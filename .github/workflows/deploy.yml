@@ -11,6 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
+      - name: PATH
+        run: |
+          pwd
+          ls -lha 
+
       - name: CLONE
         run: |
            cd /home/runner
@@ -25,13 +30,11 @@ jobs:
       - name: DEPLOY
         run: |
            npm run build
-           pwa
-           ls -lha 
-           cp -r dist/* /home/runner/vaxzk/vaxzk/
+           cp -r dist/* /home/runner/vaxzk/
 
       - name: SAVE
         run: |
-           cd /home/runner/vaxzk/vaxzk
+           cd /home/runner/vaxzk/
            date > lastest-sociap-hotsite.txt
            git config --global user.email "marco@startupvb.com"
            git config --global user.name "Marco Santos"
