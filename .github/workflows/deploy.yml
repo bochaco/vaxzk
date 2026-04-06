@@ -1,0 +1,36 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: CLONE
+        run: |
+           cd /home/runner
+           mkdir vaxzk
+           cd vaxzk
+           git clone --depth 1 https://.:${{ secrets.API_TOKEN_GITHUB }}@github.com/beerhouse-io/vaxzk.git .
+
+      - name: DEPLOY
+        run: |
+           npm run build
+           ls -lha 
+           cd /home/runner/vaxzk/vaxzk
+           cd /home/runner/vaxzk/vaxzk
+
+      - name: SAVE
+        run: |
+           cd /home/runner/vaxzk/vaxzk
+           date > lastest-sociap-hotsite.txt
+           git config --global user.email "marco@startupvb.com"
+           git config --global user.name "Marco Santos"
+           git add .
+           git commit -m "Automatic publish from github.com/sociap-hotsite"
+           git push
