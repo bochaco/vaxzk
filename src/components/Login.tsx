@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
+import { useLanguage } from '../LanguageContext';
 
 /*
 const connectedApi = await wallet.connect('preprod');
@@ -24,13 +25,14 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+  const { t } = useLanguage();
   const [status, setStatus] = useState<'connecting' | 'connected' | 'idle' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
 
 
   const connectWallet = async () => {
     if (!wallet) {
-      setError('Midnight Connector (Lace) não encontrado. Por favor, instale a extensão.');
+      setError(t.walletNotFound);
       setStatus('error');
       return;
     }
@@ -43,18 +45,18 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
       // Connect to Preprod network
       const connectedApi = await wallet.connect('preprod');
-      
+
       // Retrieve shielded address
       const addresses = await connectedApi.getShieldedAddresses();
       if (addresses.shieldedAddress) {
         setStatus('connected');
         onLoginSuccess(addresses.shieldedAddress);
       } else {
-        throw new Error('Endereço blindado não encontrado.');
+        throw new Error(t.shieldedAddressNotFound);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Connection failed:', err);
-      setError(err.message || 'Falha ao conectar à carteira.');
+      setError(err instanceof Error ? err.message : t.connectionFailed);
       setStatus('error');
     }
   };
@@ -86,13 +88,13 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         {/* Value Proposition Section */}
         <section className="mb-12 space-y-4">
           <p className="text-on-surface-variant text-lg leading-relaxed font-medium px-4">
-            Your immunization passport, always with you.
+            {t.tagline}
           </p>
           <div className="bg-surface-container-low p-5 rounded-xl text-sm border-none shadow-sm text-left">
             <div className="flex items-start gap-3">
               <span className="material-symbols-outlined text-primary mt-0.5">verified_user</span>
               <p className="text-on-surface-variant leading-snug">
-                Your clinical data is encrypted and stored on the blockchain using <span className="font-bold text-primary">Midnight</span> to ensure absolute privacy.
+                {t.privacyNote} <span className="font-bold text-primary">Midnight</span> {t.privacyNote2}
               </p>
             </div>
             {status === 'error' && error && (
@@ -105,7 +107,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
         {/* Primary Action */}
         <div className="w-full space-y-4">
-          <button 
+          <button
             onClick={connectWallet}
             disabled={status === 'connecting' || status === 'connected'}
             className="w-full midnight-gradient text-white font-semibold py-5 px-8 rounded-full shadow-xl shadow-primary/20 flex items-center justify-center gap-3 transition-transform active:scale-95 duration-200 group disabled:opacity-70 disabled:cursor-not-allowed"
@@ -116,12 +118,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">account_balance_wallet</span>
             )}
             <span className="text-lg">
-              {status === 'connecting' ? 'Iniciando...' : status === 'connected' ? 'Conectado' : 'Entrar com Midnight'}
+              {status === 'connecting' ? t.connecting : status === 'connected' ? t.connected : t.connectButton}
             </span>
           </button>
           {/* Contextual Hint */}
           <p className="text-xs text-outline uppercase tracking-widest font-bold">
-            Secure Anonymized Connection
+            {t.secureConnection}
           </p>
         </div>
       </main>
@@ -130,12 +132,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       <footer className="w-full max-w-md px-8 pb-12">
         <div className="flex flex-col gap-4 items-center">
           <a className="text-primary text-sm font-semibold hover:underline flex items-center gap-1" href="https://midnight.network/" target="_blank">
-            Learn more about midnight
+            {t.learnMore}
             <span className="material-symbols-outlined text-sm">open_in_new</span>
           </a>
           <div className="w-12 h-1 bg-surface-container-highest rounded-full"></div>
           <a className="text-on-surface-variant text-xs hover:text-primary transition-colors" href="https://github.com/bochaco/vaxzk" target="_blank">
-            Need help?
+            {t.needHelp}
           </a>
         </div>
       </footer>
