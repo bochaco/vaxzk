@@ -18,12 +18,15 @@ jobs:
            cd vaxzk
            git clone --depth 1 https://.:${{ secrets.API_TOKEN_GITHUB }}@github.com/beerhouse-io/vaxzk.git .
 
+      - name: INSTALL
+        run: |
+           npm install
+
       - name: DEPLOY
         run: |
            npm run build
            ls -lha 
-           cd /home/runner/vaxzk/vaxzk
-           cd /home/runner/vaxzk/vaxzk
+           cp -r dist/* /home/runner/vaxzk/vaxzk/
 
       - name: SAVE
         run: |
@@ -32,5 +35,5 @@ jobs:
            git config --global user.email "marco@startupvb.com"
            git config --global user.name "Marco Santos"
            git add .
-           git commit -m "Automatic publish from github.com/sociap-hotsite"
+           git commit -m "Automatic publish from vaxzk"
            git push
