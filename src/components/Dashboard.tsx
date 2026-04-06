@@ -17,13 +17,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
         <div className="flex justify-between items-center px-6 py-4 w-full max-w-screen-xl mx-auto">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border-2 border-primary/20">
-                <img
-                  alt="User profile photo"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC18Bi4VhaO_ifjE-xTn5LxEs5PGv1gprQHtZ7zQepNhxm1dMOG8Evppxki8MLKbucZpYeIsqiWME4CAjvnOCBpFiOIy3MxwSh0CRj3s5k7F-zcqgXbGQMp6X7mmqH3PdxURzsooPG27Rxh1H0IFxHhrRiGrQOhe6xUQ5BkfeHm6ani2h1ruMvVz2sWBDSMwsGhz9q6IoARZ22R4ua4l13SZzPT8FVrZYppQhwyDzkHuF62kg9Ovy6b-7qPyjr01bM_U80ui6dNpwH"
-                  className="w-full h-full object-cover"
-                />
-              </div>
               <div className="flex flex-col text-left">
                 <span className="text-xs font-medium text-slate-500">{t.loggedInAs}</span>
                 <span className="text-sm font-bold text-on-surface">
