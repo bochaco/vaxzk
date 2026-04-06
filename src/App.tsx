@@ -10,10 +10,10 @@ const LANGUAGES = [
   { code: 'es', label: 'ES', flag: '🇪🇸' },
 ] as const;
 
-function LanguageSelector() {
+export function LanguageSelector({ fixed = false }: { fixed?: boolean }) {
   const { language, setLanguage } = useLanguage();
   return (
-    <div className="fixed top-3 right-4 z-[100] flex items-center gap-1 bg-white/80 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-slate-200/60">
+    <div className={`flex items-center gap-1 bg-white/80 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-slate-200/60 ${fixed ? 'fixed top-3 right-4 z-[100]' : ''}`}>
       {LANGUAGES.map(({ code, label, flag }) => (
         <button
           key={code}
@@ -48,11 +48,13 @@ function AppContent() {
 
   return (
     <>
-      <LanguageSelector />
       {isConnected ? (
         <Dashboard onLogout={handleLogout} walletAddress={walletAddress} />
       ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
+        <>
+          <LanguageSelector fixed />
+          <Login onLoginSuccess={handleLoginSuccess} />
+        </>
       )}
     </>
   );

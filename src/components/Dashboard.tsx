@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../LanguageContext';
+import { LanguageSelector } from '../App';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -34,7 +35,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
             <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">Clinical Sanctuary</h1>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <LanguageSelector />
             <button
               onClick={onLogout}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"

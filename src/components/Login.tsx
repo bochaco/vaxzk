@@ -54,9 +54,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       } else {
         throw new Error(t.shieldedAddressNotFound);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Connection failed:', err);
-      setError(err.message || t.connectionFailed);
+      setError(err instanceof Error ? err.message : t.connectionFailed);
       setStatus('error');
     }
   };
