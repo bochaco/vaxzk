@@ -3,6 +3,8 @@ import { useLanguage } from '../LanguageContext';
 import { LanguageSelector } from '../App';
 import HomeView from './HomeView';
 import WalletView from './WalletView';
+import AddVaccineView from './AddVaccineView';
+import CalendarView from './CalendarView';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -14,15 +16,25 @@ type Tab = 'home' | 'wallet' | 'add' | 'calendar';
 const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [prevTab, setPrevTab] = useState<Tab>('home');
+
+  const handleTabChange = (tab: Tab) => {
+    if (tab !== 'add') setPrevTab(activeTab);
+    setActiveTab(tab);
+  };
 
   const renderView = () => {
     switch (activeTab) {
       case 'home':
-        return <HomeView walletAddress={walletAddress} />;
+        return <HomeView walletAddress={walletAddress} onSchedule={() => handleTabChange('add')} />;
       case 'wallet':
         return <WalletView />;
+      case 'add':
+        return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
+      case 'calendar':
+        return <CalendarView />;
       default:
-        return <HomeView walletAddress={walletAddress} />;
+        return <HomeView walletAddress={walletAddress} onSchedule={() => handleTabChange('add')} />;
     }
   };
 
@@ -62,7 +74,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:flex">
         <button
-          onClick={() => setActiveTab('home')}
+          onClick={() => handleTabChange('home')}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
             activeTab === 'home' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
           }`}
@@ -71,7 +83,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Home</span>
         </button>
         <button
-          onClick={() => setActiveTab('wallet')}
+          onClick={() => handleTabChange('wallet')}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
             activeTab === 'wallet' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
           }`}
@@ -80,7 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Wallet</span>
         </button>
         <button
-          onClick={() => setActiveTab('add')}
+          onClick={() => handleTabChange('add')}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
             activeTab === 'add' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
           }`}
@@ -89,7 +101,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Add</span>
         </button>
         <button
-          onClick={() => setActiveTab('calendar')}
+          onClick={() => handleTabChange('calendar')}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
             activeTab === 'calendar' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
           }`}
@@ -101,7 +113,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
 
       {/* FAB - Only show on Home for now */}
       {activeTab === 'home' && (
-        <button className="fixed bottom-24 right-6 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-transform z-40 md:bottom-28">
+        <button 
+          onClick={() => handleTabChange('add')}
+          className="fixed bottom-24 right-6 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-transform z-40 md:bottom-28"
+        >
           <span className="material-symbols-outlined scale-125">calendar_add_on</span>
         </button>
       )}
