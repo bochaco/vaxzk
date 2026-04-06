@@ -1,0 +1,183 @@
+export type Language = 'en' | 'pt' | 'es';
+
+export const translations = {
+  en: {
+    // Login
+    tagline: 'Your immunization passport, always with you.',
+    privacyNote: 'Your clinical data is encrypted and stored on the blockchain using',
+    privacyNote2: 'to ensure absolute privacy.',
+    connecting: 'Connecting...',
+    connected: 'Connected',
+    connectButton: 'Connect with Midnight',
+    secureConnection: 'Secure Anonymized Connection',
+    learnMore: 'Learn more about midnight',
+    needHelp: 'Need help?',
+    walletNotFound: 'Midnight Connector (Lace) not found. Please install the extension.',
+    shieldedAddressNotFound: 'Shielded address not found.',
+    connectionFailed: 'Failed to connect to wallet.',
+
+    // Dashboard header
+    loggedInAs: 'Logged in as',
+    logout: 'Logout',
+
+    // Welcome section
+    welcomeBack: 'Welcome back',
+    headline: 'Your health in\nperfect harmony.',
+    overallStatus: 'Overall Status',
+    immunized: '92% Immunized',
+
+    // Next vaccine card
+    nextDose: 'Next Dose',
+    nextVaccineName: 'Influenza Booster 2024',
+    nextVaccineDesc: 'Your annual dose is available for scheduling. Keep your protection up to date.',
+    scheduleNow: 'Schedule now',
+    viewDetails: 'View details',
+
+    // Progress
+    progress: 'Progress',
+    infantCycle: 'Infant Cycle',
+    completed: 'Completed',
+    boosterDoses: 'Booster Doses',
+    outOf4: '3 of 4',
+    internationalTravel: 'International Travel',
+    pending: 'Pending',
+
+    // Recent history
+    recentHistory: 'Recent History',
+    viewAll: 'View all',
+    validated: 'Validated',
+    activities: [
+      { title: 'COVID-19 Bivalent', subtitle: 'Single Dose • Central Unit', date: 'Mar 12, 2024', icon: 'shield' },
+      { title: 'Hepatitis B', subtitle: '3rd Dose • Santa Fé Clinic', date: 'Jan 15, 2024', icon: 'water_drop' },
+      { title: 'Yellow Fever', subtitle: 'Booster Dose • Mobile Post', date: 'Dec 05, 2023', icon: 'science' },
+    ],
+
+    // Info cards
+    nearestClinic: 'Nearest clinic',
+    nearestClinicDesc: 'Central Unit - 0.8km away. Open until 8:00 PM.',
+    viewOnMap: 'View on map',
+    familyGroup: 'Family Group',
+    familyGroupDesc: 'Your dependents (2) are up to date on their schedule. Great job!',
+    manageFamily: 'Manage family',
+  },
+  pt: {
+    // Login
+    tagline: 'Seu passaporte de imunização, sempre com você.',
+    privacyNote: 'Seus dados clínicos são criptografados e armazenados na blockchain usando',
+    privacyNote2: 'para garantir privacidade absoluta.',
+    connecting: 'Iniciando...',
+    connected: 'Conectado',
+    connectButton: 'Entrar com Midnight',
+    secureConnection: 'Conexão Segura e Anonimizada',
+    learnMore: 'Saiba mais sobre o Midnight',
+    needHelp: 'Precisa de ajuda?',
+    walletNotFound: 'Midnight Connector (Lace) não encontrado. Por favor, instale a extensão.',
+    shieldedAddressNotFound: 'Endereço blindado não encontrado.',
+    connectionFailed: 'Falha ao conectar à carteira.',
+
+    // Dashboard header
+    loggedInAs: 'Logado como',
+    logout: 'Sair',
+
+    // Welcome section
+    welcomeBack: 'Bem-vindo de volta',
+    headline: 'Sua saúde em\nperfeita harmonia.',
+    overallStatus: 'Status Geral',
+    immunized: '92% Imunizado',
+
+    // Next vaccine card
+    nextDose: 'Próxima Dose',
+    nextVaccineName: 'Reforço Influenza 2024',
+    nextVaccineDesc: 'Sua dose anual está disponível para agendamento. Mantenha sua proteção atualizada.',
+    scheduleNow: 'Agendar agora',
+    viewDetails: 'Ver detalhes',
+
+    // Progress
+    progress: 'Progresso',
+    infantCycle: 'Ciclo Infantil',
+    completed: 'Concluído',
+    boosterDoses: 'Doses de Reforço',
+    outOf4: '3 de 4',
+    internationalTravel: 'Viagens Internacionais',
+    pending: 'Pendente',
+
+    // Recent history
+    recentHistory: 'Histórico Recente',
+    viewAll: 'Ver tudo',
+    validated: 'Validada',
+    activities: [
+      { title: 'COVID-19 Bivalente', subtitle: 'Dose Única • Unidade Central', date: '12 Mar, 2024', icon: 'shield' },
+      { title: 'Hepatite B', subtitle: '3ª Dose • Clínica Santa Fé', date: '15 Jan, 2024', icon: 'water_drop' },
+      { title: 'Febre Amarela', subtitle: 'Dose de Reforço • Posto Móvel', date: '05 Dez, 2023', icon: 'science' },
+    ],
+
+    // Info cards
+    nearestClinic: 'Clínica mais próxima',
+    nearestClinicDesc: 'Unidade Central - 0.8km de distância. Aberto até as 20:00.',
+    viewOnMap: 'Ver no mapa',
+    familyGroup: 'Grupo Familiar',
+    familyGroupDesc: 'Seus dependentes (2) estão com o calendário em dia. Ótimo trabalho!',
+    manageFamily: 'Gerenciar família',
+  },
+  es: {
+    // Login
+    tagline: 'Tu pasaporte de inmunización, siempre contigo.',
+    privacyNote: 'Tus datos clínicos están cifrados y almacenados en la blockchain usando',
+    privacyNote2: 'para garantizar total privacidad.',
+    connecting: 'Conectando...',
+    connected: 'Conectado',
+    connectButton: 'Entrar con Midnight',
+    secureConnection: 'Conexión Segura y Anonimizada',
+    learnMore: 'Más sobre Midnight',
+    needHelp: '¿Necesitas ayuda?',
+    walletNotFound: 'Midnight Connector (Lace) no encontrado. Por favor, instala la extensión.',
+    shieldedAddressNotFound: 'Dirección blindada no encontrada.',
+    connectionFailed: 'Error al conectar con la billetera.',
+
+    // Dashboard header
+    loggedInAs: 'Conectado como',
+    logout: 'Salir',
+
+    // Welcome section
+    welcomeBack: 'Bienvenido de nuevo',
+    headline: 'Tu salud en\nperfecta armonía.',
+    overallStatus: 'Estado General',
+    immunized: '92% Inmunizado',
+
+    // Next vaccine card
+    nextDose: 'Próxima Dosis',
+    nextVaccineName: 'Refuerzo Influenza 2024',
+    nextVaccineDesc: 'Tu dosis anual está disponible para agendar. Mantén tu protección al día.',
+    scheduleNow: 'Agendar ahora',
+    viewDetails: 'Ver detalles',
+
+    // Progress
+    progress: 'Progreso',
+    infantCycle: 'Ciclo Infantil',
+    completed: 'Completado',
+    boosterDoses: 'Dosis de Refuerzo',
+    outOf4: '3 de 4',
+    internationalTravel: 'Viajes Internacionales',
+    pending: 'Pendiente',
+
+    // Recent history
+    recentHistory: 'Historial Reciente',
+    viewAll: 'Ver todo',
+    validated: 'Validada',
+    activities: [
+      { title: 'COVID-19 Bivalente', subtitle: 'Dosis Única • Unidad Central', date: '12 Mar, 2024', icon: 'shield' },
+      { title: 'Hepatitis B', subtitle: '3ª Dosis • Clínica Santa Fé', date: '15 Ene, 2024', icon: 'water_drop' },
+      { title: 'Fiebre Amarilla', subtitle: 'Dosis de Refuerzo • Puesto Móvil', date: '05 Dic, 2023', icon: 'science' },
+    ],
+
+    // Info cards
+    nearestClinic: 'Clínica más cercana',
+    nearestClinicDesc: 'Unidad Central - 0.8km de distancia. Abierto hasta las 20:00.',
+    viewOnMap: 'Ver en el mapa',
+    familyGroup: 'Grupo Familiar',
+    familyGroupDesc: 'Tus dependientes (2) están al día con su calendario. ¡Buen trabajo!',
+    manageFamily: 'Gestionar familia',
+  },
+};
+
+export type Translations = typeof translations.en;

@@ -1,9 +1,38 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import { LanguageProvider, useLanguage } from './LanguageContext';
 import './index.css';
 
-function App() {
+const LANGUAGES = [
+  { code: 'en', label: 'EN', flag: '🇺🇸' },
+  { code: 'pt', label: 'PT', flag: '🇧🇷' },
+  { code: 'es', label: 'ES', flag: '🇪🇸' },
+] as const;
+
+function LanguageSelector() {
+  const { language, setLanguage } = useLanguage();
+  return (
+    <div className="fixed top-3 right-4 z-[100] flex items-center gap-1 bg-white/80 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-slate-200/60">
+      {LANGUAGES.map(({ code, label, flag }) => (
+        <button
+          key={code}
+          onClick={() => setLanguage(code)}
+          className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors ${
+            language === code
+              ? 'bg-primary text-white'
+              : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <span>{flag}</span>
+          <span>{label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function AppContent() {
   const [isConnected, setIsConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
@@ -19,12 +48,21 @@ function App() {
 
   return (
     <>
+      <LanguageSelector />
       {isConnected ? (
         <Dashboard onLogout={handleLogout} walletAddress={walletAddress} />
       ) : (
         <Login onLoginSuccess={handleLoginSuccess} />
       )}
     </>
+  );
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 
