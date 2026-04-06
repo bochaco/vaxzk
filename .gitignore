@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+deploy.yml
+mockup
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
