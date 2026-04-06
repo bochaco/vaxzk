@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 deploy.yml
+mockup
 
 # Editor directories and files
 .vscode/*
