@@ -24,3 +24,15 @@ The application allows users to register, securely receive vaccine certificates 
 - We will integrate the TypeScript backend/SDK layers to connect the Compact logic with the React frontend.
 - Utilize standard Midnight Wallet integration (e.g. Lace Nightly/Midnight integration pattern).
 - Provide QR code generation and scanning functionality via `qrcode.react` and generic QR scanner libraries.
+
+### 4. Profiles
+
+- **Admin**:
+  - Can create and revoke other admins.
+  - Can create and revoke Health Facilities.
+  - Can create and edit existing vaccine types.
+- **Users**:
+
+- **Health Facilities**: Like Clinics, Pharmacies and Hospitals.
+  - Can create and edit their profile, specifying the type of vaccine they can administer.
+  - Can administer the vaccines.
