@@ -32,7 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
               </div>
             </div>
             <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2"></div>
-            <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">Clinical Sanctuary</h1>
+            <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">VaxZk</h1>
           </div>
 
           <div className="flex items-center gap-3">
@@ -43,9 +43,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
             >
               <span className="material-symbols-outlined text-lg">logout</span>
               <span className="hidden sm:inline">{t.logout}</span>
-            </button>
-            <button className="p-2 text-slate-500 hover:bg-blue-50/50 transition-colors rounded-full active:scale-95 duration-200">
-              <span className="material-symbols-outlined">notifications</span>
             </button>
           </div>
         </div>
