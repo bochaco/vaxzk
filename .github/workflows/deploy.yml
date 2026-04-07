@@ -42,7 +42,6 @@ jobs:
       - name: SAVE
         run: |
            cd /home/runner/vaxzk/
-           date > lastest-sociap-hotsite.txt
            git config --global user.email "marco@startupvb.com"
            git config --global user.name "Marco Santos"
            git add .
