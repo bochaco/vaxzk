@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
-import { LanguageSelector } from '../App';
+import { LanguageSelector, CONTRACTID } from '../App';
 import HomeView from './HomeView';
 import WalletView from './WalletView';
 import AddVaccineView from './AddVaccineView';
@@ -112,15 +112,17 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
           <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'calendar' ? "'FILL' 1" : undefined }}>calendar_today</span>
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Calendar</span>
         </button>
-        <button
-          onClick={() => handleTabChange('publish')}
-          className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === 'publish' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
-          }`}
-        >
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'publish' ? "'FILL' 1" : undefined }}>publish</span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Admin</span>
-        </button>
+        {!CONTRACTID && (
+          <button
+            onClick={() => handleTabChange('publish')}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === 'publish' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+            }`}
+          >
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'publish' ? "'FILL' 1" : undefined }}>publish</span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Admin</span>
+          </button>
+        )}
       </nav>
 
       {/* FAB - Only show on Home for now */}
