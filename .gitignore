@@ -14,7 +14,7 @@ dist-ssr
 
 deploy.yml
 mockup
-src/components/contracts
+src/utils/contracts
 
 # Editor directories and files
 .vscode/*
