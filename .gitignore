@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 mockup
-src/utils/contracts
+contract/managed/
 
 # Editor directories and files
 .vscode/*
