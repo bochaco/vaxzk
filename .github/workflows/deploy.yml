@@ -36,7 +36,7 @@ jobs:
       - name: DEPLOY
         run: |
            npm run build
-           cp -r src/utils/managed dist/
+           cp -r src/utils/managed dist/assets/
            cp -r dist/* /home/runner/vaxzk/
 
       - name: SAVE
