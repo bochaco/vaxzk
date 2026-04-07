@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
 
-import { deployVaxZkContract } from '../utils/deploy';
+import { buildProviders, deployVaxZkContract } from '../utils/deploy';
 
 interface PublishContractViewProps {
   onBack: () => void;
@@ -29,8 +29,16 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({ onBack }) => 
         throw new Error("Compatible Midnight wallet not found");
       }
 
-      const connectedApi = await wallet.connect('preprod');
-      const deployedContract = await deployVaxZkContract(connectedApi);
+      const networkId = 'preprod';
+      const connectedApi = await wallet.connect(networkId);
+      const providers = await buildProviders(connectedApi, networkId);
+
+      // Generate a fresh 32-byte secret key for this admin identity.
+      // The key is persisted in the private state provider so subsequent
+      // circuit calls (addAdmin, addClinic, etc.) can retrieve it.
+      const secretKey = crypto.getRandomValues(new Uint8Array(32));
+
+      const deployedContract = await deployVaxZkContract(providers, secretKey);
       console.log('Successfully deployed contract:', deployedContract);
 
       setIsDeploying(false);
