@@ -119,7 +119,7 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({ onBack }) => 
             {/* Primary Action */}
             <div className="pt-6 relative pb-20">
               <button 
-                className={`w-full py-4 bg-gradient-to-r from-primary to-blue-600 text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 ${isDeploying ? 'opacity-80 cursor-wait' : ''}`}
+                className={`w-full py-4 bg-gradient-to-r from-primary to-blue-600 font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 ${isDeploying ? 'opacity-80 cursor-wait' : ''}`}
                 type="submit"
                 disabled={isDeploying || deployed}
               >
