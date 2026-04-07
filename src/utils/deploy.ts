@@ -2,12 +2,12 @@
  * VaxZK contract deployment, joining, and circuit call utilities.
  *
  * NOTE: The contract must be compiled before this file is fully functional:
- *   compact compile contract/src/vaxzk.compact contract/src/managed/vaxzk
+ *   compact compile contract/src/vaxzk.compact dist/managed/vaxzk 
  *
  * After compilation the managed output will contain:
- *   contract/src/managed/vaxzk/contract/index.cjs  – TypeScript bindings
- *   contract/src/managed/vaxzk/keys/               – Verifier keys (served as static assets)
- *   contract/src/managed/vaxzk/zkir/               – ZK IR files (served as static assets)
+ *   dist/managed/vaxzk/contract/index.cjs  – TypeScript bindings
+ *   dist/managed/vaxzk/keys/               – Verifier keys (served as static assets)
+ *   dist/managed/vaxzk/zkir/               – ZK IR files (served as static assets)
  *
  * The keys/ and zkir/ directories must be reachable from window.location.origin so that
  * FetchZkConfigProvider can load them at runtime.
@@ -84,7 +84,7 @@ async function getCompiledContract() {
     // at startup if the contract hasn't been compiled yet.
     const VaxZk = await import(
       /* @vite-ignore */
-      '../../vaxzk/contract/index.js'
+      '../../managed/vaxzk/contract/index.js'
     );
 
     _compiledContract = CompiledContract.make('vaxzk', VaxZk.Contract).pipe(
