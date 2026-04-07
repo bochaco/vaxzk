@@ -1,5 +1,5 @@
 import { deployContract } from '@midnight-ntwrk/midnight-js/contracts';
-import { Contract } from '../vaxzk_contract/contract/index.js';
+import { Contract } from 'contract/index.js';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 // In a full Midnight DApp, indexer URI and node URI are typically fetched from connectedApi.getConfiguration()
 // and passed into IndexerClient and NodeClient to construct publicDataProvider.

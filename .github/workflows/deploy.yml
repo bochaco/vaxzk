@@ -31,8 +31,7 @@ jobs:
         run: |
            curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
            compact update
-           compact compile contract/src/vaxzk.compact dist/managed/vaxsk
-           cp contract/src/vaxzk.compact dist/ 
+           compact compile contract/src/vaxzk.compact src/components/contracts/vaxsk
 
       - name: DEPLOY
         run: |
