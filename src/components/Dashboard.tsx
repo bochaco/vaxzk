@@ -7,7 +7,7 @@ import WalletView from './WalletView';
 import AddVaccineView from './AddVaccineView';
 import CalendarView from './CalendarView';
 import PublishContractView from './PublishContractView';
-import { joinVaxZkContract, isClinic, buildProviders } from '../utils/deploy';
+import { joinVaxZkContract, isClinic, adminOnlyAction, buildProviders } from '../utils/deploy';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 
 interface DashboardProps {
@@ -16,13 +16,14 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'publish';
+type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'deploy' | 'publish';
 
 const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connectedApi }) => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [prevTab, setPrevTab] = useState<Tab>('home');
   const [isClinicUser, setIsClinicUser] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   React.useEffect(() => {
     async function checkClinicStatus() {
@@ -43,6 +44,25 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
         setIsClinicUser(false);
       }
     }
+    async function checkIsAdmin() {
+      if (!walletAddress || !CONTRACTID || !connectedApi) return;
+      try {
+        const providers = await buildProviders(connectedApi, networkId);
+        
+        // For this check, we need a secret key. In a real-world scenario, 
+        // this would be retrieved from secure storage or derivation.
+        // For now, we try to join with a placeholder or the stored state.
+        const secretKey = new Uint8Array(32); // This should be the user's real secret key
+        const contract = await joinVaxZkContract(providers, CONTRACTID as any, secretKey);
+        
+        const result = await adminOnlyAction(contract as any);
+        setIsAdmin(result);
+      } catch (err) {
+        console.error('Failed to check clinic status:', err);
+        setIsAdmin(false);
+      }
+    }
+    checkIsAdmin();
     checkClinicStatus();
   }, [walletAddress, connectedApi]);
 
@@ -60,6 +80,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
       case 'add':
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
       case 'publish':
+        return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
+      case 'deploy':
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
       case 'calendar':
         return <CalendarView />;
@@ -122,7 +144,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Wallet</span>
         </button>
         
-        {/* Only clinics can access the Add button */}
         {isClinicUser && (
           <button
             onClick={() => handleTabChange('add')}
@@ -132,6 +153,18 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
           >
             <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'add' ? "'FILL' 1" : undefined }}>add_circle</span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Add</span>
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            onClick={() => handleTabChange('publish')}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === 'publish' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+            }`}
+          >
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'publish' ? "'FILL' 1" : undefined }}>publish</span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Admin</span>
           </button>
         )}
 
@@ -146,26 +179,16 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
         </button>
         {!CONTRACTID && (
           <button
-            onClick={() => handleTabChange('publish')}
+            onClick={() => handleTabChange('deploy')}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === 'publish' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+              activeTab === 'deploy' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'publish' ? "'FILL' 1" : undefined }}>publish</span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Admin</span>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'deploy' ? "'FILL' 1" : undefined }}>publish</span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Deploy</span>
           </button>
         )}
       </nav>
-
-      {/* FAB - Only show on Home for clinics */}
-      {activeTab === 'home' && isClinicUser && (
-        <button 
-          onClick={() => handleTabChange('add')}
-          className="fixed bottom-24 right-6 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-transform z-40 md:bottom-28"
-        >
-          <span className="material-symbols-outlined scale-125">calendar_add_on</span>
-        </button>
-      )}
     </div>
   );
 };

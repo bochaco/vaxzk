@@ -272,10 +272,23 @@ export function revokeAdmin(contract: DeployedVaxZkContract, adminSk: Uint8Array
  * Execute adminOnlyAction — a placeholder circuit that asserts admin status.
  *
  * @param contract   - Deployed contract handle
- * @param someParam  - A Uint<16> value (passed as bigint)
  */
-export function adminOnlyAction(contract: DeployedVaxZkContract, someParam: bigint) {
-  return contract.callTx.adminOnlyAction(someParam);
+export async function adminOnlyAction(contract: DeployedVaxZkContract): Promise<boolean> {
+  try {
+    // We attempt to "call" the circuit. In midnight-js, calling an impure circuit
+    // performs local proof generation. If the assertion fails (e.g. not a clinic),
+    // it will throw an error before even trying to submit.
+    await contract.callTx.adminOnlyAction();
+    return true;
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("You are not an admin")) {
+      return false;
+    }
+    // For other errors, we might want to log them or rethrow, but for UI check,
+    // assuming not a clinic is safer.
+    console.warn('Admin check failed:', err);
+    return false;
+  }
 }
 
 /**
