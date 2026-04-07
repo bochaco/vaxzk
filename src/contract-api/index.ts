@@ -47,6 +47,9 @@ export interface DeployedVaxZkAPI {
   readonly state$: Observable<VaxZkDerivedState>;
 
   addAdmin: (id: Uint8Array) => Promise<void>;
+  revokeAdmin: (id: Uint8Array) => Promise<void>;
+  addClinic: (id: Uint8Array) => Promise<void>;
+  revokeClinic: (id: Uint8Array) => Promise<void>;
 }
 
 /**
@@ -166,7 +169,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
   }
 
   async addAdmin(id: Uint8Array): Promise<void> {
-    console.log(`adding admin with ID ${toHex(id)}`);
+    console.log(`adding Admin with ID ${toHex(id)}`);
     if (id.length !== 32) {
       throw new Error(`Admin ID shall be 32 bytes long but it is ${id.length}`);
     }
@@ -174,6 +177,55 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     console.log({
       transactionAdded: {
         circuit: "addAdmin",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async revokeAdmin(id: Uint8Array): Promise<void> {
+    console.log(`revoking Admin with ID ${toHex(id)}`);
+    if (id.length !== 32) {
+      throw new Error(`Admin ID shall be 32 bytes long but it is ${id.length}`);
+    }
+    const txData = await this.deployedContract.callTx.revokeAdmin(id);
+    console.log({
+      transactionAdded: {
+        circuit: "revokeAdmin",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async addClinic(id: Uint8Array): Promise<void> {
+    console.log(`adding Clinic with ID ${toHex(id)}`);
+    if (id.length !== 32) {
+      throw new Error(
+        `Clinic ID shall be 32 bytes long but it is ${id.length}`,
+      );
+    }
+    const txData = await this.deployedContract.callTx.addClinic(id);
+    console.log({
+      transactionAdded: {
+        circuit: "addClinic",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async revokeClinic(id: Uint8Array): Promise<void> {
+    console.log(`revoking Clinic with ID ${toHex(id)}`);
+    if (id.length !== 32) {
+      throw new Error(
+        `Clinic ID shall be 32 bytes long but it is ${id.length}`,
+      );
+    }
+    const txData = await this.deployedContract.callTx.revokeClinic(id);
+    console.log({
+      transactionAdded: {
+        circuit: "revokeClinic",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },
