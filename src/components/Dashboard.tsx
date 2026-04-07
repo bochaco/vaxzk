@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { useLanguage } from '../LanguageContext';
-import { networkId, CONTRACTID } from './ConfigNetwork';
-import { LanguageSelector } from '../App';
-import HomeView from './HomeView';
-import WalletView from './WalletView';
-import AddVaccineView from './AddVaccineView';
-import CalendarView from './CalendarView';
-import PublishContractView from './PublishContractView';
-import { joinVaxZkContract, isClinic, adminOnlyAction, buildProviders } from '../utils/deploy';
-import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
+import React, { useState } from "react";
+import { useLanguage } from "../LanguageContext";
+import { networkId, CONTRACTID } from "./ConfigNetwork";
+import { LanguageSelector } from "../App";
+import HomeView from "./HomeView";
+import WalletView from "./WalletView";
+import AddVaccineView from "./AddVaccineView";
+import CalendarView from "./CalendarView";
+import PublishContractView from "./PublishContractView";
+import { buildProviders, VaxZkAPI } from "../contract-api/index";
+import { firstValueFrom } from "rxjs";
+import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
+import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -16,12 +18,16 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'deploy' | 'publish';
+type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "publish";
 
-const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connectedApi }) => {
+const Dashboard: React.FC<DashboardProps> = ({
+  onLogout,
+  walletAddress,
+  connectedApi,
+}) => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<Tab>('home');
-  const [prevTab, setPrevTab] = useState<Tab>('home');
+  const [activeTab, setActiveTab] = useState<Tab>("home");
+  const [prevTab, setPrevTab] = useState<Tab>("home");
   const [isClinicUser, setIsClinicUser] = useState<boolean | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
@@ -30,17 +36,21 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
       if (!walletAddress || !CONTRACTID || !connectedApi) return;
       try {
         const providers = await buildProviders(connectedApi, networkId);
-        
-        // For this check, we need a secret key. In a real-world scenario, 
+
+        // TODO: derive from wallet or secure user input instead of zeros
+        // For this check, we need a secret key. In a real-world scenario,
         // this would be retrieved from secure storage or derivation.
         // For now, we try to join with a placeholder or the stored state.
-        const secretKey = new Uint8Array(32); // This should be the user's real secret key
-        const contract = await joinVaxZkContract(providers, CONTRACTID as any, secretKey);
-        
-        const result = await isClinic(contract as any);
-        setIsClinicUser(result);
+        const secretKey = new Uint8Array(32);
+        const api = await VaxZkAPI.join(
+          providers,
+          CONTRACTID as unknown as ContractAddress,
+          secretKey,
+        );
+        const { isClinic } = await firstValueFrom(api.state$);
+        setIsClinicUser(isClinic);
       } catch (err) {
-        console.error('Failed to check clinic status:', err);
+        console.error("Failed to check clinic status:", err);
         setIsClinicUser(false);
       }
     }
@@ -48,17 +58,21 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
       if (!walletAddress || !CONTRACTID || !connectedApi) return;
       try {
         const providers = await buildProviders(connectedApi, networkId);
-        
-        // For this check, we need a secret key. In a real-world scenario, 
+
+        // TODO: derive from wallet or secure user input instead of zeros
+        // For this check, we need a secret key. In a real-world scenario,
         // this would be retrieved from secure storage or derivation.
         // For now, we try to join with a placeholder or the stored state.
-        const secretKey = new Uint8Array(32); // This should be the user's real secret key
-        const contract = await joinVaxZkContract(providers, CONTRACTID as any, secretKey);
-        
-        const result = await adminOnlyAction(contract as any);
-        setIsAdmin(result);
+        const secretKey = new Uint8Array(32);
+        const api = await VaxZkAPI.join(
+          providers,
+          CONTRACTID as unknown as ContractAddress,
+          secretKey,
+        );
+        const { isAdmin } = await firstValueFrom(api.state$);
+        setIsAdmin(isAdmin);
       } catch (err) {
-        console.error('Failed to check clinic status:', err);
+        console.error("Failed to check admin status:", err);
         setIsAdmin(false);
       }
     }
@@ -67,26 +81,36 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
   }, [walletAddress, connectedApi]);
 
   const handleTabChange = (tab: Tab) => {
-    if (tab !== 'add' && tab !== 'publish') setPrevTab(activeTab);
+    if (tab !== "add" && tab !== "publish") setPrevTab(activeTab);
     setActiveTab(tab);
   };
 
   const renderView = () => {
     switch (activeTab) {
-      case 'home':
-        return <HomeView walletAddress={walletAddress} onSchedule={() => handleTabChange('add')} />;
-      case 'wallet':
+      case "home":
+        return (
+          <HomeView
+            walletAddress={walletAddress}
+            onSchedule={() => handleTabChange("add")}
+          />
+        );
+      case "wallet":
         return <WalletView />;
-      case 'add':
+      case "add":
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
-      case 'publish':
+      case "publish":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
-      case 'deploy':
+      case "deploy":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
-      case 'calendar':
+      case "calendar":
         return <CalendarView />;
       default:
-        return <HomeView walletAddress={walletAddress} onSchedule={() => handleTabChange('add')} />;
+        return (
+          <HomeView
+            walletAddress={walletAddress}
+            onSchedule={() => handleTabChange("add")}
+          />
+        );
     }
   };
 
@@ -98,14 +122,19 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3">
               <div className="flex flex-col text-left">
-                <span className="text-xs font-medium text-slate-500">{t.loggedInAs}</span>
+                <span className="text-xs font-medium text-slate-500">
+                  {t.loggedInAs}
+                </span>
                 <span className="text-sm font-bold text-on-surface">
-                  Midnight {walletAddress ? `(...${walletAddress.slice(-6)})` : ''}
+                  Midnight{" "}
+                  {walletAddress ? `(...${walletAddress.slice(-6)})` : ""}
                 </span>
               </div>
             </div>
             <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2"></div>
-            <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">VaxZk</h1>
+            <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">
+              VaxZk
+            </h1>
           </div>
 
           <div className="flex items-center gap-3">
@@ -126,66 +155,138 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:flex">
         <button
-          onClick={() => handleTabChange('home')}
+          onClick={() => handleTabChange("home")}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === 'home' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+            activeTab === "home"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
           }`}
         >
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'home' ? "'FILL' 1" : undefined }}>home</span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Home</span>
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "home" ? "'FILL' 1" : undefined,
+            }}
+          >
+            home
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            Home
+          </span>
         </button>
         <button
-          onClick={() => handleTabChange('wallet')}
+          onClick={() => handleTabChange("wallet")}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === 'wallet' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+            activeTab === "wallet"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
           }`}
         >
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'wallet' ? "'FILL' 1" : undefined }}>account_balance_wallet</span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Wallet</span>
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "wallet" ? "'FILL' 1" : undefined,
+            }}
+          >
+            account_balance_wallet
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            Wallet
+          </span>
         </button>
-        
+
         {isClinicUser && (
           <button
-            onClick={() => handleTabChange('add')}
+            onClick={() => handleTabChange("add")}
             className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === 'add' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+              activeTab === "add"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'add' ? "'FILL' 1" : undefined }}>add_circle</span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Add</span>
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "add" ? "'FILL' 1" : undefined,
+              }}
+            >
+              add_circle
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Add
+            </span>
           </button>
         )}
 
         {isAdmin && (
           <button
-            onClick={() => handleTabChange('publish')}
+            onClick={() => handleTabChange("publish")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === 'publish' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+              activeTab === "publish"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'publish' ? "'FILL' 1" : undefined }}>publish</span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Admin</span>
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "publish" ? "'FILL' 1" : undefined,
+              }}
+            >
+              publish
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Admin
+            </span>
           </button>
         )}
 
         <button
-          onClick={() => handleTabChange('calendar')}
+          onClick={() => handleTabChange("calendar")}
           className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === 'calendar' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+            activeTab === "calendar"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
           }`}
         >
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'calendar' ? "'FILL' 1" : undefined }}>calendar_today</span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Calendar</span>
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "calendar" ? "'FILL' 1" : undefined,
+            }}
+          >
+            calendar_today
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            Calendar
+          </span>
         </button>
         {!CONTRACTID && (
           <button
-            onClick={() => handleTabChange('deploy')}
+            onClick={() => handleTabChange("deploy")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === 'deploy' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+              activeTab === "deploy"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'deploy' ? "'FILL' 1" : undefined }}>publish</span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Deploy</span>
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "deploy" ? "'FILL' 1" : undefined,
+              }}
+            >
+              publish
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Deploy
+            </span>
           </button>
         )}
       </nav>

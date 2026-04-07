@@ -1,0 +1,60 @@
+pragma language_version >= 0.20;
+
+import CompactStandardLibrary;
+
+// Public ledger of shielded admin IDs.
+export ledger admins: Set<Bytes<32>>;
+
+// Public ledger of shielded clinic IDs.
+export ledger clinics: Set<Bytes<32>>;
+
+// Reads the caller's 32-byte secret key from local private state.
+witness localSk(): Bytes<32>;
+
+// Registers the deployer as the first admin by inserting their shielded ID.
+constructor() {
+  const _sk = localSk();
+  const adminId = getShieldedId(_sk);
+  admins.insert(disclose(adminId));
+}
+
+// Derives a deterministic shielded ID from a secret key using a persistent hash.
+export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "guest-list:pk:"), _sk]);
+}
+
+// Guards: aborts the calling circuit if the caller is not a registered admin.
+circuit isAdmin(): Boolean {
+  const _sk = localSk();
+  const adminId = getShieldedId(_sk);
+  assert(admins.member(disclose(adminId)), "You are not an admin");
+  return true;
+}
+
+// Adds a new admin by their shielded ID. Caller must be an existing admin.
+export circuit addAdmin(adminId: Bytes<32>): [] {
+  isAdmin();
+  assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
+  admins.insert(disclose(adminId));
+}
+
+// Removes an admin by their shielded ID. Caller must be an existing admin.
+export circuit revokeAdmin(adminId: Bytes<32>): [] {
+  isAdmin();
+  assert(!admins.member(disclose(adminId)), "Admin ID is not in the admins list");
+  admins.remove(disclose(adminId));
+}
+
+// Registers a clinic by their shielded ID. Caller must be an admin.
+export circuit addClinic(clinicId: Bytes<32>): [] {
+  isAdmin();
+  assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
+  clinics.insert(disclose(clinicId));
+}
+
+// Removes a clinic by their shielded ID. Caller must be an admin.
+export circuit revokeClinic(clinicId: Bytes<32>): [] {
+  isAdmin();
+  assert(!clinics.member(disclose(clinicId)), "Clinic ID is not in the clinics list");
+  clinics.remove(disclose(clinicId));
+}
