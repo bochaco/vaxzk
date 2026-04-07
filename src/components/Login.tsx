@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { ConnectedAPI, InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { useLanguage } from '../LanguageContext';
+import { networkId } from './ConfigNetwork';
 
 const getCompatibleWallet = (): InitialAPI | undefined => {
   if (!window.midnight) return undefined;
@@ -36,9 +37,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       setStatus('connecting');
       setError(null);
 
-      // Connect to Preprod network
-      const connectedApi = await wallet.connect('preprod');
-
+      const connectedApi = await wallet.connect(networkId);
       // Retrieve shielded address
       const addresses = await connectedApi.getShieldedAddresses();
       if (addresses.shieldedAddress) {

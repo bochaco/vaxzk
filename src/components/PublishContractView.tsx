@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
-
+import { networkId } from './ConfigNetwork';
 import { buildProviders, deployVaxZkContract } from '../utils/deploy';
 
 interface PublishContractViewProps {
@@ -29,7 +29,6 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({ onBack }) => 
         throw new Error("Compatible Midnight wallet not found");
       }
 
-      const networkId = 'preprod';
       const connectedApi = await wallet.connect(networkId);
       const providers = await buildProviders(connectedApi, networkId);
 

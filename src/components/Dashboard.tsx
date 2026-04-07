@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
-import { LanguageSelector, CONTRACTID } from '../App';
+import { networkId, CONTRACTID } from './ConfigNetwork';
+import { LanguageSelector } from '../App';
 import HomeView from './HomeView';
 import WalletView from './WalletView';
 import AddVaccineView from './AddVaccineView';
@@ -27,7 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connecte
     async function checkClinicStatus() {
       if (!walletAddress || !CONTRACTID || !connectedApi) return;
       try {
-        const providers = await buildProviders(connectedApi, 'preprod');
+        const providers = await buildProviders(connectedApi, networkId);
         
         // For this check, we need a secret key. In a real-world scenario, 
         // this would be retrieved from secure storage or derivation.
