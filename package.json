@@ -8,10 +8,18 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "eslint . --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "contract:compile": "compact compile contract/src/vaxzk.compact contract/src/managed/vaxzk && npm run contract:copy-assets",
+    "contract:copy-assets": "mkdir -p public && cp -r contract/src/managed/vaxzk/keys public/keys && cp -r contract/src/managed/vaxzk/zkir public/zkir"
   },
   "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/dapp-connector-api": "^4.0.1",
+    "@midnight-ntwrk/midnight-js": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-fetch-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
     "@midnight-ntwrk/wallet-sdk-facade": "^3.0.0",
     "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^2.1.0",
     "buffer": "^6.0.3",

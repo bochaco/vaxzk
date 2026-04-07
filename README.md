@@ -4,6 +4,43 @@ VaxZK is a decentralized application designed for the Midnight Network to manage
 
 The application allows users to register, securely receive vaccine certificates from authorized organizations (e.g., WHO), view their private certificates, and generate ZK proofs via QR codes to verify their vaccination status without revealing their sensitive personal data.
 
+## Development
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (LTS)
+- [Midnight Compact compiler](https://docs.midnight.network/getting-started/installation) (`compact`)
+- [Lace wallet](https://www.lace.io/) browser extension with Midnight support
+
+### Setup
+
+```bash
+npm install
+npm run contract:compile   # compile the contract and copy ZK assets
+npm run dev
+```
+
+### Contract changes
+
+Whenever `contract/src/vaxzk.compact` is modified, recompile before running or building the app:
+
+```bash
+npm run contract:compile
+```
+
+This compiles the Compact source to `contract/src/managed/vaxzk/` and copies the verifier keys and ZK IR files into `public/keys/` and `public/zkir/`, where Vite serves them as static assets. **If this step is skipped after a contract change, the app will fail at runtime with a `ContractConfigurationError` when trying to deploy or call circuits.**
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | Type-check and build for production |
+| `npm run contract:compile` | Compile the contract and copy ZK assets to `public/` |
+| `npm run contract:copy-assets` | Copy already-compiled ZK assets to `public/` (without recompiling) |
+| `npm run lint` | Lint the codebase |
+| `npm run preview` | Preview the production build |
+
+---
+
 ### 1. Frontend Setup (React + Vite)
 - We will initialize a Vite project for the DApp interface.
 - Implement rich, dynamic, state-of-the-art UI with a Glassmorphism aesthetic and a sleek dark mode.

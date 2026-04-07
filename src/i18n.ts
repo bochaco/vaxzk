@@ -113,6 +113,22 @@ export const translations = {
     recommendedStatus: 'Recommended',
     confirmedStatus: 'Confirmed',
     scheduleNewDose: 'Schedule New Dose',
+    
+    // Publish Contract View
+    publishContract: 'Publish Contract',
+    publishContractSubtitle: 'Deploy a new VaxZk smart contract to the Midnight network.',
+    contractName: 'Contract Name',
+    contractNamePlaceholder: 'Ex: VaxZk Core v1.0',
+    network: 'Network',
+    networkTestnet: 'Testnet',
+    networkDevnet: 'Devnet',
+    deploying: 'Deploying...',
+    deployContractButton: 'Deploy Contract',
+    deploySuccess: 'Contract deployed successfully!',
+    adminKey: 'Initial Admin (Optional)',
+    adminKeyPlaceholder: 'Leave empty to use current wallet',
+    contractParamsTitle: 'Contract Parameters',
+    contractDesc: 'The constructor will automatically set your wallet as the initial admin. Further clinics can be added later.',
   },
   pt: {
     // Login
@@ -226,6 +242,22 @@ export const translations = {
     recommendedStatus: 'Recomendada',
     confirmedStatus: 'Confirmada',
     scheduleNewDose: 'Agendar Nova Dose',
+    
+    // Publish Contract View
+    publishContract: 'Publicar Contrato',
+    publishContractSubtitle: 'Faça o deploy de um novo contrato VaxZk na rede do Midnight.',
+    contractName: 'Nome do Contrato',
+    contractNamePlaceholder: 'Ex: VaxZk Core v1.0',
+    network: 'Rede',
+    networkTestnet: 'Testnet',
+    networkDevnet: 'Devnet',
+    deploying: 'Publicando...',
+    deployContractButton: 'Publicar Contrato',
+    deploySuccess: 'Contrato publicado com sucesso!',
+    adminKey: 'Admin Inicial (Opcional)',
+    adminKeyPlaceholder: 'Deixe vazio para usar a carteira atual',
+    contractParamsTitle: 'Parâmetros do Contrato',
+    contractDesc: 'O construtor definirá automaticamente sua carteira como admin inicial. Outras clínicas poderão ser adicionadas depois.',
   },
   es: {
     // Login
@@ -339,6 +371,22 @@ export const translations = {
     recommendedStatus: 'Recomendada',
     confirmedStatus: 'Confirmada',
     scheduleNewDose: 'Programar Nueva Dosis',
+    
+    // Publish Contract View
+    publishContract: 'Publicar Contrato',
+    publishContractSubtitle: 'Despliegue un nuevo contrato inteligente VaxZk en la red de Midnight.',
+    contractName: 'Nombre del Contrato',
+    contractNamePlaceholder: 'Ej: VaxZk Core v1.0',
+    network: 'Red',
+    networkTestnet: 'Testnet',
+    networkDevnet: 'Devnet',
+    deploying: 'Desplegando...',
+    deployContractButton: 'Desplegar Contrato',
+    deploySuccess: '¡Contrato desplegado con éxito!',
+    adminKey: 'Admin Inicial (Opcional)',
+    adminKeyPlaceholder: 'Dejar vacío para usar la billetera actual',
+    contractParamsTitle: 'Parámetros del Contrato',
+    contractDesc: 'El constructor establecerá automáticamente su billetera como administrador inicial. Se pueden agregar más clínicas posteriormente.',
   },
 };
 

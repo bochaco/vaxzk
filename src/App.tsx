@@ -20,7 +20,7 @@ export function LanguageSelector({ fixed = false }: { fixed?: boolean }) {
           onClick={() => setLanguage(code)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors ${
             language === code
-              ? 'bg-primary text-white'
+              ? 'bg-primary'
               : 'text-slate-500 hover:text-slate-800'
           }`}
         >
