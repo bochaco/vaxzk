@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import type { InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { useLanguage } from '../LanguageContext';
 
-/*
-const connectedApi = await wallet.connect('preprod');
-const status = await connectedApi.getConnectionStatus();
-console.log('Connection status:', status);
-*/
-
 const getCompatibleWallet = (): InitialAPI | undefined => {
   if (!window.midnight) return undefined;
   return Object.values(window.midnight).find(

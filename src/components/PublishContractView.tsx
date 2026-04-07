@@ -66,43 +66,6 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({ onBack }) => 
               </div>
             </div>
 
-            {/* Network and Admin Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-                  {t.network}
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                    <span className="material-symbols-outlined text-outline">dns</span>
-                  </div>
-                  <select className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300 appearance-none text-slate-700">
-                    <option value="testnet">{t.networkTestnet}</option>
-                    <option value="devnet">{t.networkDevnet}</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                    <span className="material-symbols-outlined text-outline">arrow_drop_down</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-3">
-                <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-                  {t.adminKey}
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                    <span className="material-symbols-outlined text-outline">key</span>
-                  </div>
-                  <input 
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300 placeholder:text-outline" 
-                    placeholder={t.adminKeyPlaceholder}
-                    type="password"
-                  />
-                </div>
-              </div>
-            </div>
-
             {/* Visual Aid Card */}
             <div className="bg-blue-50 p-5 rounded-lg border-none flex items-start gap-4 mt-12">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">

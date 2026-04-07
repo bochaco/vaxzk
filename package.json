@@ -11,7 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/dapp-connector-api": "^4.0.1",
+    "@midnight-ntwrk/midnight-js": "^4.0.4",
     "@midnight-ntwrk/wallet-sdk-facade": "^3.0.0",
     "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^2.1.0",
     "buffer": "^6.0.3",
