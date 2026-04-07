@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import { LanguageProvider, useLanguage } from './LanguageContext';
+import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 import './index.css';
 
 const LANGUAGES = [
@@ -38,21 +39,24 @@ export function LanguageSelector({ fixed = false }: { fixed?: boolean }) {
 function AppContent() {
   const [isConnected, setIsConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [connectedApi, setConnectedApi] = useState<ConnectedAPI | null>(null);
 
-  const handleLoginSuccess = (address: string) => {
+  const handleLoginSuccess = (address: string, api: ConnectedAPI) => {
     setWalletAddress(address);
+    setConnectedApi(api);
     setIsConnected(true);
   };
 
   const handleLogout = () => {
     setIsConnected(false);
     setWalletAddress(null);
+    setConnectedApi(null);
   };
 
   return (
     <>
       {isConnected ? (
-        <Dashboard onLogout={handleLogout} walletAddress={walletAddress} />
+        <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
       ) : (
         <>
           <LanguageSelector fixed />

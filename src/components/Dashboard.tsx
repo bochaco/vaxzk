@@ -6,16 +6,18 @@ import WalletView from './WalletView';
 import AddVaccineView from './AddVaccineView';
 import CalendarView from './CalendarView';
 import PublishContractView from './PublishContractView';
-import { buildProviders, joinVaxZkContract, isClinic } from '../utils/deploy';
+import { joinVaxZkContract, isClinic, buildProviders } from '../utils/deploy';
+import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 
 interface DashboardProps {
   onLogout: () => void;
   walletAddress: string | null;
+  connectedApi: ConnectedAPI;
 }
 
 type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'publish';
 
-  const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
+const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress, connectedApi }) => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [prevTab, setPrevTab] = useState<Tab>('home');
@@ -23,20 +25,10 @@ type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'publish';
 
   React.useEffect(() => {
     async function checkClinicStatus() {
-      if (!walletAddress || !CONTRACTID) return;
+      if (!walletAddress || !CONTRACTID || !connectedApi) return;
       try {
-
-        const wallets = Object.values(window.midnight);
-        const wallet = wallets.find(w => !!w && typeof w === 'object' && 'apiVersion' in w) as any;
-      
-        if (!wallet) {
-          throw new Error("Compatible Midnight wallet not found");
-        }
-
-        const networkId = 'preprod';
-        const connectedApi = await wallet.connect(networkId);
-        const providers = await buildProviders(connectedApi, networkId);
-       
+        const providers = await buildProviders(connectedApi, 'preprod');
+        
         // For this check, we need a secret key. In a real-world scenario, 
         // this would be retrieved from secure storage or derivation.
         // For now, we try to join with a placeholder or the stored state.
@@ -51,7 +43,7 @@ type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'publish';
       }
     }
     checkClinicStatus();
-  }, [walletAddress]);
+  }, [walletAddress, connectedApi]);
 
   const handleTabChange = (tab: Tab) => {
     if (tab !== 'add' && tab !== 'publish') setPrevTab(activeTab);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
+import type { ConnectedAPI, InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { useLanguage } from '../LanguageContext';
 
 const getCompatibleWallet = (): InitialAPI | undefined => {
@@ -15,14 +15,13 @@ const getCompatibleWallet = (): InitialAPI | undefined => {
 const wallet = getCompatibleWallet();
 
 interface LoginProps {
-  onLoginSuccess: (address: string) => void;
+  onLoginSuccess: (address: string, connectedApi: ConnectedAPI) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const { t } = useLanguage();
   const [status, setStatus] = useState<'connecting' | 'connected' | 'idle' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
-
 
   const connectWallet = async () => {
     if (!wallet) {
@@ -44,7 +43,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       const addresses = await connectedApi.getShieldedAddresses();
       if (addresses.shieldedAddress) {
         setStatus('connected');
-        onLoginSuccess(addresses.shieldedAddress);
+        onLoginSuccess(addresses.shieldedAddress, connectedApi);
       } else {
         throw new Error(t.shieldedAddressNotFound);
       }
