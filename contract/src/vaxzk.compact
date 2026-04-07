@@ -41,8 +41,16 @@ export circuit revokeAdmin(_adminSk: Bytes<32>): [] {
     admins.remove(disclose(newAdminPubKey));
 }
 
-export circuit adminOnlyAction(someParam: Uint<16>): [] {
+export circuit adminOnlyAction(): [] {
     isAdmin(); // aborts here if caller is not an admin
+    return [];
+}
+
+export circuit clinicOnlyAction(): [] {
+    const _sk = localSk();
+    const pubKey = publicKey(_sk);
+    assert(clinics.member(disclose(pubKey)), "You are not an clinic");
+
     return [];
 }
 
