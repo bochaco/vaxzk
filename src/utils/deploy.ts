@@ -84,7 +84,7 @@ async function getCompiledContract() {
     // at startup if the contract hasn't been compiled yet.
     const VaxZk = await import(
       /* @vite-ignore */
-      '../managed/vaxzk/contract/index.js'
+      './managed/vaxzk/contract/index.js'
     );
 
     _compiledContract = CompiledContract.make('vaxzk', VaxZk.Contract).pipe(
