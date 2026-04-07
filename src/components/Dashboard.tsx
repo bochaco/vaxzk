@@ -6,6 +6,7 @@ import WalletView from './WalletView';
 import AddVaccineView from './AddVaccineView';
 import CalendarView from './CalendarView';
 import PublishContractView from './PublishContractView';
+import { buildProviders, joinVaxZkContract, isClinic } from '../utils/deploy';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -24,14 +25,18 @@ type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'publish';
     async function checkClinicStatus() {
       if (!walletAddress || !CONTRACTID) return;
       try {
+
         const wallets = Object.values(window.midnight);
         const wallet = wallets.find(w => !!w && typeof w === 'object' && 'apiVersion' in w) as any;
-        if (!wallet) return;
+      
+        if (!wallet) {
+          throw new Error("Compatible Midnight wallet not found");
+        }
 
-        const connectedApi = await wallet.connect('preprod');
-        const { buildProviders, joinVaxZkContract, isClinic } = await import('../utils/deploy');
-        const providers = await buildProviders(connectedApi, 'preprod');
-        
+        const networkId = 'preprod';
+        const connectedApi = await wallet.connect(networkId);
+        const providers = await buildProviders(connectedApi, networkId);
+       
         // For this check, we need a secret key. In a real-world scenario, 
         // this would be retrieved from secure storage or derivation.
         // For now, we try to join with a placeholder or the stored state.
