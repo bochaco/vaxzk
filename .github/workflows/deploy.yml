@@ -32,11 +32,13 @@ jobs:
            curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
            compact update
            compact compile contract/src/vaxzk.compact src/utils/managed/vaxzk
+           mkdir -p public/keys public/zkir
+           cp -r src/utils/managed/vaxzk/keys/* public/keys/
+           cp -r src/utils/managed/vaxzk/zkir/* public/zkir/
 
       - name: DEPLOY
         run: |
            npm run build
-           cp -r src/utils/managed dist/assets/
            cp -r dist/* /home/runner/vaxzk/
 
       - name: SAVE

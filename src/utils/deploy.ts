@@ -82,10 +82,7 @@ async function getCompiledContract() {
   if (!_compiledContract) {
     // Dynamic import so the module loads only when needed and doesn't crash
     // at startup if the contract hasn't been compiled yet.
-    const VaxZk = await import(
-      /* @vite-ignore */
-      './managed/vaxzk/contract/index.js'
-    );
+    const VaxZk = await import('./managed/vaxzk/contract/index.js');
 
     _compiledContract = CompiledContract.make('vaxzk', VaxZk.Contract).pipe(
       CompiledContract.withWitnesses(witnesses),
