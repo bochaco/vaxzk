@@ -46,7 +46,7 @@ jobs:
       - name: SAVE
         run: |
            cd /home/runner/vaxzk/
-           git config --global user.email "marco@startupvb.com"
+           git config --global user.email "marco@sociap.com.br"
            git config --global user.name "Marco Santos"
            git add .
            git commit -m "Automatic publish from vaxzk"
