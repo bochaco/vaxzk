@@ -6,7 +6,7 @@ interface HomeViewProps {
   onSchedule: () => void;
 }
 
-const HomeView: React.FC<HomeViewProps> = ({ walletAddress, onSchedule }) => {
+const HomeView: React.FC<HomeViewProps> = ({ onSchedule }) => {
   const { t } = useLanguage();
 
   return (
