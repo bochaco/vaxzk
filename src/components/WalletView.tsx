@@ -18,7 +18,7 @@ const WalletView: React.FC = () => {
 
       {/* Category Filters */}
       <div className="flex gap-3 mb-12 overflow-x-auto pb-2 scrollbar-hide">
-        <button className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold shadow-md active:scale-95 duration-200 whitespace-nowrap">
+        <button className="px-6 py-2.5 rounded-full bg-primary font-semibold shadow-md active:scale-95 duration-200 whitespace-nowrap">
           {t.filterAll}
         </button>
         <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 whitespace-nowrap">

@@ -12,9 +12,8 @@ dist
 dist-ssr
 *.local
 
-deploy.yml
 mockup
-src/utils/contracts
+src/utils/managed/
 
 # Editor directories and files
 .vscode/*

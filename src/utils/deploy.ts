@@ -2,12 +2,12 @@
  * VaxZK contract deployment, joining, and circuit call utilities.
  *
  * NOTE: The contract must be compiled before this file is fully functional:
- *   compact compile contract/src/vaxzk.compact contract/src/managed/vaxzk
+ *   compact compile contract/src/vaxzk.compact dist/managed/vaxzk 
  *
  * After compilation the managed output will contain:
- *   contract/src/managed/vaxzk/contract/index.cjs  – TypeScript bindings
- *   contract/src/managed/vaxzk/keys/               – Verifier keys (served as static assets)
- *   contract/src/managed/vaxzk/zkir/               – ZK IR files (served as static assets)
+ *   dist/managed/vaxzk/contract/index.cjs  – TypeScript bindings
+ *   dist/managed/vaxzk/keys/               – Verifier keys (served as static assets)
+ *   dist/managed/vaxzk/zkir/               – ZK IR files (served as static assets)
  *
  * The keys/ and zkir/ directories must be reachable from window.location.origin so that
  * FetchZkConfigProvider can load them at runtime.
@@ -54,7 +54,10 @@ export type VaxZkCircuitKeys =
   | 'revokeAdmin'
   | 'adminOnlyAction'
   | 'addClinic'
-  | 'revokeClinic';
+  | 'revokeClinic'
+  | 'clinicOnlyAction';
+
+export type ClinicPrivateState = VaxZkPrivateState;
 
 export const VAXZK_PRIVATE_STATE_ID = 'vaxzk-private-state' as const;
 
@@ -82,10 +85,7 @@ async function getCompiledContract() {
   if (!_compiledContract) {
     // Dynamic import so the module loads only when needed and doesn't crash
     // at startup if the contract hasn't been compiled yet.
-    const VaxZk = await import(
-      /* @vite-ignore */
-      '../../contract/src/managed/vaxzk/contract/index.js'
-    );
+    const VaxZk = await import('./managed/vaxzk/contract/index.js');
 
     _compiledContract = CompiledContract.make('vaxzk', VaxZk.Contract).pipe(
       CompiledContract.withWitnesses(witnesses),
@@ -272,10 +272,23 @@ export function revokeAdmin(contract: DeployedVaxZkContract, adminSk: Uint8Array
  * Execute adminOnlyAction — a placeholder circuit that asserts admin status.
  *
  * @param contract   - Deployed contract handle
- * @param someParam  - A Uint<16> value (passed as bigint)
  */
-export function adminOnlyAction(contract: DeployedVaxZkContract, someParam: bigint) {
-  return contract.callTx.adminOnlyAction(someParam);
+export async function adminOnlyAction(contract: DeployedVaxZkContract): Promise<boolean> {
+  try {
+    // We attempt to "call" the circuit. In midnight-js, calling an impure circuit
+    // performs local proof generation. If the assertion fails (e.g. not a clinic),
+    // it will throw an error before even trying to submit.
+    await contract.callTx.adminOnlyAction();
+    return true;
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("You are not an admin")) {
+      return false;
+    }
+    // For other errors, we might want to log them or rethrow, but for UI check,
+    // assuming not a clinic is safer.
+    console.warn('Admin check failed:', err);
+    return false;
+  }
 }
 
 /**
@@ -298,4 +311,37 @@ export function addClinic(contract: DeployedVaxZkContract, clinicSk: Uint8Array)
  */
 export function revokeClinic(contract: DeployedVaxZkContract, clinicSk: Uint8Array) {
   return contract.callTx.revokeClinic(clinicSk);
+}
+
+/**
+ * Execute clinicOnlyAction — a circuit that asserts clinic status.
+ *
+ * @param contract   - Deployed contract handle
+ */
+export function clinicOnlyAction(contract: DeployedVaxZkContract) {
+  return contract.callTx.clinicOnlyAction();
+}
+
+/**
+ * Check if the current user is a clinic by attempting to call clinicOnlyAction locally.
+ *
+ * @param contract - Deployed contract handle
+ * @returns true if the user is a clinic, false otherwise.
+ */
+export async function isClinic(contract: DeployedVaxZkContract): Promise<boolean> {
+  try {
+    // We attempt to "call" the circuit. In midnight-js, calling an impure circuit
+    // performs local proof generation. If the assertion fails (e.g. not a clinic),
+    // it will throw an error before even trying to submit.
+    await contract.callTx.clinicOnlyAction();
+    return true;
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("You are not an clinic")) {
+      return false;
+    }
+    // For other errors, we might want to log them or rethrow, but for UI check,
+    // assuming not a clinic is safer.
+    console.warn('Clinic check failed:', err);
+    return false;
+  }
 }

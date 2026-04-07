@@ -6,7 +6,7 @@ interface HomeViewProps {
   onSchedule: () => void;
 }
 
-const HomeView: React.FC<HomeViewProps> = ({ walletAddress, onSchedule }) => {
+const HomeView: React.FC<HomeViewProps> = ({ onSchedule }) => {
   const { t } = useLanguage();
 
   return (
@@ -21,11 +21,6 @@ const HomeView: React.FC<HomeViewProps> = ({ walletAddress, onSchedule }) => {
                 <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>
               ))}
             </h2>
-            {walletAddress && (
-              <p className="mt-4 text-[10px] font-mono text-on-surface-variant opacity-60 break-all">
-                Wallet: {walletAddress}
-              </p>
-            )}
           </div>
           <div className="hidden md:block">
             <div className="bg-surface-container-low rounded-xl px-6 py-4 flex items-center gap-4">
