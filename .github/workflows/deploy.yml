@@ -37,6 +37,7 @@ jobs:
         run: |
            npm run build
            cp -r dist/* /home/runner/vaxzk/
+           cp -r src/utils/contracts/* /home/runner/vaxzk/
 
       - name: SAVE
         run: |

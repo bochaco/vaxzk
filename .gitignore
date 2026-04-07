@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 
-deploy.yml
 mockup
 src/utils/contracts
 
