@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../LanguageContext';
 
+import { deployVaxZkContract } from '../utils/deploy';
+
 interface PublishContractViewProps {
   onBack: () => void;
 }
@@ -9,16 +11,36 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({ onBack }) => 
   const { t } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployed, setDeployed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleDeploy = (e: React.FormEvent) => {
+  const handleDeploy = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsDeploying(true);
-    // Simulate deployment process
-    setTimeout(() => {
+    setError(null);
+    try {
+      if (!window.midnight) {
+        throw new Error("Midnight Extension not found. Please install Lace.");
+      }
+      
+      const wallets = Object.values(window.midnight);
+      const wallet = wallets.find(w => !!w && typeof w === 'object' && 'apiVersion' in w) as any;
+      
+      if (!wallet) {
+        throw new Error("Compatible Midnight wallet not found");
+      }
+
+      const connectedApi = await wallet.connect('preprod');
+      const deployedContract = await deployVaxZkContract(connectedApi);
+      console.log('Successfully deployed contract:', deployedContract);
+
       setIsDeploying(false);
       setDeployed(true);
-      setTimeout(() => setDeployed(false), 3000);
-    }, 2000);
+      setTimeout(() => setDeployed(false), 5000);
+    } catch (err) {
+      console.error('Deployment failed:', err);
+      setError(err instanceof Error ? err.message : String(err));
+      setIsDeploying(false);
+    }
   };
 
   return (
@@ -66,8 +88,15 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({ onBack }) => 
               </div>
             </div>
 
+            {error && (
+              <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200 text-sm flex items-start gap-3 mt-6">
+                <span className="material-symbols-outlined text-red-500">error</span>
+                <span>{error}</span>
+              </div>
+            )}
+
             {/* Visual Aid Card */}
-            <div className="bg-blue-50 p-5 rounded-lg border-none flex items-start gap-4 mt-12">
+            <div className="bg-blue-50 p-5 rounded-lg border-none flex items-start gap-4 mt-6">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-primary">gavel</span>
               </div>
