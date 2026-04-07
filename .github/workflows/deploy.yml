@@ -27,6 +27,13 @@ jobs:
         run: |
            npm install
 
+
+      - name: COMPACT
+        run: |
+           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+           compact update
+           compact compile contract/src/vaxzk.compact dist/vaxsk
+
       - name: DEPLOY
         run: |
            npm run build
