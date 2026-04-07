@@ -1,0 +1,65 @@
+pragma language_version 0.22;
+
+import CompactStandardLibrary;
+
+export ledger admins: Set<Bytes<32>>; // admins are public
+export ledger clinics: Set<Bytes<32>>; // clinics are public
+
+witness localSk(): Bytes<32>;
+
+export circuit publicKey(_sk: Bytes<32>): Bytes<32> {
+    return persistentHash<Vector<2, Bytes<32>>>([pad(32, "guest-list:pk:"), _sk]);
+}
+constructor(){
+    const _sk = localSk();
+    const pubKey = publicKey(_sk);
+    admins.insert(disclose(pubKey));
+}
+
+circuit isAdmin(): Boolean {
+    const _sk = localSk();
+    const pubKey = publicKey(_sk);
+    assert(admins.member(disclose(pubKey)), "You are not an admin");
+    return true;
+}
+
+export circuit addAdmin(_adminSk: Bytes<32>): [] {
+    isAdmin();
+
+    const newAdminPubKey = publicKey(_adminSk);
+    assert(!admins.member(disclose(newAdminPubKey)), "You are already in the admin list");
+    
+    admins.insert(disclose(newAdminPubKey));
+}
+
+export circuit revokeAdmin(_adminSk: Bytes<32>): [] {
+    isAdmin();
+
+    const newAdminPubKey = publicKey(_adminSk);
+    assert(admins.member(disclose(newAdminPubKey)), "You are not in the admin list");
+    
+    admins.remove(disclose(newAdminPubKey));
+}
+
+export circuit adminOnlyAction(someParam: Uint<16>): [] {
+    isAdmin(); // aborts here if caller is not an admin
+    return [];
+}
+
+export circuit addClinic(_clinicSk: Bytes<32>): [] {
+    isAdmin();
+
+    const newClinicPubKey = publicKey(_clinicSk);
+    assert(!clinics.member(disclose(newClinicPubKey)), "You are already in the clinic list");
+    
+    clinics.insert(disclose(newClinicPubKey));
+}
+
+export circuit revokeClinic(_clinicSk: Bytes<32>): [] {
+    isAdmin();
+
+    const newClinicPubKey = publicKey(_clinicSk);
+    assert(!clinics.member(disclose(newClinicPubKey)), "You are not in the clinic list");
+    
+    clinics.remove(disclose(newClinicPubKey));
+}

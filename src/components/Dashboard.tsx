@@ -5,13 +5,14 @@ import HomeView from './HomeView';
 import WalletView from './WalletView';
 import AddVaccineView from './AddVaccineView';
 import CalendarView from './CalendarView';
+import PublishContractView from './PublishContractView';
 
 interface DashboardProps {
   onLogout: () => void;
   walletAddress: string | null;
 }
 
-type Tab = 'home' | 'wallet' | 'add' | 'calendar';
+type Tab = 'home' | 'wallet' | 'add' | 'calendar' | 'publish';
 
 const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
   const { t } = useLanguage();
@@ -19,7 +20,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
   const [prevTab, setPrevTab] = useState<Tab>('home');
 
   const handleTabChange = (tab: Tab) => {
-    if (tab !== 'add') setPrevTab(activeTab);
+    if (tab !== 'add' && tab !== 'publish') setPrevTab(activeTab);
     setActiveTab(tab);
   };
 
@@ -31,6 +32,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
         return <WalletView />;
       case 'add':
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
+      case 'publish':
+        return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
       case 'calendar':
         return <CalendarView />;
       default:
@@ -102,12 +105,21 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, walletAddress }) => {
         </button>
         <button
           onClick={() => handleTabChange('calendar')}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+          className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
             activeTab === 'calendar' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
           }`}
         >
           <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'calendar' ? "'FILL' 1" : undefined }}>calendar_today</span>
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Calendar</span>
+        </button>
+        <button
+          onClick={() => handleTabChange('publish')}
+          className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+            activeTab === 'publish' ? 'text-blue-700 bg-blue-100/50 rounded-2xl' : 'text-slate-400 hover:text-blue-600'
+          }`}
+        >
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: activeTab === 'publish' ? "'FILL' 1" : undefined }}>publish</span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">Admin</span>
         </button>
       </nav>
 
