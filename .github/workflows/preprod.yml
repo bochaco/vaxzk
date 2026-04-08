@@ -1,8 +1,8 @@
-name: Deploy
+name: Preprod
 
 on:
   push:
-    branches: [ main ]
+    branches-ignore: [ main ]
 
 jobs:
 
