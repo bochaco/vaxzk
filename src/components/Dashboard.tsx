@@ -80,7 +80,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "publish":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
       case "listvaccine":
-        return <VaccinesAdmin />;
+        return <VaccinesAdmin connectedApi={connectedApi!} />;
       case "deploy":
         return <DeployContractView />;
       case "calendar":
