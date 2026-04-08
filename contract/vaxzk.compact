@@ -2,18 +2,28 @@ pragma language_version >= 0.20;
 
 import CompactStandardLibrary;
 
-// Account Possible Profiles
-export enum ProfileState {
-    ADMIN,
-    CLINIC,
-    USER
-}
+import "./Types";
+
+export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, ProfileState };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
 
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Set<Bytes<32>>;
+
+// Map of vaccine certificate issuers indexed by assigned ID
+export ledger issuers: Map<Bytes<32>, CertIssuerInfo>;
+
+export ledger issuerId: Counter;
+
+export ledger proofReqId: Counter;
+
+// Map of vaccine proof requests indexed by assigned ID
+export ledger vaccineProofReqs: Map<Bytes<32>, VaccineProofRequest>;
+
+// Map of sumitted vaccine proofs indexed by request ID
+export ledger vaccineProofs: Map<Bytes<32>, VaxZkProof>;
 
 // Reads the caller's 32-byte secret key from local private state.
 witness localSk(): Bytes<32>;
@@ -23,6 +33,8 @@ constructor() {
   const _sk = localSk();
   const adminId = getShieldedId(_sk);
   admins.insert(disclose(adminId));
+  issuerId.increment(1);
+  proofReqId.increment(1);
 }
 
 // Export Profile
@@ -43,11 +55,35 @@ export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<2, Bytes<32>>>([pad(32, "guest-list:pk:"), _sk]);
 }
 
+// Generate a new cert issuer ID.
+export circuit getCertIssuerId(): Bytes<32> {
+  const newIssuerId =
+          persistentHash<Vector<2, Field>>([pad(32, "cert-issuer-id:") as Field, issuerId as Field]);
+  issuerId.increment(1);
+  return newIssuerId;
+}
+
+// Generate a new cert proof request ID.
+export circuit getProofReqId(): Bytes<32> {
+  const newProofReqId =
+          persistentHash<Vector<2, Field>>([pad(32, "proof-req-id:") as Field, proofReqId as Field]);
+  proofReqId.increment(1);
+  return newProofReqId;
+}
+
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): Boolean {
   const _sk = localSk();
   const adminId = getShieldedId(_sk);
   assert(admins.member(disclose(adminId)), "You are not an admin");
+  return true;
+}
+
+// Guards: aborts the calling circuit if the caller is not a registered clinic.
+circuit isClinic(): Boolean {
+  const _sk = localSk();
+  const clinicId = getShieldedId(_sk);
+  assert(clinics.member(disclose(clinicId)), "You are not a registered clinic");
   return true;
 }
 
@@ -77,4 +113,48 @@ export circuit revokeClinic(clinicId: Bytes<32>): [] {
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "Clinic ID is not in the clinics list");
   clinics.remove(disclose(clinicId));
+}
+
+// Registers a vaccine certificate issuer. Caller must be an admin.
+export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
+  isAdmin();
+  const newIssuerId = getCertIssuerId();
+  assert(!issuers.member(disclose(newIssuerId)), "The ID is already in the issuers list");
+  issuers.insert(disclose(newIssuerId), disclose(issuerInfo));
+  return newIssuerId;
+}
+
+// Registers a new vaccine proof request. Caller must be a clinic.
+export circuit requestVaccineProof(req: VaccineProofRequest): Bytes<32> {
+  isClinic();
+  const newProofReqId = getProofReqId();
+  assert(!vaccineProofReqs.member(disclose(newProofReqId)),
+         "The ID is already in the vaccine proof requests list"
+         );
+  vaccineProofReqs.insert(disclose(newProofReqId), disclose(req));
+  return newProofReqId;
+}
+
+// Submits a requested vaccine proof.
+export circuit submitVaccineProof(proofReqId: Bytes<32>, proof: VaxZkProof): [] {
+  assert(vaccineProofReqs.member(disclose(proofReqId)),
+         "The ID is not the vaccine proof requests list"
+         );
+  assert(!vaccineProofs.member(disclose(proofReqId)),
+         "The vaccine proof for the given request ID has been already submitted"
+         );
+  const vaccineProofReq = vaccineProofReqs.lookup(disclose(proofReqId));
+
+  assert(proof.vaccine == vaccineProofReq.vaccine,
+         "The submitted proof doesn't match the vaccine type"
+         );
+  assert(proof.personalId == vaccineProofReq.personalId,
+         "The submitted proof doesn't match the passport or ID number"
+         );
+  assert(proof.expirationDate >= vaccineProofReq.validUntil,
+         "The submitted certificate proof doesn't comply with validity date"
+         );
+  // TODO: validate issuer signature
+
+  vaccineProofs.insert(disclose(proofReqId), disclose(proof));
 }
