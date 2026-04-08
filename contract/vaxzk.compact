@@ -2,6 +2,13 @@ pragma language_version >= 0.20;
 
 import CompactStandardLibrary;
 
+// Account Possible Profiles
+export enum ProfileState {
+    ADMIN,
+    CLINIC,
+    USER
+}
+
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
 
@@ -18,6 +25,19 @@ constructor() {
   admins.insert(disclose(adminId));
 }
 
+// Export Profile
+export circuit getProfile(): ProfileState {
+  const _sk = localSk();
+  const adminId = getShieldedId(_sk);
+  if (admins.member(disclose(adminId))) {
+      return ProfileState.ADMIN;
+  }
+  if (clinics.member(disclose(_sk))) {
+      return ProfileState.CLINIC;
+  }
+  return ProfileState.USER;
+}
+
 // Derives a deterministic shielded ID from a secret key using a persistent hash.
 export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<2, Bytes<32>>>([pad(32, "guest-list:pk:"), _sk]);
@@ -27,14 +47,14 @@ export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
 circuit isAdmin(): Boolean {
   const _sk = localSk();
   const adminId = getShieldedId(_sk);
-  assert(!admins.member(disclose(adminId)), "You are not an admin");
+  assert(admins.member(disclose(adminId)), "You are not an admin");
   return true;
 }
 
 // Adds a new admin by their shielded ID. Caller must be an existing admin.
 export circuit addAdmin(adminId: Bytes<32>): [] {
   isAdmin();
-  assert(admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
+  assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
   admins.insert(disclose(adminId));
 }
 
