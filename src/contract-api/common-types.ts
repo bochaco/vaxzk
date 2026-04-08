@@ -79,6 +79,7 @@ export type DeployedVaxZkContract = FoundContract<VaxZkContract>;
 export type VaxZkDerivedState = {
   readonly admins: Array<string>;
   readonly clinics: Array<string>;
+  readonly vaccines: Array<string>;
   readonly isAdmin: boolean;
   readonly isClinic: boolean;
 };

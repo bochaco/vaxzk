@@ -99,6 +99,10 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         for (const clinic of ledgerState.clinics) {
           clinics.push(toHex(clinic));
         }
+        const vaccines = new Array<string>();
+        for (const vaccineBytes of ledgerState.vaccines) {
+          vaccines.push(new TextDecoder().decode(vaccineBytes).replace(/\0/g, '').trim());
+        }
 
         const myId = privateState
           ? VaxZk.pureCircuits.getShieldedId(privateState.secretKey)
@@ -106,7 +110,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         const isAdmin = myId ? ledgerState.admins.member(myId) : false;
         const isClinic = myId ? ledgerState.clinics.member(myId) : false;
 
-        return { admins, clinics, isAdmin, isClinic };
+        return { admins, clinics, vaccines, isAdmin, isClinic };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
