@@ -6,7 +6,7 @@ import HomeView from "./HomeView";
 import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
 import CalendarView from "./CalendarView";
-import PublishContractView from "./PublishContractView";
+import VaccinesAdmin from "./VaccinesAdmin";
 import DeployContractView from "./DeployContractView";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 import { firstValueFrom } from "rxjs";
@@ -19,7 +19,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "publish";
+type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccines" | "publish";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -30,7 +30,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [prevTab, setPrevTab] = useState<Tab>("home");
   const [isClinicUser, setIsClinicUser] = useState<boolean | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const isAdmin = true;
 
   React.useEffect(() => {
     async function checkClinicStatus() {
@@ -48,36 +48,16 @@ const Dashboard: React.FC<DashboardProps> = ({
           CONTRACTID as unknown as ContractAddress,
           secretKey,
         );
+
         const { isClinic } = await firstValueFrom(api.state$);
+        console.log(isClinic);
+
         setIsClinicUser(isClinic);
       } catch (err) {
         console.error("Failed to check clinic status:", err);
         setIsClinicUser(false);
       }
     }
-    async function checkIsAdmin() {
-      if (!walletAddress || !CONTRACTID || !connectedApi) return;
-      try {
-        const providers = await buildProviders(connectedApi, networkId);
-
-        // TODO: derive from wallet or secure user input instead of zeros
-        // For this check, we need a secret key. In a real-world scenario,
-        // this would be retrieved from secure storage or derivation.
-        // For now, we try to join with a placeholder or the stored state.
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          CONTRACTID as unknown as ContractAddress,
-          secretKey,
-        );
-        const { isAdmin } = await firstValueFrom(api.state$);
-        setIsAdmin(isAdmin);
-      } catch (err) {
-        console.error("Failed to check admin status:", err);
-        setIsAdmin(false);
-      }
-    }
-    checkIsAdmin();
     checkClinicStatus();
   }, [walletAddress, connectedApi]);
 
@@ -100,7 +80,17 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "add":
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
       case "publish":
-        return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
+        return (
+          <VaccinesAdmin
+            connectedApi={connectedApi}
+          />
+        );
+      case "listvaccines":
+        return (
+          <VaccinesAdmin
+            connectedApi={connectedApi}
+          />
+        );
       case "deploy":
         return <DeployContractView />;
       case "calendar":
@@ -241,7 +231,31 @@ const Dashboard: React.FC<DashboardProps> = ({
               publish
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Admin
+              Manage
+            </span>
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            onClick={() => handleTabChange("listvaccines")}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "publish"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "listvaccines" ? "'FILL' 1" : undefined,
+              }}
+            >
+              publish
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Vacines
             </span>
           </button>
         )}

@@ -81,4 +81,5 @@ export type VaxZkDerivedState = {
   readonly clinics: Array<string>;
   readonly isAdmin: boolean;
   readonly isClinic: boolean;
+  readonly vaccines: Array<string>;
 };

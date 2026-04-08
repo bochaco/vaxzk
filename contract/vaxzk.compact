@@ -2,40 +2,35 @@ pragma language_version >= 0.20;
 
 import CompactStandardLibrary;
 
-// Account Possible Profiles
-export enum ProfileState {
-    ADMIN,
-    CLINIC,
-    USER
-}
-
-// Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
-
-// Public ledger of shielded clinic IDs.
 export ledger clinics: Set<Bytes<32>>;
+export ledger vaccines: Set<Bytes<20>>;
 
 // Reads the caller's 32-byte secret key from local private state.
 witness localSk(): Bytes<32>;
 
 // Registers the deployer as the first admin by inserting their shielded ID.
 constructor() {
-  const _sk = localSk();
-  const adminId = getShieldedId(_sk);
-  admins.insert(disclose(adminId));
+  const own = ownPublicKey();
+  // const _sk = localSk();
+  // const adminId = getShieldedId(_sk);
+  // admins.insert(disclose(adminId));
+  admins.insert(disclose(own.bytes));
+
+  // Init some Vaccines
+  vaccines.insert(disclose(pad(20, "HepB")));
+  vaccines.insert(disclose(pad(20, "PCV")));
+  vaccines.insert(disclose(pad(20, "Tdap")));
 }
 
-// Export Profile
-export circuit getProfile(): ProfileState {
-  const _sk = localSk();
-  const adminId = getShieldedId(_sk);
-  if (admins.member(disclose(adminId))) {
-      return ProfileState.ADMIN;
-  }
-  if (clinics.member(disclose(_sk))) {
-      return ProfileState.CLINIC;
-  }
-  return ProfileState.USER;
+// Vaccines
+export circuit addVaccine(name: Bytes<20>): [] {
+    assert(!vaccines.member(disclose(name)), "Vacina já cadastrada");
+    vaccines.insert(disclose(name));
+}
+
+export circuit hasVaccine(name: Bytes<20>): Boolean {
+    return vaccines.member(disclose(name));
 }
 
 // Derives a deterministic shielded ID from a secret key using a persistent hash.
@@ -45,9 +40,8 @@ export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): Boolean {
-  const _sk = localSk();
-  const adminId = getShieldedId(_sk);
-  assert(admins.member(disclose(adminId)), "You are not an admin");
+  const own = ownPublicKey();
+  assert(admins.member(disclose(own.bytes)), "You are not an admin");
   return true;
 }
 

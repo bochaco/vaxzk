@@ -30,6 +30,13 @@ const DeployContractView: React.FC = () => {
       const connectedApi = await wallet.connect(networkId);
       const providers = await buildProviders(connectedApi, networkId);
 
+//      const addresses = await connectedApi.getShieldedAddresses();
+//      console.log(addresses.shieldedAddress);
+//      const coinPk = await connectedApi.getCoinPublicKey();        // string
+//      console.log(coinPk);
+//      const encPk  = await connectedApi.getEncryptionPublicKey();  // string
+//      console.log(encPk);
+
       // Fresh 32-byte secret key for this admin identity. Its derived public
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
