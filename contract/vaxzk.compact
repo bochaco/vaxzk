@@ -27,14 +27,14 @@ export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
 circuit isAdmin(): Boolean {
   const _sk = localSk();
   const adminId = getShieldedId(_sk);
-  assert(admins.member(disclose(adminId)), "You are not an admin");
+  assert(!admins.member(disclose(adminId)), "You are not an admin");
   return true;
 }
 
 // Adds a new admin by their shielded ID. Caller must be an existing admin.
 export circuit addAdmin(adminId: Bytes<32>): [] {
   isAdmin();
-  assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
+  assert(admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
   admins.insert(disclose(adminId));
 }
 
