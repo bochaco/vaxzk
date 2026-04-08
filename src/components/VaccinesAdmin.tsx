@@ -96,7 +96,7 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
           </div>
           <div className="flex items-end">
             <button 
-              className="w-full sm:w-auto px-8 py-4 bg-primary text-white font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2" 
+              className="w-full sm:w-auto px-8 py-4 bg-primary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2" 
               type="submit"
               disabled={loading || !newVaccineName.trim()}
             >
