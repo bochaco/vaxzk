@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "format": "eslint . --fix",
     "preview": "vite preview",
-    "contract:compile": "compact compile contract/src/vaxzk.compact contract/src/managed/vaxzk && npm run contract:copy-assets",
-    "contract:copy-assets": "mkdir -p public && cp -r contract/src/managed/vaxzk/keys public/keys && cp -r contract/src/managed/vaxzk/zkir public/zkir"
+    "contract:compile": "compact compile contract/vaxzk.compact contract/managed && npm run contract:copy-assets",
+    "contract:copy-assets": "mkdir -p public && cp -r contract/managed/keys public/keys && cp -r contract/managed/zkir public/zkir"
   },
   "dependencies": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",

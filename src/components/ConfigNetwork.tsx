@@ -1,6 +1,4 @@
-
-export const CONTRACTID = "14860735cfb7f08f7a790f7a5e8e867f06087d577fb7511bdb654dd625fd5245";
-// export const CONTRACTID = ""
-// export const CONTRACTID = "927b02ceb1bc3776e87cd5c316b1e43c2a93d6c5b92295f2609c010d1f51a678";
-export const networkId = 'preprod';
-
+//export const CONTRACTID = "";
+export const CONTRACTID =
+  "44b38048104f39006e4aa524644f891f7e3b9278e704ed0a538901b6ffe65f22";
+export const networkId = "preprod";
