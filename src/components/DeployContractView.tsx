@@ -70,10 +70,10 @@ const DeployContractView: React.FC<DeployContractViewProps> = ({
           </button>
         </div>
         <h2 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
-          {t.publishContract}
+          {t.DeployContract}
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
-          {t.publishContractSubtitle}
+          {t.DeployContractSubtitle}
         </p>
       </section>
 

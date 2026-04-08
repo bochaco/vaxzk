@@ -57,7 +57,6 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({
 
   return (
     <main className="pt-24 px-6 max-w-screen-md mx-auto">
-      {/* Page Title & Editorial Intro */}
       <section className="mb-12 text-left">
         <div className="flex items-center gap-3 mb-6">
           <button

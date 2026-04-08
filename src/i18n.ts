@@ -129,6 +129,10 @@ export const translations = {
     adminKeyPlaceholder: 'Leave empty to use current wallet',
     contractParamsTitle: 'Contract Parameters',
     contractDesc: 'The constructor will automatically set your wallet as the initial admin. Further clinics can be added later.',
+
+    // Deploy Contract View
+    deployContract: 'Deploy Contract',
+    deployContractSubtitle: 'Deploy a new VaxZk smart contract to the Midnight network.',
   },
   pt: {
     // Login
@@ -258,6 +262,10 @@ export const translations = {
     adminKeyPlaceholder: 'Deixe vazio para usar a carteira atual',
     contractParamsTitle: 'Parâmetros do Contrato',
     contractDesc: 'O construtor definirá automaticamente sua carteira como admin inicial. Outras clínicas poderão ser adicionadas depois.',
+
+    // Deploy Contract View
+    deployContract: 'Publicar Contrato',
+    deployContractSubtitle: 'Faça o deploy de um novo contrato VaxZk na rede do Midnight.',
   },
   es: {
     // Login
@@ -387,6 +395,10 @@ export const translations = {
     adminKeyPlaceholder: 'Dejar vacío para usar la billetera actual',
     contractParamsTitle: 'Parámetros del Contrato',
     contractDesc: 'El constructor establecerá automáticamente su billetera como administrador inicial. Se pueden agregar más clínicas posteriormente.',
+
+    // Deploy Contract View
+    deployContract: 'Publicar Contrato',
+    deployContractSubtitle: 'Despliegue un nuevo contrato inteligente VaxZk en la red de Midnight.',
   },
 };
 
