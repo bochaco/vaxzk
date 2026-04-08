@@ -78,6 +78,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
       case "publish":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
+      case "listvaccine":
+        return <VaccinesAdmin />;
       case "deploy":
         return <DeployContractView />;
       case "calendar":
@@ -239,7 +241,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                   activeTab === "listvaccine" ? "'FILL' 1" : undefined,
               }}
             >
-              vaccine
+              vaccines
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Vaccines
