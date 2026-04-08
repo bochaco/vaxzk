@@ -40,7 +40,9 @@ export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
 
 // Helper to get the caller's shielded ID using their secret key.
 export circuit getOwnShieldedId(): Bytes<32> {
-  return getShieldedId(disclose(localSk()));
+  const _sk = localSk();
+  const adminId = getShieldedId(_sk);
+  return disclose(adminId);
 }
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
