@@ -12,6 +12,19 @@ export ledger admins: Set<Bytes<32>>;
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Set<Bytes<32>>;
 
+// Public ledger of vaccines list.
+export ledger vaccines: Set<Bytes<20>>;
+
+// Vaccines
+export circuit addVaccine(name: Bytes<20>): [] {
+    assert(!vaccines.member(disclose(name)), "Vacina já cadastrada");
+    vaccines.insert(disclose(name));
+}
+
+export circuit hasVaccine(name: Bytes<20>): Boolean {
+    return vaccines.member(disclose(name));
+}
+
 // Map of vaccine certificate issuers indexed by assigned ID
 export ledger issuers: Map<Bytes<32>, CertIssuerInfo>;
 
@@ -35,6 +48,11 @@ constructor() {
   admins.insert(disclose(adminId));
   issuerId.increment(1);
   proofReqId.increment(1);
+
+  // Init some Vaccines
+  vaccines.insert(disclose(pad(20, "HepB")));
+  vaccines.insert(disclose(pad(20, "PCV")));
+  vaccines.insert(disclose(pad(20, "Tdap")));
 }
 
 // Derives a deterministic shielded ID from a secret key using a persistent hash.
