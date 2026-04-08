@@ -69,13 +69,11 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
+
       <section className="mb-12 text-left">
-        <h2 className="text-4xl font-extrabold tracking-tighter text-on-surface mb-2 font-headline">
-          {t.vaccinesAdminTitle}
-        </h2>
-        <p className="text-on-surface-variant text-lg max-w-xl">
-          {t.vaccinesAdminSubtitle}
-        </p>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
+          <span className="text-primary">{t.vaccinesAdminTitle}</span> {t.vaccinesAdminTitleEnd} </h2>
+        <p className="text-on-surface-variant text-lg max-w-xl leading-relaxed">{t.vaccinesAdminSubtitle}</p>
       </section>
 
       {/* Add Vaccine Form */}

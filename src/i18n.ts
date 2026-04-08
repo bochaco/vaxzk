@@ -135,7 +135,8 @@ export const translations = {
     deployContractSubtitle: 'Deploy a new VaxZk smart contract to the Midnight network.',
 
     // Vaccines Admin
-    vaccinesAdminTitle: 'Manage Vaccines',
+    vaccinesAdminTitle: 'Manage',
+    vaccinesAdminTitleEnd: 'Vaccines',
     vaccinesAdminSubtitle: 'List and add new vaccines to the system.',
     vaccinesList: 'Registered Vaccines',
     add: 'Add',
@@ -275,7 +276,8 @@ export const translations = {
     deployContractSubtitle: 'Faça o deploy de um novo contrato VaxZk na rede do Midnight.',
 
     // Vaccines Admin
-    vaccinesAdminTitle: 'Gerenciar Vacinas',
+    vaccinesAdminTitle: 'Gerenciar',
+    vaccinesAdminTitleEnd: 'Vacinas',
     vaccinesAdminSubtitle: 'Liste e adicione novas vacinas ao sistema.',
     vaccinesList: 'Vacinas Cadastradas',
     add: 'Adicionar',
@@ -415,7 +417,8 @@ export const translations = {
     deployContractSubtitle: 'Despliegue un nuevo contrato inteligente VaxZk en la red de Midnight.',
 
     // Vaccines Admin
-    vaccinesAdminTitle: 'Administrar Vacunas',
+    vaccinesAdminTitle: 'Administrar',
+    vaccinesAdminTitleEnd: 'Vacunas',
     vaccinesAdminSubtitle: 'Listar y agregar nuevas vacunas al sistema.',
     vaccinesList: 'Vacunas Registradas',
     add: 'Agregar',
