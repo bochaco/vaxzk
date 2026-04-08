@@ -33,8 +33,8 @@ jobs:
            compact update
            compact compile contract/vaxzk.compact contract/managed
            mkdir -p public/keys public/zkir
-           cp -r contract/managed/vaxzk/keys/* public/keys/
-           cp -r contract/managed/vaxzk/zkir/* public/zkir/
+           cp -r contract/managed/keys/* public/keys/
+           cp -r contract/managed/zkir/* public/zkir/
 
       - name: DEPLOY
         run: |
