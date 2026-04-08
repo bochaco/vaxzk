@@ -107,10 +107,10 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
 
         console.log(isAdmin);
         console.log("myId");
-        console.log(toHex(myId));
+        console.log(myId);
         console.log("member");
         for (const admin of ledgerState.admins) {
-          console.log(toHex(admin));
+          console.log(admin);
         }
 
         return { admins, clinics, isAdmin, isClinic };
