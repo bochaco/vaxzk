@@ -103,13 +103,9 @@ const WalletView: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-              <button className="w-10 h-10 rounded-full hover:bg-white/50 flex items-center justify-center transition-colors text-slate-400">
-                <span className="material-symbols-outlined">more_vert</span>
-              </button>
             </div>
           </div>
 
-          {/* Vaccine Item: MMR */}
           <div className="bg-surface-container-low p-6 rounded-xl hover:bg-surface-container-high transition-all duration-300 flex items-center justify-between group">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-primary">
@@ -122,13 +118,9 @@ const WalletView: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-              <button className="w-10 h-10 rounded-full hover:bg-white/50 flex items-center justify-center transition-colors text-slate-400">
-                <span className="material-symbols-outlined">more_vert</span>
-              </button>
             </div>
           </div>
 
-          {/* Vaccine Item: Td */}
           <div className="bg-surface-container-low p-6 rounded-xl hover:bg-surface-container-high transition-all duration-300 flex items-center justify-between group opacity-70 hover:opacity-100">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-primary">
