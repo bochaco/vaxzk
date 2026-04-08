@@ -70,9 +70,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           CONTRACTID as unknown as ContractAddress,
           secretKey,
         );
-        console.log("Looking is Admin");
         const { isAdmin } = await firstValueFrom(api.state$);
-        console.log(isAdmin);
         setIsAdmin(isAdmin);
       } catch (err) {
         console.error("Failed to check admin status:", err);

@@ -59,16 +59,6 @@ const DeployContractView: React.FC<DeployContractViewProps> = ({
     <main className="pt-24 px-6 max-w-screen-md mx-auto">
       {/* Page Title & Editorial Intro */}
       <section className="mb-12 text-left">
-        <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={onBack}
-            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-blue-50/50 transition-colors active:scale-95 duration-200"
-          >
-            <span className="material-symbols-outlined text-blue-700">
-              arrow_back
-            </span>
-          </button>
-        </div>
         <h2 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
           {t.deployContract}
         </h2>
