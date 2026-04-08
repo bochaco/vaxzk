@@ -106,8 +106,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         const isClinic = myId ? ledgerState.clinics.member(myId) : false;
 
         console.log(isAdmin);
+        console.log("myId");
         console.log(myId);
-        console.log(ledgerState.admins);
+        console.log("member");
+        ledgerState.admins.forEach(admin => {
+            console.log(admin);
+        });
 
         return { admins, clinics, isAdmin, isClinic };
       },
