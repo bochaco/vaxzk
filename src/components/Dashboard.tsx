@@ -102,7 +102,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "publish":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
       case "deploy":
-        return <DeployContractView onBack={() => setActiveTab(prevTab)} />;
+        return <DeployContractView />;
       case "calendar":
         return <CalendarView />;
       default:
