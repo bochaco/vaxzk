@@ -7,6 +7,7 @@ import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
 import CalendarView from "./CalendarView";
 import PublishContractView from "./PublishContractView";
+import PublishContractView from "./DeployContractView";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 import { firstValueFrom } from "rxjs";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
@@ -101,7 +102,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "publish":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
       case "deploy":
-        return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
+        return <DeployContractView onBack={() => setActiveTab(prevTab)} />;
       case "calendar":
         return <CalendarView />;
       default:
