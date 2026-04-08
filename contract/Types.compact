@@ -1,13 +1,6 @@
 module Types {
   import CompactStandardLibrary;
 
-  // Account Possible Profiles
-  export enum ProfileState {
-      ADMIN,
-      CLINIC,
-      USER
-  }
-
   // Vaccine certificate issuer metadata
   export struct CertIssuerInfo {
     // issuer DID or URL (e.g., "did:example:who" or "https://who.int")

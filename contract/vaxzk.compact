@@ -4,7 +4,7 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, ProfileState };
+export { CertIssuerInfo, VaccineProofRequest, VaxZkProof };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
@@ -35,19 +35,6 @@ constructor() {
   admins.insert(disclose(adminId));
   issuerId.increment(1);
   proofReqId.increment(1);
-}
-
-// Export Profile
-export circuit getProfile(): ProfileState {
-  const _sk = localSk();
-  const adminId = getShieldedId(_sk);
-  if (admins.member(disclose(adminId))) {
-      return ProfileState.ADMIN;
-  }
-  if (clinics.member(disclose(_sk))) {
-      return ProfileState.CLINIC;
-  }
-  return ProfileState.USER;
 }
 
 // Derives a deterministic shielded ID from a secret key using a persistent hash.
