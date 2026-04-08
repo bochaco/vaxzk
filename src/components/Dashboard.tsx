@@ -8,6 +8,7 @@ import AddVaccineView from "./AddVaccineView";
 import CalendarView from "./CalendarView";
 import PublishContractView from "./PublishContractView";
 import DeployContractView from "./DeployContractView";
+import VaccinesAdmin from "./VaccinesAdmin";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 import { firstValueFrom } from "rxjs";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
