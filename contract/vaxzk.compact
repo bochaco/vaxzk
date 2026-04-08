@@ -38,6 +38,11 @@ export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<2, Bytes<32>>>([pad(32, "guest-list:pk:"), _sk]);
 }
 
+// Helper to get the caller's shielded ID using their secret key.
+export circuit getOwnShieldedId(): Bytes<32> {
+  return getShieldedId(disclose(localSk()));
+}
+
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): Boolean {
   const own = ownPublicKey();
