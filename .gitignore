@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 
+contract/managed
 mockup
 src/utils/managed/
 

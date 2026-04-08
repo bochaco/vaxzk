@@ -2,6 +2,13 @@ pragma language_version >= 0.20;
 
 import CompactStandardLibrary;
 
+// Account Possible Profiles
+export enum ProfileState {
+    ADMIN,
+    CLINIC,
+    USER
+}
+
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
 
@@ -16,6 +23,19 @@ constructor() {
   const _sk = localSk();
   const adminId = getShieldedId(_sk);
   admins.insert(disclose(adminId));
+}
+
+// Export Profile
+export circuit getProfile(): ProfileState {
+  const _sk = localSk();
+  const adminId = getShieldedId(_sk);
+  if (admins.member(disclose(adminId))) {
+      return ProfileState.ADMIN;
+  }
+  if (clinics.member(disclose(_sk))) {
+      return ProfileState.CLINIC;
+  }
+  return ProfileState.USER;
 }
 
 // Derives a deterministic shielded ID from a secret key using a persistent hash.

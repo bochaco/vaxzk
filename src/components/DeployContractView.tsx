@@ -3,13 +3,7 @@ import { useLanguage } from "../LanguageContext";
 import { networkId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 
-interface PublishContractViewProps {
-  onBack: () => void;
-}
-
-const PublishContractView: React.FC<PublishContractViewProps> = ({
-  onBack,
-}) => {
+const DeployContractView: React.FC = () => {
   const { t } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployed, setDeployed] = useState(false);
@@ -57,22 +51,13 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({
 
   return (
     <main className="pt-24 px-6 max-w-screen-md mx-auto">
+      {/* Page Title & Editorial Intro */}
       <section className="mb-12 text-left">
-        <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={onBack}
-            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-blue-50/50 transition-colors active:scale-95 duration-200"
-          >
-            <span className="material-symbols-outlined text-blue-700">
-              arrow_back
-            </span>
-          </button>
-        </div>
         <h2 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
-          {t.publishContract}
+          {t.deployContract}
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
-          {t.publishContractSubtitle}
+          {t.deployContractSubtitle}
         </p>
       </section>
 
@@ -167,4 +152,4 @@ const PublishContractView: React.FC<PublishContractViewProps> = ({
   );
 };
 
-export default PublishContractView;
+export default DeployContractView;
