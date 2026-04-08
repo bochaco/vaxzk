@@ -3,13 +3,7 @@ import { useLanguage } from "../LanguageContext";
 import { networkId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 
-interface DeployContractViewProps {
-  onBack: () => void;
-}
-
-const DeployContractView: React.FC<DeployContractViewProps> = ({
-  onBack,
-}) => {
+const DeployContractView: React.FC = () => {
   const { t } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployed, setDeployed] = useState(false);
