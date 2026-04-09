@@ -236,7 +236,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           <button
             onClick={() => handleTabChange("listvaccine")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "publish"
+              activeTab === "listvaccine"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
@@ -260,7 +260,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           <button
             onClick={() => handleTabChange("listcountries")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "publish"
+              activeTab === "listcountries"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
