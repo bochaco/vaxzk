@@ -9,7 +9,7 @@ export { CertIssuerInfo, VaccineProofRequest, VaxZkProof };
 // ledger of shielded admin IDs.
 ledger admins: Set<Bytes<32>>;
 
-export totalAdmins(): Uint<64> {
+export circuit totalAdmins(): Uint<64> {
   return admins.size();
 }
 
