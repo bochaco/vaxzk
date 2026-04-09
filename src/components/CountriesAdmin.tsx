@@ -121,7 +121,7 @@ const CountriesAdmin: React.FC<CountriesAdminProps> = ({ connectedApi }) => {
         {vaccines.length === 0 ? (
           <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
             <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">vaccines</span>
-            <p className="text-on-surface-variant italic">Nenhuma vacina cadastrada no contrato.</p>
+            <p className="text-on-surface-variant italic">Nenhuma pais cadastrado no contrato.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
