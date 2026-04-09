@@ -57,14 +57,16 @@ function AppContent() {
       {isConnected ? (
         <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
       ) : (
+        <>
         {!CONTRACTID ? (
-            <DeployContractView />
-          ) : (
-            <>
-              <LanguageSelector fixed />
-              <Login onLoginSuccess={handleLoginSuccess} />
-            </>
+          <DeployContractView />
+        ) : (
+          <>
+            <LanguageSelector fixed />
+            <Login onLoginSuccess={handleLoginSuccess} />
+          </>
           )}
+        </>
       )}
     </>
   );
