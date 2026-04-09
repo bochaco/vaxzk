@@ -205,7 +205,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {isAdmin && (
+        {CONTRACTID && isAdmin && (
           <button
             onClick={() => handleTabChange("publish")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
@@ -229,7 +229,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {isAdmin && (
+        {CONTRACTID && isAdmin && (
           <button
             onClick={() => handleTabChange("listvaccine")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
