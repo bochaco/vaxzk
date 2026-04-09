@@ -1,0 +1,37 @@
+module Types {
+  import CompactStandardLibrary;
+
+  // Vaccine certificate issuer metadata
+  export struct CertIssuerInfo {
+    // issuer DID or URL (e.g., "did:example:who" or "https://who.int")
+    uri: Opaque<'string'>,
+    // human-readable name
+    name: Opaque<'string'>,
+    // known verification keys
+    key: Opaque<'string'>,
+    // URL for verification checks
+    verificationEndpoint: Opaque<'string'>,
+  }
+
+  // Vaccine proof request
+  export struct VaccineProofRequest {
+    // Vaccine product/type
+    vaccine: Opaque<'string'>,
+    // Passport or ID number associated to vaccine certificate
+    personalId: Opaque<'string'>,
+    // Minimum vaccine validity timestamp
+    validUntil: Uint<128>,
+  }
+
+  // Vaccine proof
+  export struct VaxZkProof {
+    // Vaccine certificate issuer assinged ID
+    issuerId: Bytes<32>,
+    // Vaccine product/type
+    vaccine: Opaque<'string'>,
+    // Passport or ID number associated to vaccine certificate
+    personalId: Opaque<'string'>,
+    // Certificate expiration timestamp
+    expirationDate: Uint<128>,
+  }
+}

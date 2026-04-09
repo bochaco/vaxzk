@@ -8,6 +8,7 @@ import AddVaccineView from "./AddVaccineView";
 import CalendarView from "./CalendarView";
 import PublishContractView from "./PublishContractView";
 import DeployContractView from "./DeployContractView";
+import VaccinesAdmin from "./VaccinesAdmin";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 import { firstValueFrom } from "rxjs";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
@@ -19,7 +20,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "publish";
+type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccine" | "publish";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -30,7 +31,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [prevTab, setPrevTab] = useState<Tab>("home");
   const [isClinicUser, setIsClinicUser] = useState<boolean | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const isAdmin = true; // TODO: IMPLEMENTAR DEPOIS
 
   React.useEffect(() => {
     async function checkClinicStatus() {
@@ -55,29 +56,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         setIsClinicUser(false);
       }
     }
-    async function checkIsAdmin() {
-      if (!walletAddress || !CONTRACTID || !connectedApi) return;
-      try {
-        const providers = await buildProviders(connectedApi, networkId);
-
-        // TODO: derive from wallet or secure user input instead of zeros
-        // For this check, we need a secret key. In a real-world scenario,
-        // this would be retrieved from secure storage or derivation.
-        // For now, we try to join with a placeholder or the stored state.
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          CONTRACTID as unknown as ContractAddress,
-          secretKey,
-        );
-        const { isAdmin } = await firstValueFrom(api.state$);
-        setIsAdmin(isAdmin);
-      } catch (err) {
-        console.error("Failed to check admin status:", err);
-        setIsAdmin(false);
-      }
-    }
-    checkIsAdmin();
     checkClinicStatus();
   }, [walletAddress, connectedApi]);
 
@@ -101,6 +79,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
       case "publish":
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
+      case "listvaccine":
+        return <VaccinesAdmin connectedApi={connectedApi!} />;
       case "deploy":
         return <DeployContractView />;
       case "calendar":
@@ -242,6 +222,30 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Admin
+            </span>
+          </button>
+        )}
+
+        {isAdmin && (
+          <button
+            onClick={() => handleTabChange("listvaccine")}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "publish"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "listvaccine" ? "'FILL' 1" : undefined,
+              }}
+            >
+              vaccines
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Vaccines
             </span>
           </button>
         )}
