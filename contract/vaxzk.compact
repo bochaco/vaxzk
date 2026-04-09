@@ -6,9 +6,8 @@ import "./Types";
 
 export { CertIssuerInfo, VaccineProofRequest, VaxZkProof };
 
-// ledger of shielded admin IDs.
-ledger admins: Set<Bytes<32>>;
-export ledger totalAdmins: Uint<64>;
+// Public ledger of shielded admin IDs.
+export ledger admins: Set<Bytes<32>>;
 
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Set<Bytes<32>>;
@@ -16,24 +15,13 @@ export ledger clinics: Set<Bytes<32>>;
 // Public ledger of vaccines list.
 export ledger vaccines: Set<Bytes<20>>;
 
-// Vaccines
-export circuit addVaccine(name: Bytes<20>): [] {
-    isAdmin();
-    assert(!vaccines.member(disclose(name)), "Vacina já cadastrada");
-    vaccines.insert(disclose(name));
-}
-
-export circuit delVaccine(name: Bytes<20>): [] {
-    isAdmin();
-    assert(vaccines.member(disclose(name)), "Vacina nao está cadastrada");
-    vaccines.remove(disclose(name));
-}
-
 // Map of vaccine certificate issuers indexed by assigned ID
 export ledger issuers: Map<Bytes<32>, CertIssuerInfo>;
 
+// Counter used to generate issuers Ids
 export ledger issuerId: Counter;
 
+// Counter used to generate vaccine proof requests Ids
 export ledger proofReqId: Counter;
 
 // Map of vaccine proof requests indexed by assigned ID
@@ -48,10 +36,8 @@ witness localSk(): Bytes<32>;
 // Registers the deployer as the first admin by inserting their shielded ID.
 constructor() {
   const own = ownPublicKey();
-  //const _sk = localSk();
-  //const adminId = getShieldedId(_sk);
-  //admins.insert(disclose(adminId));
-  admins.insert(disclose(own.bytes));
+  const adminId = getShieldedId(own.bytes);
+  admins.insert(disclose(adminId));
 
   issuerId.increment(1);
   proofReqId.increment(1);
@@ -60,13 +46,11 @@ constructor() {
   vaccines.insert(disclose(pad(20, "HepB")));
   vaccines.insert(disclose(pad(20, "PCV")));
   vaccines.insert(disclose(pad(20, "Tdap")));
-
-  totalAdmins = admins.size();
 }
 
-// Derives a deterministic shielded ID from a secret key using a persistent hash.
-export circuit getShieldedId(_sk: Bytes<32>): Bytes<32> {
-  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "guest-list:pk:"), _sk]);
+// Derives a deterministic shielded ID using a persistent hash.
+export circuit getShieldedId(id: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "registered-entity-id:"), id]);
 }
 
 // Generate a new cert issuer ID.
@@ -88,7 +72,8 @@ export circuit getProofReqId(): Bytes<32> {
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): Boolean {
   const own = ownPublicKey();
-  assert(admins.member(disclose(own.bytes)), "You are not an admin");
+  const adminId = getShieldedId(own.bytes);
+  assert(admins.member(disclose(adminId)), "You are not an admin");
   return true;
 }
 
@@ -105,7 +90,6 @@ export circuit addAdmin(adminId: Bytes<32>): [] {
   isAdmin();
   assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
   admins.insert(disclose(adminId));
-  totalAdmins = admins.size();
 }
 
 // Removes an admin by their shielded ID. Caller must be an existing admin.
@@ -113,7 +97,6 @@ export circuit revokeAdmin(adminId: Bytes<32>): [] {
   isAdmin();
   assert(!admins.member(disclose(adminId)), "Admin ID is not in the admins list");
   admins.remove(disclose(adminId));
-  totalAdmins = admins.size();
 }
 
 // Registers a clinic by their shielded ID. Caller must be an admin.
@@ -137,6 +120,19 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
   assert(!issuers.member(disclose(newIssuerId)), "The ID is already in the issuers list");
   issuers.insert(disclose(newIssuerId), disclose(issuerInfo));
   return newIssuerId;
+}
+
+// Vaccines
+export circuit addVaccine(name: Bytes<20>): [] {
+  isAdmin();
+  assert(!vaccines.member(disclose(name)), "Vaccine type already registered");
+  vaccines.insert(disclose(name));
+}
+
+export circuit delVaccine(name: Bytes<20>): [] {
+  isAdmin();
+  assert(vaccines.member(disclose(name)), "Vaccine type is not registered");
+  vaccines.remove(disclose(name));
 }
 
 // Registers a new vaccine proof request. Caller must be a clinic.

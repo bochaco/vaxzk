@@ -81,7 +81,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: admins ${ledgerState.totalAdmins}, clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: admins ${ledgerState.admins.size()}, clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -98,15 +98,18 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         }
         const vaccines = new Array<string>();
         for (const vaccineBytes of ledgerState.vaccines) {
-          vaccines.push(new TextDecoder().decode(vaccineBytes).replace(/\0/g, '').trim());
+          vaccines.push(
+            new TextDecoder().decode(vaccineBytes).replace(/\0/g, "").trim(),
+          );
         }
 
         const myId = privateState
           ? VaxZk.pureCircuits.getShieldedId(privateState.secretKey)
           : null;
         const isClinic = myId ? ledgerState.clinics.member(myId) : false;
+        const isAdmin = myId ? ledgerState.admins.member(myId) : false;
 
-        return { clinics, vaccines, isClinic };
+        return { clinics, vaccines, isClinic, isAdmin };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
@@ -238,7 +241,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     const nameBytes = new TextEncoder().encode(name);
     const padded = new Uint8Array(20);
     padded.set(nameBytes.slice(0, 20));
-    
+
     const txData = await this.deployedContract.callTx.addVaccine(padded);
     console.log({
       transactionAdded: {
@@ -249,12 +252,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-    async delVaccine(name: string): Promise<void> {
+  async delVaccine(name: string): Promise<void> {
     console.log(`removing Vaccine ${name}`);
     const nameBytes = new TextEncoder().encode(name);
     const padded = new Uint8Array(20);
     padded.set(nameBytes.slice(0, 20));
-    
+
     const txData = await this.deployedContract.callTx.delVaccine(padded);
     console.log({
       transactionAdded: {
@@ -264,7 +267,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       },
     });
   }
-
 }
 
 /**

@@ -7,7 +7,6 @@ import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
 import CalendarView from "./CalendarView";
 import AccessAdmin from "./AccessAdmin";
-import DeployContractView from "./DeployContractView";
 import VaccinesAdmin from "./VaccinesAdmin";
 import CountriesAdmin from "./CountriesAdmin";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
@@ -21,7 +20,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccine" | "listcountries" | "access";
+type Tab = "home" | "wallet" | "add" | "calendar" | "listvaccine" | "listcountries" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -84,8 +83,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <VaccinesAdmin connectedApi={connectedApi!} />;
       case "listcountries":
         return <CountriesAdmin connectedApi={connectedApi!} />;
-      case "deploy":
-        return <DeployContractView />;
       case "calendar":
         return <CalendarView />;
       default:
@@ -301,29 +298,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             Calendar
           </span>
         </button>
-        {!CONTRACTID && (
-          <button
-            onClick={() => handleTabChange("deploy")}
-            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "deploy"
-                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-                : "text-slate-400 hover:text-blue-600"
-            }`}
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{
-                fontVariationSettings:
-                  activeTab === "deploy" ? "'FILL' 1" : undefined,
-              }}
-            >
-              publish
-            </span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Deploy
-            </span>
-          </button>
-        )}
+
       </nav>
     </div>
   );
