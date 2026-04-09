@@ -9,6 +9,7 @@ import CalendarView from "./CalendarView";
 import PublishContractView from "./PublishContractView";
 import DeployContractView from "./DeployContractView";
 import VaccinesAdmin from "./VaccinesAdmin";
+import CountriesAdmin from "./CountriesAdmin";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 import { firstValueFrom } from "rxjs";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
@@ -20,7 +21,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccine" | "publish";
+type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccine" | "listcountries" | "publish";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -81,6 +82,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
       case "listvaccine":
         return <VaccinesAdmin connectedApi={connectedApi!} />;
+      case "listcountries":
+        return <CountriesAdmin connectedApi={connectedApi!} />;
       case "deploy":
         return <DeployContractView />;
       case "calendar":
@@ -250,6 +253,30 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
+        {isAdmin && (
+          <button
+            onClick={() => handleTabChange("listcountries")}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "publish"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "listcountries" ? "'FILL' 1" : undefined,
+              }}
+            >
+              south_america
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Countries
+            </span>
+          </button>
+        )}
+
         <button
           onClick={() => handleTabChange("calendar")}
           className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
@@ -265,7 +292,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 activeTab === "calendar" ? "'FILL' 1" : undefined,
             }}
           >
-            calendar_today
+            south_america
           </span>
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
             Calendar
