@@ -6,8 +6,12 @@ import "./Types";
 
 export { CertIssuerInfo, VaccineProofRequest, VaxZkProof };
 
-// Public ledger of shielded admin IDs.
-export ledger admins: Set<Bytes<32>>;
+// ledger of shielded admin IDs.
+ledger admins: Set<Bytes<32>>;
+
+export totalAdmins(): Uint<128> {
+  return admins.size();
+}
 
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Set<Bytes<32>>;
@@ -17,6 +21,7 @@ export ledger vaccines: Set<Bytes<20>>;
 
 // Vaccines
 export circuit addVaccine(name: Bytes<20>): [] {
+    isAdmin();
     assert(!vaccines.member(disclose(name)), "Vacina já cadastrada");
     vaccines.insert(disclose(name));
 }
