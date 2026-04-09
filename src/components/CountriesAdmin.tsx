@@ -73,7 +73,7 @@ const CountriesAdmin: React.FC<CountriesAdminProps> = ({ connectedApi }) => {
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
           <span className="text-primary">{t.manage}</span> {t.countriesAdminTitleEnd} </h2>
-        <p className="text-on-surface-variant text-lg max-w-xl leading-relaxed">{t.countriesAdminSubtitle}</p>
+        <p className="text-on-surface-variant text-lg leading-relaxed">{t.countriesAdminSubtitle}</p>
       </section>
 
       {/* Add Vaccine Form */}
