@@ -159,6 +159,8 @@ const Dashboard: React.FC<DashboardProps> = ({
             Home
           </span>
         </button>
+
+        {CONTRACTID && (
         <button
           onClick={() => handleTabChange("wallet")}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -180,8 +182,9 @@ const Dashboard: React.FC<DashboardProps> = ({
             Wallet
           </span>
         </button>
+        )}
 
-        {isClinicUser && (
+        {CONTRACTID && isClinicUser && (
           <button
             onClick={() => handleTabChange("add")}
             className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -253,7 +256,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {isAdmin && (
+        {CONTRACTID && isAdmin && (
           <button
             onClick={() => handleTabChange("listcountries")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
