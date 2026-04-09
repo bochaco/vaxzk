@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import { CONTRACTID } from "./components/ConfigNetwork";
+import DeployContractView from "./components/DeployContractView";
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 import './index.css';
@@ -55,10 +57,14 @@ function AppContent() {
       {isConnected ? (
         <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
       ) : (
-        <>
-          <LanguageSelector fixed />
-          <Login onLoginSuccess={handleLoginSuccess} />
-        </>
+        {!CONTRACTID && (
+            <DeployContractView />
+          ) : (
+            <>
+              <LanguageSelector fixed />
+              <Login onLoginSuccess={handleLoginSuccess} />
+            </>
+          )}
       )}
     </>
   );
