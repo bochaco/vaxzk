@@ -49,8 +49,9 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
     };
   }, [connectedApi]);
 
-  const handleAddVaccine = async (e: React.FormEvent) => {
+  const handleAddVaccine = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!vaxApi || !newVaccineName.trim()) return;
 
     setLoading(true);
@@ -60,7 +61,6 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
       setNewVaccineName('');
       // The list should update automatically via subscription
     } catch (err) {
-      console.log(err);
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
         setError("Erro ao adicionar vacina: " + err.message);
@@ -72,6 +72,30 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
       setLoading(false);
     }
   };
+
+  const handleRemoveVaccine = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!vaxApi || !newVaccineName.trim()) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      await vaxApi.delVaccine(newVaccineName.trim());
+      setNewVaccineName('');
+    } catch (err) {
+      console.error("Failed to add vaccine:", err);
+      if (err instanceof Error) {
+        setError("Erro ao adicionar vacina: " + err.message);
+      } else {
+        setError("Erro ao adicionar vacina: " + String(err));
+      }
+//    setError("Erro ao adicionar vacina");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">

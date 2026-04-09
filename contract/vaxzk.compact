@@ -23,8 +23,10 @@ export circuit addVaccine(name: Bytes<20>): [] {
     vaccines.insert(disclose(name));
 }
 
-export circuit hasVaccine(name: Bytes<20>): Boolean {
-    return vaccines.member(disclose(name));
+export circuit delVaccine(name: Bytes<20>): [] {
+    isAdmin();
+    assert(vaccines.member(disclose(name)), "Vacina nao está cadastrada");
+    vaccines.remove(disclose(name));
 }
 
 // Map of vaccine certificate issuers indexed by assigned ID
