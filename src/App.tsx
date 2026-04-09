@@ -57,7 +57,7 @@ function AppContent() {
       {isConnected ? (
         <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
       ) : (
-        {!CONTRACTID && (
+        {!CONTRACTID ? (
             <DeployContractView />
           ) : (
             <>
