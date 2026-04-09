@@ -73,15 +73,17 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
     }
   };
 
-  const handleRemoveVaccine = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleRemoveVaccine = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+
+    const vaccineName = e.currentTarget.dataset.name;
     
-    if (!vaxApi || !newVaccineName.trim()) return;
+    if (!vaxApi || !vaccineName || !vaccineName.trim()) return;
 
     setLoading(true);
     setError(null);
     try {
-      await vaxApi.delVaccine(newVaccineName.trim());
+      await vaxApi.delVaccine(vaccineName.trim());
       setNewVaccineName('');
     } catch (err) {
       console.error("Failed to add vaccine:", err);
@@ -90,7 +92,6 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
       } else {
         setError("Erro ao adicionar vacina: " + String(err));
       }
-//    setError("Erro ao adicionar vacina");
     } finally {
       setLoading(false);
     }
@@ -162,17 +163,13 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
                 </div>
                 <span className="font-bold text-lg text-on-surface">{v}</span>
 
-                <form onSubmit={handleRemoveVaccine} className="flex flex-col sm:flex-row gap-4">
-                  <input value={newVaccineName} type="hidden" />
-                  <button type="submit" disabled={loading}>
+                <a href="#" data-name={v} onClick={handleRemoveVaccine}>
                   {loading ? (
                     <><span className="material-symbols-outlined animate-spin">trash</span></>
                   ) : (
                     <><span className="material-symbols-outlined">trash</span></>
                   )}
-                  </button>
-                </form>
-
+                </a>
               </div>
             ))}
           </div>
