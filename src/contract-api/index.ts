@@ -51,6 +51,7 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array) => Promise<void>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
+  delVaccine: (name: string) => Promise<void>;
 }
 
 /**
@@ -242,6 +243,22 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     console.log({
       transactionAdded: {
         circuit: "addVaccine",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+    async delVaccine(name: string): Promise<void> {
+    console.log(`removing Vaccine ${name}`);
+    const nameBytes = new TextEncoder().encode(name);
+    const padded = new Uint8Array(20);
+    padded.set(nameBytes.slice(0, 20));
+    
+    const txData = await this.deployedContract.callTx.delVaccine(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "delVaccine",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },

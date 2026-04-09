@@ -49,8 +49,9 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
     };
   }, [connectedApi]);
 
-  const handleAddVaccine = async (e: React.FormEvent) => {
+  const handleAddVaccine = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!vaxApi || !newVaccineName.trim()) return;
 
     setLoading(true);
@@ -61,11 +62,41 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
       // The list should update automatically via subscription
     } catch (err) {
       console.error("Failed to add vaccine:", err);
-      setError("Erro ao adicionar vacina");
+      if (err instanceof Error) {
+        setError("Erro ao adicionar vacina: " + err.message);
+      } else {
+        setError("Erro ao adicionar vacina: " + String(err));
+      }
+//    setError("Erro ao adicionar vacina");
     } finally {
       setLoading(false);
     }
   };
+
+  const handleRemoveVaccine = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    const vaccineName = e.currentTarget.dataset.name;
+    
+    if (!vaxApi || !vaccineName || !vaccineName.trim()) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      await vaxApi.delVaccine(vaccineName.trim());
+      setNewVaccineName('');
+    } catch (err) {
+      console.error("Failed to add vaccine:", err);
+      if (err instanceof Error) {
+        setError("Erro ao adicionar vacina: " + err.message);
+      } else {
+        setError("Erro ao adicionar vacina: " + String(err));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
@@ -131,6 +162,10 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
                   <span className="material-symbols-outlined">vaccines</span>
                 </div>
                 <span className="font-bold text-lg text-on-surface">{v}</span>
+
+                <a href="#" data-name={v} onClick={handleRemoveVaccine}>
+                  <span className="material-symbols-outlined animate-spin">delete</span>
+                </a>
               </div>
             ))}
           </div>
