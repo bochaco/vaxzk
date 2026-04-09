@@ -45,9 +45,12 @@ witness localSk(): Bytes<32>;
 
 // Registers the deployer as the first admin by inserting their shielded ID.
 constructor() {
-  const _sk = localSk();
-  const adminId = getShieldedId(_sk);
-  admins.insert(disclose(adminId));
+  const own = ownPublicKey();
+  //const _sk = localSk();
+  //const adminId = getShieldedId(_sk);
+  //admins.insert(disclose(adminId));
+  admins.insert(disclose(own.bytes));
+
   issuerId.increment(1);
   proofReqId.increment(1);
 
@@ -82,9 +85,8 @@ export circuit getProofReqId(): Bytes<32> {
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): Boolean {
-  const _sk = localSk();
-  const adminId = getShieldedId(_sk);
-  assert(admins.member(disclose(adminId)), "You are not an admin");
+  const own = ownPublicKey();
+  assert(admins.member(disclose(own.bytes)), "You are not an admin");
   return true;
 }
 
