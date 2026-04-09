@@ -135,12 +135,15 @@ export const translations = {
     deployContractSubtitle: 'Deploy a new VaxZk smart contract to the Midnight network.',
 
     // Vaccines Admin
-    vaccinesAdminTitle: 'Manage',
+    manage: 'Manage',
     vaccinesAdminTitleEnd: 'Vaccines',
     vaccinesAdminSubtitle: 'List and add new vaccines to the system.',
     vaccinesList: 'Registered Vaccines',
     add: 'Add',
     loading: 'Processing...',
+
+    countriesAdminTitleEnd: 'Countries',
+    countriesAdminSubtitle: 'List all the countries and what types of cows are needed to visit them.',
   },
   pt: {
     // Login
@@ -276,12 +279,15 @@ export const translations = {
     deployContractSubtitle: 'Faça o deploy de um novo contrato VaxZk na rede do Midnight.',
 
     // Vaccines Admin
-    vaccinesAdminTitle: 'Gerenciar',
+    manage: 'Gerenciar',
     vaccinesAdminTitleEnd: 'Vacinas',
     vaccinesAdminSubtitle: 'Liste e adicione novas vacinas ao sistema.',
     vaccinesList: 'Vacinas Cadastradas',
     add: 'Adicionar',
     loading: 'Processando...',
+
+    countriesAdminTitleEnd: 'Paises',
+    countriesAdminSubtitle: 'Liste todos os países e quais vacas são necessárias para visitá-los.',
   },
   es: {
     // Login
@@ -417,12 +423,15 @@ export const translations = {
     deployContractSubtitle: 'Despliegue un nuevo contrato inteligente VaxZk en la red de Midnight.',
 
     // Vaccines Admin
-    vaccinesAdminTitle: 'Administrar',
+    manage: 'Administrar',
     vaccinesAdminTitleEnd: 'Vacunas',
     vaccinesAdminSubtitle: 'Listar y agregar nuevas vacunas al sistema.',
     vaccinesList: 'Vacunas Registradas',
     add: 'Agregar',
     loading: 'Procesando...',
+
+    countriesAdminTitleEnd: 'Países',
+    countriesAdminSubtitle: 'Enumera todos los países y qué tipos de vacas se necesitan para visitarlos.',
   },
 };
 

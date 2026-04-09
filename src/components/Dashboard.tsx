@@ -6,7 +6,7 @@ import HomeView from "./HomeView";
 import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
 import CalendarView from "./CalendarView";
-import PublishContractView from "./PublishContractView";
+import AccessAdmin from "./AccessAdmin";
 import DeployContractView from "./DeployContractView";
 import VaccinesAdmin from "./VaccinesAdmin";
 import CountriesAdmin from "./CountriesAdmin";
@@ -21,7 +21,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccine" | "listcountries" | "publish";
+type Tab = "home" | "wallet" | "add" | "calendar" | "deploy" | "listvaccine" | "listcountries" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -61,7 +61,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   }, [walletAddress, connectedApi]);
 
   const handleTabChange = (tab: Tab) => {
-    if (tab !== "add" && tab !== "publish") setPrevTab(activeTab);
+    if (tab !== "add" && tab !== "access") setPrevTab(activeTab);
     setActiveTab(tab);
   };
 
@@ -78,8 +78,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <WalletView />;
       case "add":
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
-      case "publish":
-        return <PublishContractView onBack={() => setActiveTab(prevTab)} />;
+      case "access":
+        return <AccessAdmin connectedApi={connectedApi!} />;
       case "listvaccine":
         return <VaccinesAdmin connectedApi={connectedApi!} />;
       case "listcountries":
@@ -159,6 +159,8 @@ const Dashboard: React.FC<DashboardProps> = ({
             Home
           </span>
         </button>
+
+        {CONTRACTID && (
         <button
           onClick={() => handleTabChange("wallet")}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -180,8 +182,9 @@ const Dashboard: React.FC<DashboardProps> = ({
             Wallet
           </span>
         </button>
+        )}
 
-        {isClinicUser && (
+        {CONTRACTID && isClinicUser && (
           <button
             onClick={() => handleTabChange("add")}
             className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -205,11 +208,11 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {isAdmin && (
+        {CONTRACTID && isAdmin && (
           <button
-            onClick={() => handleTabChange("publish")}
+            onClick={() => handleTabChange("access")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "publish"
+              activeTab === "access"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
@@ -218,22 +221,22 @@ const Dashboard: React.FC<DashboardProps> = ({
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
-                  activeTab === "publish" ? "'FILL' 1" : undefined,
+                  activeTab === "access" ? "'FILL' 1" : undefined,
               }}
             >
-              publish
+              admin_panel_settings
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Admin
+              Access
             </span>
           </button>
         )}
 
-        {isAdmin && (
+        {CONTRACTID && isAdmin && (
           <button
             onClick={() => handleTabChange("listvaccine")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "publish"
+              activeTab === "listvaccine"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
@@ -253,11 +256,11 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {isAdmin && (
+        {CONTRACTID && isAdmin && (
           <button
             onClick={() => handleTabChange("listcountries")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "publish"
+              activeTab === "listcountries"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}

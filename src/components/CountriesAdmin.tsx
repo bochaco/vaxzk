@@ -72,8 +72,8 @@ const CountriesAdmin: React.FC<CountriesAdminProps> = ({ connectedApi }) => {
 
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-          <span className="text-primary">{t.vaccinesAdminTitle}</span> {t.vaccinesAdminTitleEnd} </h2>
-        <p className="text-on-surface-variant text-lg max-w-xl leading-relaxed">{t.vaccinesAdminSubtitle}</p>
+          <span className="text-primary">{t.manage}</span> {t.countriesAdminTitleEnd} </h2>
+        <p className="text-on-surface-variant text-lg leading-relaxed">{t.countriesAdminSubtitle}</p>
       </section>
 
       {/* Add Vaccine Form */}
@@ -121,7 +121,7 @@ const CountriesAdmin: React.FC<CountriesAdminProps> = ({ connectedApi }) => {
         {vaccines.length === 0 ? (
           <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
             <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">vaccines</span>
-            <p className="text-on-surface-variant italic">Nenhuma vacina cadastrada no contrato.</p>
+            <p className="text-on-surface-variant italic">Nenhuma pais cadastrado no contrato.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
