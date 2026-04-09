@@ -224,7 +224,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                   activeTab === "publish" ? "'FILL' 1" : undefined,
               }}
             >
-              publish
+              admin_panel_settings
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Admin
