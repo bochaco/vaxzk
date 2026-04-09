@@ -80,7 +80,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: admins ${ledgerState.admins.size()}, clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: admins ${ledgerState.totalAdmins()}, clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -91,10 +91,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         ),
       ],
       (ledgerState, privateState) => {
-        const admins = new Array<string>();
-        for (const admin of ledgerState.admins) {
-          admins.push(toHex(admin));
-        }
         const clinics = new Array<string>();
         for (const clinic of ledgerState.clinics) {
           clinics.push(toHex(clinic));
@@ -110,7 +106,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         const isAdmin = myId ? ledgerState.admins.member(myId) : false;
         const isClinic = myId ? ledgerState.clinics.member(myId) : false;
 
-        return { admins, clinics, vaccines, isAdmin, isClinic };
+        return { clinics, vaccines, isAdmin, isClinic };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }

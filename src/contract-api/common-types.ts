@@ -77,9 +77,7 @@ export type DeployedVaxZkContract = FoundContract<VaxZkContract>;
  * A type that represents the derived combination of public (or ledger), and private state.
  */
 export type VaxZkDerivedState = {
-  readonly admins: Array<string>;
   readonly clinics: Array<string>;
   readonly vaccines: Array<string>;
-  readonly isAdmin: boolean;
   readonly isClinic: boolean;
 };
