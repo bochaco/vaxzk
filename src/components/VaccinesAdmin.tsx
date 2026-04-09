@@ -60,8 +60,14 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
       setNewVaccineName('');
       // The list should update automatically via subscription
     } catch (err) {
+      console.log(err);
       console.error("Failed to add vaccine:", err);
-      setError("Erro ao adicionar vacina");
+      if (err instanceof Error) {
+        setError("Erro ao adicionar vacina: " + err.message);
+      } else {
+        setError("Erro ao adicionar vacina: " + String(err));
+      }
+//    setError("Erro ao adicionar vacina");
     } finally {
       setLoading(false);
     }
