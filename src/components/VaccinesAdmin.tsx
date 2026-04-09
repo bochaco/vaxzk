@@ -164,11 +164,7 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
                 <span className="font-bold text-lg text-on-surface">{v}</span>
 
                 <a href="#" data-name={v} onClick={handleRemoveVaccine}>
-                  {loading ? (
-                    <><span className="material-symbols-outlined animate-spin">trash</span></>
-                  ) : (
-                    <><span className="material-symbols-outlined">trash</span></>
-                  )}
+                  <span className="material-symbols-outlined animate-spin">delete</span>
                 </a>
               </div>
             ))}
