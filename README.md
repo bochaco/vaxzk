@@ -67,7 +67,7 @@ This compiles the Compact source to `contract/src/managed/vaxzk/` and copies the
 - **Admin**:
   - Can create and revoke other admins.
   - Can create and revoke Health Facilities.
-  - Can create and edit existing vaccine types.
+  - ✅ Can create and edit existing vaccine types.
   - Can create and edit country and mandatory vaccination list to enter the country.
 - **Users**:
   - List all the countries and see which vaccines are required to enter them.
