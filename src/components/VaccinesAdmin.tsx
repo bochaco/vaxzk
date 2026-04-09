@@ -161,6 +161,18 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
                   <span className="material-symbols-outlined">vaccines</span>
                 </div>
                 <span className="font-bold text-lg text-on-surface">{v}</span>
+
+                <form onSubmit={handleRemoveVaccine} className="flex flex-col sm:flex-row gap-4">
+                  <input value={newVaccineName} type="hidden" />
+                  <button type="submit" disabled={loading}>
+                  {loading ? (
+                    <><span className="material-symbols-outlined animate-spin">trash</span></>
+                  ) : (
+                    <><span className="material-symbols-outlined">trash</span></>
+                  )}
+                  </button>
+                </form>
+
               </div>
             ))}
           </div>
