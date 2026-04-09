@@ -62,7 +62,17 @@ This compiles the Compact source to `contract/src/managed/vaxzk/` and copies the
 - Utilize standard Midnight Wallet integration (e.g. Lace Nightly/Midnight integration pattern).
 - Provide QR code generation and scanning functionality via `qrcode.react` and generic QR scanner libraries.
 
-### 4. Profiles
+### 4. Navigation Flow
+
+When a user starts using the platform, they follow the flow below.
+
+![image](public/images/00-navigation-flow.png)
+
+Login Page
+
+![image](public/images/01-login.png)
+
+### 5. Profiles
 
 - **Admin**:
   - Can create and revoke other admins ( using their nicknames profiles ).
@@ -70,10 +80,10 @@ This compiles the Compact source to `contract/src/managed/vaxzk/` and copies the
   - ✅ Can create and edit existing vaccine types.
   - Can create and edit country and mandatory vaccination list to enter the country.
 - **Users**:
+  - Create a private profile, with nickname.
   - List all the countries and see which vaccines are required to enter them.
   - List the clinics that administer vaccines, and you can refine the list by vaccine and location.
   - View all vaccination certificates generated for him.
-  - Create a private profile, with nickname.
 - **Health Facilities**: Like Clinics, Pharmacies and Hospitals.
   - Can create and edit their clinic profile, specifying the type of vaccine they can administer.
   - Generate vaccination certificates for users ( using their nicknames profiles ).
