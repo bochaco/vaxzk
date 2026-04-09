@@ -8,10 +8,7 @@ export { CertIssuerInfo, VaccineProofRequest, VaxZkProof };
 
 // ledger of shielded admin IDs.
 ledger admins: Set<Bytes<32>>;
-
-export circuit totalAdmins(): Uint<64> {
-  return admins.size();
-}
+export ledger totalAdmins: Uint<64>;
 
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Set<Bytes<32>>;
@@ -58,6 +55,8 @@ constructor() {
   vaccines.insert(disclose(pad(20, "HepB")));
   vaccines.insert(disclose(pad(20, "PCV")));
   vaccines.insert(disclose(pad(20, "Tdap")));
+
+  totalAdmins = admins.size();
 }
 
 // Derives a deterministic shielded ID from a secret key using a persistent hash.
@@ -102,6 +101,7 @@ export circuit addAdmin(adminId: Bytes<32>): [] {
   isAdmin();
   assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
   admins.insert(disclose(adminId));
+  totalAdmins = admins.size();
 }
 
 // Removes an admin by their shielded ID. Caller must be an existing admin.
@@ -109,6 +109,7 @@ export circuit revokeAdmin(adminId: Bytes<32>): [] {
   isAdmin();
   assert(!admins.member(disclose(adminId)), "Admin ID is not in the admins list");
   admins.remove(disclose(adminId));
+  totalAdmins = admins.size();
 }
 
 // Registers a clinic by their shielded ID. Caller must be an admin.
