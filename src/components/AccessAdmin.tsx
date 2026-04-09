@@ -1,170 +1,143 @@
-import React, { useState } from "react";
-import { useLanguage } from "../LanguageContext";
-import { networkId } from "./ConfigNetwork";
+import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../LanguageContext';
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
+import { networkId, CONTRACTID } from "./ConfigNetwork";
+import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
+import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 
-interface PublishContractViewProps {
-  onBack: () => void;
+interface AccessAdminProps {
+  connectedApi: ConnectedAPI;
 }
 
-const PublishContractView: React.FC<PublishContractViewProps> = ({
-  onBack,
-}) => {
+const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
   const { t } = useLanguage();
-  const [isDeploying, setIsDeploying] = useState(false);
-  const [deployed, setDeployed] = useState(false);
+  const [vaccines, setVaccines] = useState<string[]>([]);
+  const [newVaccineName, setNewVaccineName] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
-  const handleDeploy = async (e: React.FormEvent) => {
+  useEffect(() => {
+    let subscription: { unsubscribe: () => void } | undefined;
+    
+    async function init() {
+      if (!connectedApi || !CONTRACTID) return;
+      try {
+        const providers = await buildProviders(connectedApi, networkId);
+        // Using placeholder secret key as in Dashboard.tsx
+        const secretKey = new Uint8Array(32);
+        const api = await VaxZkAPI.join(
+          providers,
+          CONTRACTID as unknown as ContractAddress,
+          secretKey,
+        );
+        setVaxApi(api);
+
+        subscription = api.state$.subscribe((state) => {
+          setVaccines(state.vaccines);
+        });
+      } catch (err) {
+        console.error("Failed to join contract:", err);
+        setError("Erro ao conectar ao contrato");
+      }
+    }
+    
+    init();
+    
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
+  }, [connectedApi]);
+
+  const handleAddVaccine = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsDeploying(true);
+    if (!vaxApi || !newVaccineName.trim()) return;
+
+    setLoading(true);
     setError(null);
     try {
-      if (!window.midnight) {
-        throw new Error("Midnight Extension not found. Please install Lace.");
-      }
-
-      const wallets = Object.values(window.midnight);
-      const wallet = wallets.find(
-        (w) => !!w && typeof w === "object" && "apiVersion" in w,
-      ) as any;
-
-      if (!wallet) {
-        throw new Error("Compatible Midnight wallet not found");
-      }
-
-      const connectedApi = await wallet.connect(networkId);
-      const providers = await buildProviders(connectedApi, networkId);
-
-      // Fresh 32-byte secret key for this admin identity. Its derived public
-      // key becomes the first admin on the ledger via the localSk() witness.
-      const secretKey = crypto.getRandomValues(new Uint8Array(32));
-      const api = await VaxZkAPI.deploy(providers, secretKey);
-
-      console.log(
-        "Successfully deployed contract at:",
-        api.deployedContractAddress,
-      );
-      setIsDeploying(false);
-      setDeployed(true);
-      setTimeout(() => setDeployed(false), 5000);
+      await vaxApi.addVaccine(newVaccineName.trim());
+      setNewVaccineName('');
+      // The list should update automatically via subscription
     } catch (err) {
-      console.error("Deployment failed:", err);
-      setError(err instanceof Error ? err.message : String(err));
-      setIsDeploying(false);
+      console.error("Failed to add vaccine:", err);
+      setError("Erro ao adicionar vacina");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <main className="pt-24 px-6 max-w-screen-md mx-auto">
+    <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
+
       <section className="mb-12 text-left">
-        <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={onBack}
-            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-blue-50/50 transition-colors active:scale-95 duration-200"
-          >
-            <span className="material-symbols-outlined text-blue-700">
-              arrow_back
-            </span>
-          </button>
-        </div>
-        <h2 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
-          {t.publishContract}
-        </h2>
-        <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
-          {t.publishContractSubtitle}
-        </p>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
+          <span className="text-primary">{t.manage}</span> {t.vaccinesAdminTitleEnd} </h2>
+        <p className="text-on-surface-variant text-lg leading-relaxed">{t.vaccinesAdminSubtitle}</p>
       </section>
 
-      {/* Form Container with Tonal Depth */}
-      <div className="space-y-16 text-left">
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-          {/* Decorative Subtle Background Gradient */}
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+      {/* Add Vaccine Form */}
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
+        <form onSubmit={handleAddVaccine} className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1 space-y-3">
+            <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
+              {t.vaccineName}
+            </label>
+            <input 
+              className="w-full px-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300" 
+              placeholder={t.vaccinePlaceholder}
+              value={newVaccineName}
+              onChange={(e) => setNewVaccineName(e.target.value)}
+              disabled={loading}
+              type="text"
+            />
+          </div>
+          <div className="flex items-end">
+            <button 
+              className="w-full sm:w-auto px-8 py-4 bg-primary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2" 
+              type="submit"
+              disabled={loading || !newVaccineName.trim()}
+            >
+              {loading ? (
+                <>
+                  <span className="material-symbols-outlined animate-spin">sync</span>
+                  <span>{t.loading}</span>
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined">add</span>
+                  <span>{t.add}</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+        {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+      </div>
 
-          <form className="space-y-8 relative z-10" onSubmit={handleDeploy}>
-            {/* General Settings */}
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-                {t.contractName}
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-outline">
-                    description
-                  </span>
+      {/* Vaccines List */}
+      <div className="space-y-4 text-left">
+        <h3 className="text-2xl font-bold mb-6">{t.vaccinesList}</h3>
+        {vaccines.length === 0 ? (
+          <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
+            <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">vaccines</span>
+            <p className="text-on-surface-variant italic">Nenhuma vacina cadastrada no contrato.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {vaccines.map((v, i) => (
+              <div key={i} className="bg-surface-container-low p-6 rounded-xl border border-slate-50 flex items-center gap-4 hover:bg-surface-container-high transition-colors">
+                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined">vaccines</span>
                 </div>
-                <input
-                  className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300 placeholder:text-outline"
-                  placeholder={t.contractNamePlaceholder}
-                  type="text"
-                  required
-                />
+                <span className="font-bold text-lg text-on-surface">{v}</span>
               </div>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200 text-sm flex items-start gap-3 mt-6">
-                <span className="material-symbols-outlined text-red-500">
-                  error
-                </span>
-                <span>{error}</span>
-              </div>
-            )}
-
-            {/* Visual Aid Card */}
-            <div className="bg-blue-50 p-5 rounded-lg border-none flex items-start gap-4 mt-6">
-              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-primary">
-                  gavel
-                </span>
-              </div>
-              <div>
-                <h4 className="font-bold text-primary text-sm">
-                  {t.contractParamsTitle}
-                </h4>
-                <p className="text-xs text-blue-800/70 leading-relaxed mt-1">
-                  {t.contractDesc}
-                </p>
-              </div>
-            </div>
-
-            {/* Primary Action */}
-            <div className="pt-6 relative pb-20">
-              <button
-                className={`w-full py-4 bg-gradient-to-r from-primary to-blue-600 font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 ${isDeploying ? "opacity-80 cursor-wait" : ""}`}
-                type="submit"
-                disabled={isDeploying || deployed}
-              >
-                {isDeploying ? (
-                  <>
-                    <span className="animate-spin material-symbols-outlined">
-                      sync
-                    </span>
-                    <span>{t.deploying}</span>
-                  </>
-                ) : deployed ? (
-                  <>
-                    <span className="material-symbols-outlined">
-                      check_circle
-                    </span>
-                    <span>{t.deploySuccess}</span>
-                  </>
-                ) : (
-                  <>
-                    <span>{t.deployContractButton}</span>
-                    <span className="material-symbols-outlined">
-                      cloud_upload
-                    </span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
 };
 
-export default PublishContractView;
+export default AccessAdmin;
