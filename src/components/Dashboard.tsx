@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
-import { networkId, CONTRACTID } from "./ConfigNetwork";
 import { LanguageSelector } from "../App";
 import { useProfile, ProfileSelector } from "../Profile";
 import HomeView from "./HomeView";
@@ -10,9 +9,6 @@ import CalendarView from "./CalendarView";
 import AccessAdmin from "./AccessAdmin";
 import VaccinesAdmin from "./VaccinesAdmin";
 import CountriesAdmin from "./CountriesAdmin";
-import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import { firstValueFrom } from "rxjs";
-import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 
 interface DashboardProps {
