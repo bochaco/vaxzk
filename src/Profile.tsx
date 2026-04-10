@@ -1,10 +1,9 @@
 import { createContext, useContext } from 'react';
-import Select from 'react-select';
 
-const options = [
-  { value: 'amdin', label: 'Amdin' },
-  { value: 'clinic', label: 'Clinic' },
-  { value: 'user', label: 'User' },
+const ProfileOptions = [
+  { code: 'admin', label: 'Admin' },
+  { code: 'clinic', label: 'Clinic' },
+  { code: 'user', label: 'User' },
 ]
 
 interface ProfileContextValue {
@@ -21,7 +20,11 @@ export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
   const { profile, setProfile } = useProfile();
   return (
     <div className={`flex items-center gap-1 bg-white/80 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-slate-200/60 ${fixed ? 'fixed top-3 right-4 z-[100]' : ''}`}>
-        <Select id={profile} options={options} onChange={setProfile} />
+        <select class="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors bg-primary" id={profile} onChange={setProfile}>
+        {ProfileOptions.map(({ code, label }) => (
+            <option value={code}>{label}</option>
+        ))}
+        </select>
     </div>
   );
 }
