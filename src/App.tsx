@@ -3,6 +3,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import { CONTRACTID } from "./components/ConfigNetwork";
 import DeployContractView from "./components/DeployContractView";
+import { ProfileProvider } from './Profile';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 import './index.css';
@@ -75,7 +76,9 @@ function AppContent() {
 function App() {
   return (
     <LanguageProvider>
-      <AppContent />
+      <ProfileProvider>
+        <AppContent />
+      </ProfileProvider>
     </LanguageProvider>
   );
 }
