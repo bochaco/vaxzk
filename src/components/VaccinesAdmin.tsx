@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { useLanguage } from "../LanguageContext";
 import {
   buildProviders,
@@ -393,8 +394,12 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
               return (
                 <div
                   key={reqIdHex}
-                  className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row sm:items-center gap-4"
+                  className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-row items-center gap-6"
                 >
+                  <div className="flex-shrink-0 p-2 bg-white border border-slate-100 rounded-lg">
+                    <QRCodeSVG value={reqIdHex} size={96} />
+                  </div>
+                  <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-1 space-y-1">
                     <p className="font-semibold text-on-surface">
                       <span className="text-primary">{vaccineName}</span>
@@ -443,6 +448,7 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
                       )}
                     </button>
                   )}
+                  </div>
                 </div>
               );
             })}
