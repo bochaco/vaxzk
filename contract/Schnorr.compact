@@ -11,25 +11,38 @@ module Schnorr {
     response: Field;
   }
 
-  struct SchnorrHashInput<#n> {
+  // VaxZk-specific Schnorr hash input. Uses native Compact types for all
+  // message fields so no Bytes-to-Field casting is required.
+  struct VaxZkSchnorrHashInput {
     ann: JubjubPoint;
     pk: JubjubPoint;
-    msg: Vector<n, Field>;
+    vaccine: Bytes<20>;
+    personalId: Bytes<20>;
+    expirationDate: Uint<128>;
+    userPubKey: Bytes<32>;
   }
 
   // The witness provides the quotient and remainder of dividing the challenge hash
   // by 2^248, so we can truncate it to fit in Jubjub's scalar field.
   witness getSchnorrReduction(challengeHash: Field): [Field, Uint<248>];
 
-  export circuit schnorrVerify<#n>(
-                   msg: Vector<n, Field>,
+  export circuit schnorrVerifyVaxZk(
+                   vaccine: Bytes<20>,
+                   personalId: Bytes<20>,
+                   expirationDate: Uint<128>,
+                   userPubKey: Bytes<32>,
                    signature: SchnorrSignature,
                    pk: JubjubPoint
                    ): [] {
     const {announcement, response} = signature;
     const cFull: Field =
-            transientHash<SchnorrHashInput<n>>(
-              SchnorrHashInput<n> { ann: announcement, pk: pk, msg: msg }
+            transientHash<VaxZkSchnorrHashInput>(
+              VaxZkSchnorrHashInput { ann: announcement,
+                                      pk: pk,
+                                      vaccine: vaccine,
+                                      personalId: personalId,
+                                      expirationDate: expirationDate,
+                                      userPubKey: userPubKey }
               );
     // Truncate challenge to 248 bits via witness-assisted division by 2^248.
     // The witness provides (quotient, remainder) such that cFull == q * 2^248 + r
@@ -48,15 +61,25 @@ module Schnorr {
     assert(lhs == rhs, "Invalid attestation signature");
   }
 
-  export pure circuit schnorrChallenge(
+  export pure circuit schnorrChallengeVaxZk(
                         ann: JubjubPoint,
                         pk: JubjubPoint,
-                        msg: Vector<4, Field>
+                        vaccine: Bytes<20>,
+                        personalId: Bytes<20>,
+                        expirationDate: Uint<128>,
+                        userPubKey: Bytes<32>
                         ): Field {
     const cFull: Field =
-            transientHash<SchnorrHashInput<4>>(SchnorrHashInput<4> { ann: ann, pk: pk, msg: msg });
+            transientHash<VaxZkSchnorrHashInput>(
+              VaxZkSchnorrHashInput { ann: ann,
+                                      pk: pk,
+                                      vaccine: vaccine,
+                                      personalId: personalId,
+                                      expirationDate: expirationDate,
+                                      userPubKey: userPubKey }
+              );
     // Return the full hash. Callers must truncate to 248 bits (mod 2^248)
-    // to match schnorrVerify's challenge reduction.
+    // to match schnorrVerifyVaxZk's challenge reduction.
     return cFull;
   }
 }

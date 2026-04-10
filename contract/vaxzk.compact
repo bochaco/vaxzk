@@ -4,7 +4,7 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallenge };
+export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
@@ -175,15 +175,17 @@ export circuit submitVaccineProof(proofReqId: Bytes<32>): [] {
          "The submitted certificate proof doesn't comply with validity date"
          );
 
-  // Build proof signed message
-  const userPubKey = ownPublicKey();
-  const msg: Vector<4, Field> =
-          [proof.vaccine as Field,
-           proof.personalId as Field,
-           proof.expirationDate as Field,
-           userPubKey.bytes as Field];
-  // Verify attestation signature
-  schnorrVerify<4>(msg, proof.issuerSignature, proofIssuer.key);
+  // Verify attestation signature using native Compact types — no Field
+  // range conversions required.
+  const userPubKey = getShieldedId(ownPublicKey().bytes);
+  schnorrVerifyVaxZk(
+    proof.vaccine,
+    proof.personalId,
+    proof.expirationDate,
+    userPubKey,
+    proof.issuerSignature,
+    proofIssuer.key
+    );
 
   vaccineProofs.insert(disclose(proofReqId), disclose(proof));
 }

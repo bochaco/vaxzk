@@ -19,9 +19,9 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
-import type { CertIssuerInfo } from "../../contract/managed/contract/index.js";
+import type { CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
-import { signVaxZkCertificate, getPublicKey } from "./signing.js";
+import { signVaxZkCertificate } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
 import {
   CompiledVaxZkContract,
@@ -56,6 +56,14 @@ export interface DeployedVaxZkAPI {
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
   addCertificateIssuer: (issuerInfo: CertIssuerInfo) => Promise<Uint8Array>;
+  addSelfAsClinic: () => Promise<void>;
+  requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
+  submitVaccineProof: (
+    proofReqId: Uint8Array,
+    issuerId: Uint8Array,
+    vaccine: Uint8Array,
+    personalId: Uint8Array,
+  ) => Promise<void>;
   signAndSetVaxZkProof: (
     vaccine: string,
     personalId: string,
@@ -114,13 +122,29 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           );
         }
 
+        const issuers = [];
+        for (const [id, info] of ledgerState.issuers) {
+          issuers.push({ id, name: info.name });
+        }
+
+        const vaccineProofReqs = [];
+        for (const [id, req] of ledgerState.vaccineProofReqs) {
+          vaccineProofReqs.push({
+            id,
+            vaccine: req.vaccine,
+            personalId: req.personalId,
+            validUntil: req.validUntil,
+            submitted: ledgerState.vaccineProofs.member(id),
+          });
+        }
+
         const myId = privateState
           ? VaxZk.pureCircuits.getShieldedId(privateState.secretKey)
           : null;
         const isClinic = myId ? ledgerState.clinics.member(myId) : false;
         const isAdmin = myId ? ledgerState.admins.member(myId) : false;
 
-        return { clinics, vaccines, isClinic, isAdmin };
+        return { clinics, vaccines, issuers, vaccineProofReqs, isClinic, isAdmin };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
@@ -281,7 +305,8 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
 
   async addCertificateIssuer(issuerInfo: CertIssuerInfo): Promise<Uint8Array> {
     console.log(`adding certificate issuer: ${issuerInfo.name}`);
-    const txData = await this.deployedContract.callTx.addCertificateIssuer(issuerInfo);
+    const txData =
+      await this.deployedContract.callTx.addCertificateIssuer(issuerInfo);
     console.log({
       transactionAdded: {
         circuit: "addCertificateIssuer",
@@ -290,6 +315,67 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       },
     });
     return txData.private.result as Uint8Array;
+  }
+
+  async addSelfAsClinic(): Promise<void> {
+    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
+    if (!privateState) throw new Error("Private state not found");
+    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
+    await this.addClinic(clinicId);
+  }
+
+  async requestVaccineProof(req: VaccineProofRequest): Promise<Uint8Array> {
+    console.log(`requesting vaccine proof for vaccine ${toHex(req.vaccine)}`);
+    const txData = await this.deployedContract.callTx.requestVaccineProof(req);
+    console.log({
+      transactionAdded: {
+        circuit: "requestVaccineProof",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as Uint8Array;
+  }
+
+  async submitVaccineProof(
+    proofReqId: Uint8Array,
+    issuerId: Uint8Array,
+    vaccine: Uint8Array,
+    personalId: Uint8Array,
+  ): Promise<void> {
+    const HARDCODED_ISSUER_SK =
+      1234567890123456789012345678901234567890123456789012345678901234n;
+    // 1/1/2031 00:00:00 UTC
+    const expirationDate = 1924992000n;
+
+    const pkHex = this.providers.walletProvider.getCoinPublicKey();
+    const userCoinPkBytes = fromHex(pkHex);
+
+    const proof = signVaxZkCertificate(
+      HARDCODED_ISSUER_SK,
+      issuerId,
+      vaccine,
+      personalId,
+      expirationDate,
+      userCoinPkBytes,
+    );
+
+    const existing = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
+    const currentState = existing ?? createVaxZkPrivateState();
+    await this.providers.privateStateProvider.set(vaxZkPrivateStateKey, {
+      ...currentState,
+      vaxZkProof: proof,
+    });
+
+    console.log(`submitting vaccine proof for request ${toHex(proofReqId)}`);
+    const txData = await this.deployedContract.callTx.submitVaccineProof(proofReqId);
+    console.log({
+      transactionAdded: {
+        circuit: "submitVaccineProof",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
   }
 
   async signAndSetVaxZkProof(
@@ -331,9 +417,8 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       userCoinPkBytes,
     );
 
-    const existing = await this.providers.privateStateProvider.get(
-      vaxZkPrivateStateKey,
-    );
+    const existing =
+      await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
     const currentState = existing ?? createVaxZkPrivateState();
     await this.providers.privateStateProvider.set(vaxZkPrivateStateKey, {
       ...currentState,
