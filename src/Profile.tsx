@@ -9,8 +9,8 @@ export type Profile = 'admin' | 'clinic' | 'user';
 
 
 interface ProfileContextValue {
-  profile: string;
-  setProfile: (profile: string) => void;
+  profile: Profile;
+  setProfile: (profile: Profile) => void;
 }
 
 const ProfileContext = createContext<ProfileContextValue>({
