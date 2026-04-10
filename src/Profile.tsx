@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from 'react';
-import Select from 'react-select'
+import { createContext, useContext } from 'react';
+import Select from 'react-select';
 
 const options = [
   { value: 'amdin', label: 'Amdin' },
