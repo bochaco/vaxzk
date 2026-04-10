@@ -1,14 +1,17 @@
 module Types {
   import CompactStandardLibrary;
 
+  import "./Schnorr";
+  export { SchnorrSignature, schnorrVerify, schnorrChallenge };
+
   // Vaccine certificate issuer metadata
   export struct CertIssuerInfo {
     // issuer DID or URL (e.g., "did:example:who" or "https://who.int")
     uri: Opaque<'string'>,
     // human-readable name
     name: Opaque<'string'>,
-    // known verification keys
-    key: Opaque<'string'>,
+    // known verification key
+    key: JubjubPoint,
     // URL for verification checks
     verificationEndpoint: Opaque<'string'>,
   }
@@ -16,9 +19,9 @@ module Types {
   // Vaccine proof request
   export struct VaccineProofRequest {
     // Vaccine product/type
-    vaccine: Opaque<'string'>,
+    vaccine: Bytes<20>,
     // Passport or ID number associated to vaccine certificate
-    personalId: Opaque<'string'>,
+    personalId: Bytes<20>,
     // Minimum vaccine validity timestamp
     validUntil: Uint<128>,
   }
@@ -28,10 +31,12 @@ module Types {
     // Vaccine certificate issuer assinged ID
     issuerId: Bytes<32>,
     // Vaccine product/type
-    vaccine: Opaque<'string'>,
+    vaccine: Bytes<20>,
     // Passport or ID number associated to vaccine certificate
-    personalId: Opaque<'string'>,
+    personalId: Bytes<20>,
     // Certificate expiration timestamp
     expirationDate: Uint<128>,
+    // Issuer signature over the vaccine certificate
+    issuerSignature: SchnorrSignature
   }
 }

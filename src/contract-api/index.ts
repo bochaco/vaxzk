@@ -19,11 +19,14 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
+import type { CertIssuerInfo } from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
+import { signVaxZkCertificate, getPublicKey } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
 import {
   CompiledVaxZkContract,
   createVaxZkPrivateState,
+  type VaxZkProof,
 } from "../../contract/src/index";
 import {
   deployContract,
@@ -52,6 +55,12 @@ export interface DeployedVaxZkAPI {
   revokeClinic: (id: Uint8Array) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
+  addCertificateIssuer: (issuerInfo: CertIssuerInfo) => Promise<Uint8Array>;
+  signAndSetVaxZkProof: (
+    vaccine: string,
+    personalId: string,
+    expirationDate: bigint,
+  ) => Promise<void>;
 }
 
 /**
@@ -62,12 +71,14 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
   readonly deployedContractAddress: ContractAddress;
   readonly state$: Observable<VaxZkDerivedState>;
   readonly deployedContract: DeployedVaxZkContract;
+  private readonly providers: VaxZkProviders;
 
   /** @internal */
   private constructor(
     deployedContract: DeployedVaxZkContract,
     providers: VaxZkProviders,
   ) {
+    this.providers = providers;
     this.deployedContract = deployedContract;
     this.deployedContractAddress =
       deployedContract.deployTxData.public.contractAddress;
@@ -266,6 +277,69 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         blockHeight: txData.public.blockHeight,
       },
     });
+  }
+
+  async addCertificateIssuer(issuerInfo: CertIssuerInfo): Promise<Uint8Array> {
+    console.log(`adding certificate issuer: ${issuerInfo.name}`);
+    const txData = await this.deployedContract.callTx.addCertificateIssuer(issuerInfo);
+    console.log({
+      transactionAdded: {
+        circuit: "addCertificateIssuer",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as Uint8Array;
+  }
+
+  async signAndSetVaxZkProof(
+    vaccine: string,
+    personalId: string,
+    expirationDate: bigint,
+  ): Promise<void> {
+    // TODO: replace with a proper mechanism to obtain the issuer secret key
+    // once that is defined (e.g. fetched from an attestation server or derived
+    // from a wallet key).
+    const HARDCODED_ISSUER_SK =
+      1234567890123456789012345678901234567890123456789012345678901234n;
+
+    // TODO: replace with the real issuer ID once the mechanism to obtain it
+    // is defined (e.g. looked up from the on-chain issuers map or provided
+    // by an attestation server).
+    const HARDCODED_ISSUER_ID = new Uint8Array(32).fill(1);
+
+    // Encode vaccine and personalId the same way requestVaccineProof does (UTF-8,
+    // zero-padded to 20 bytes), so bytes match when submitVaccineProof compares
+    // proof.vaccine == vaccineProofReq.vaccine and proof.personalId == vaccineProofReq.personalId.
+    const enc = new TextEncoder();
+    const vaccineBytes = new Uint8Array(20);
+    vaccineBytes.set(enc.encode(vaccine).slice(0, 20));
+    const personalIdBytes = new Uint8Array(20);
+    personalIdBytes.set(enc.encode(personalId).slice(0, 20));
+
+    // ownPublicKey() in the circuit resolves to the ZSwap coin public key of the
+    // transaction submitter. We obtain the same key here so the signed message matches.
+    const pkHex = this.providers.walletProvider.getCoinPublicKey();
+    const userCoinPkBytes = fromHex(pkHex);
+
+    const proof: VaxZkProof = signVaxZkCertificate(
+      HARDCODED_ISSUER_SK,
+      HARDCODED_ISSUER_ID,
+      vaccineBytes,
+      personalIdBytes,
+      expirationDate,
+      userCoinPkBytes,
+    );
+
+    const existing = await this.providers.privateStateProvider.get(
+      vaxZkPrivateStateKey,
+    );
+    const currentState = existing ?? createVaxZkPrivateState();
+    await this.providers.privateStateProvider.set(vaxZkPrivateStateKey, {
+      ...currentState,
+      vaxZkProof: proof,
+    });
+    console.log("VaxZkProof signed and stored in private state");
   }
 }
 

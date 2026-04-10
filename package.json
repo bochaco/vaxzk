@@ -10,7 +10,9 @@
     "format": "eslint . --fix",
     "preview": "vite preview",
     "contract:compile": "compact compile contract/vaxzk.compact contract/managed && npm run contract:copy-assets",
-    "contract:copy-assets": "mkdir -p public && cp -r contract/managed/keys public/keys && cp -r contract/managed/zkir public/zkir"
+    "contract:copy-assets": "mkdir -p public && cp -r contract/managed/keys public/keys && cp -r contract/managed/zkir public/zkir",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
@@ -47,6 +49,7 @@
     "rollup": "^4.60.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
-    "vite": "^8.0.4"
+    "vite": "^8.0.4",
+    "vitest": "^4.1.4"
   }
 }
