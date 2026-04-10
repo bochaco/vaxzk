@@ -4,7 +4,7 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { CertIssuerInfo, VaccineProofRequest, VaxZkProof };
+export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallenge };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
@@ -32,6 +32,9 @@ export ledger vaccineProofs: Map<Bytes<32>, VaxZkProof>;
 
 // Reads the caller's 32-byte secret key from local private state.
 witness localSk(): Bytes<32>;
+
+// Obtain the vaccine certificate proof signed by a registered issuer
+witness getAttestedCertProofWitness(): VaxZkProof;
 
 // Registers the deployer as the first admin by inserting their shielded ID.
 constructor() {
@@ -147,14 +150,20 @@ export circuit requestVaccineProof(req: VaccineProofRequest): Bytes<32> {
 }
 
 // Submits a requested vaccine proof.
-export circuit submitVaccineProof(proofReqId: Bytes<32>, proof: VaxZkProof): [] {
+export circuit submitVaccineProof(proofReqId: Bytes<32>): [] {
   assert(vaccineProofReqs.member(disclose(proofReqId)),
          "The ID is not the vaccine proof requests list"
          );
   assert(!vaccineProofs.member(disclose(proofReqId)),
          "The vaccine proof for the given request ID has been already submitted"
          );
+
+  const proof = getAttestedCertProofWitness();
+  const issuerId = disclose(proof.issuerId);
+  assert(issuers.member(issuerId), "The vaccine proof issuer is not a registered/valid entity");
+
   const vaccineProofReq = vaccineProofReqs.lookup(disclose(proofReqId));
+  const proofIssuer = issuers.lookup(issuerId);
 
   assert(proof.vaccine == vaccineProofReq.vaccine,
          "The submitted proof doesn't match the vaccine type"
@@ -165,7 +174,16 @@ export circuit submitVaccineProof(proofReqId: Bytes<32>, proof: VaxZkProof): [] 
   assert(proof.expirationDate >= vaccineProofReq.validUntil,
          "The submitted certificate proof doesn't comply with validity date"
          );
-  // TODO: validate issuer signature
+
+  // Build proof signed message
+  const userPubKey = ownPublicKey();
+  const msg: Vector<4, Field> =
+          [proof.vaccine as Field,
+           proof.personalId as Field,
+           proof.expirationDate as Field,
+           userPubKey.bytes as Field];
+  // Verify attestation signature
+  schnorrVerify<4>(msg, proof.issuerSignature, proofIssuer.key);
 
   vaccineProofs.insert(disclose(proofReqId), disclose(proof));
 }
