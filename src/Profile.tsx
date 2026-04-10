@@ -7,7 +7,6 @@ const ProfileOptions = [
 ]
 export type Profile = 'admin' | 'clinic' | 'user';
 
-
 interface ProfileContextValue {
   profile: Profile;
   setProfile: (profile: Profile) => void;
