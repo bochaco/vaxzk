@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { networkId, CONTRACTID } from "./ConfigNetwork";
 import { LanguageSelector } from "../App";
+import { ProfileSelector } from "../Profile";
 import HomeView from "./HomeView";
 import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
@@ -120,6 +121,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
           <div className="flex items-center gap-3">
             <LanguageSelector />
+            <ProfileSelector />
             <button
               onClick={onLogout}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
