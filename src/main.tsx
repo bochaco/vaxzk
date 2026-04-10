@@ -4,6 +4,19 @@ import { Buffer } from 'buffer';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any).Buffer = Buffer;
 
+// JubjubPoint interning patch: the circuit simulation uses JavaScript `===`
+// for JubjubPoint equality (assert(lhs == rhs)). ecMulGenerator/ecAdd return
+// new objects each call, so equal points fail `===` without interning.
+import { CompactTypeJubjubPoint, type JubjubPoint } from '@midnight-ntwrk/compact-runtime';
+const _jubjubCache = new Map<string, JubjubPoint>();
+const _origFromValue = CompactTypeJubjubPoint.fromValue.bind(CompactTypeJubjubPoint);
+(CompactTypeJubjubPoint as any).fromValue = function (value: any[]): JubjubPoint {
+  const pt = _origFromValue(value);
+  const key = `${pt.x},${pt.y}`;
+  if (!_jubjubCache.has(key)) _jubjubCache.set(key, pt);
+  return _jubjubCache.get(key)!;
+};
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'

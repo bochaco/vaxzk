@@ -74,11 +74,33 @@ export type VaxZkProviders = MidnightProviders<
 export type DeployedVaxZkContract = FoundContract<VaxZkContract>;
 
 /**
+ * A certificate issuer entry derived from the ledger's issuers map.
+ */
+export type DerivedIssuer = {
+  readonly id: Uint8Array;
+  readonly name: string;
+};
+
+/**
+ * A proof request entry derived from the ledger's vaccineProofReqs map.
+ */
+export type DerivedProofRequest = {
+  readonly id: Uint8Array;
+  readonly vaccine: Uint8Array;
+  readonly personalId: Uint8Array;
+  readonly validUntil: bigint;
+  /** True when a proof has already been submitted for this request ID. */
+  readonly submitted: boolean;
+};
+
+/**
  * A type that represents the derived combination of public (or ledger), and private state.
  */
 export type VaxZkDerivedState = {
   readonly clinics: Array<string>;
   readonly vaccines: Array<string>;
+  readonly issuers: Array<DerivedIssuer>;
+  readonly vaccineProofReqs: Array<DerivedProofRequest>;
   readonly isClinic: boolean;
   readonly isAdmin: boolean;
 };

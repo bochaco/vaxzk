@@ -2,7 +2,7 @@ module Types {
   import CompactStandardLibrary;
 
   import "./Schnorr";
-  export { SchnorrSignature, schnorrVerify, schnorrChallenge };
+  export { SchnorrSignature, schnorrVerifyVaxZk, schnorrChallengeVaxZk };
 
   // Vaccine certificate issuer metadata
   export struct CertIssuerInfo {
