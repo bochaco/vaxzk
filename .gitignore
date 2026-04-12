@@ -15,6 +15,7 @@ dist-ssr
 contract/managed
 mockup
 src/utils/managed/
+public/keys/*
 
 # Editor directories and files
 .vscode/*
