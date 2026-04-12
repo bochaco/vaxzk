@@ -7,7 +7,7 @@ import {
   type DerivedIssuer,
   type DerivedProofRequest,
 } from "../../contract-api/index";
-import { networkId, CONTRACTID } from "../ConfigNetwork";
+import { networkId, getContractId } from "../ConfigNetwork";
 import { getPublicKey } from "../../contract-api/signing";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
@@ -40,14 +40,15 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
     let subscription: { unsubscribe: () => void } | undefined;
 
     async function init() {
-      if (!connectedApi || !CONTRACTID) return;
+      const contractId = getContractId();
+      if (!connectedApi || !contractId) return;
       try {
         const providers = await buildProviders(connectedApi, networkId);
         // Using placeholder secret key as in Dashboard.tsx
         const secretKey = new Uint8Array(32);
         const api = await VaxZkAPI.join(
           providers,
-          CONTRACTID as unknown as ContractAddress,
+          contractId as unknown as ContractAddress,
           secretKey,
         );
         setVaxApi(api);

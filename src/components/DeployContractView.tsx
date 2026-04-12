@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
-import { networkId } from "./ConfigNetwork";
+import { networkId, saveContractId, clearContractId, getContractId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 
 interface DeployContractProps {
@@ -13,7 +13,9 @@ interface DeployContractProps {
 const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddress}) => {
   const { t } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
-  const [deployed, setDeployed] = useState(false);
+  const [deployedAddress, setDeployedAddress] = useState<string | null>(
+    getContractId() || null,
+  );
   const [error, setError] = useState<string | null>(null);
 
   const handleDeploy = async (e: React.FormEvent) => {
@@ -41,19 +43,23 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
       const api = await VaxZkAPI.deploy(providers, secretKey);
+      const address = api.deployedContractAddress as unknown as string;
 
-      console.log(
-        "Successfully deployed contract at:",
-        api.deployedContractAddress,
-      );
+      console.log("Successfully deployed contract at:", address);
+      saveContractId(address);
+      setDeployedAddress(address);
       setIsDeploying(false);
-      setDeployed(true);
-      setTimeout(() => setDeployed(false), 5000);
     } catch (err) {
       console.error("Deployment failed:", err);
       setError(err instanceof Error ? err.message : String(err));
       setIsDeploying(false);
     }
+  };
+
+  const handleRedeploy = () => {
+    clearContractId();
+    setDeployedAddress(null);
+    setError(null);
   };
 
   return (
@@ -156,12 +162,48 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               </div>
             </div>
 
+            {/* Deployed address banner */}
+            {deployedAddress && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-green-700 font-bold">
+                  <span className="material-symbols-outlined">check_circle</span>
+                  <span>Contract deployed &amp; saved!</span>
+                </div>
+                <p className="text-xs text-green-800/70">
+                  This address is stored in your browser. All views will use it
+                  automatically on the next page load.
+                </p>
+                <div className="flex items-center gap-2 bg-white border border-green-100 rounded-lg px-4 py-3">
+                  <span className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
+                  <code className="text-xs font-mono text-green-900 break-all select-all flex-1">
+                    {deployedAddress}
+                  </code>
+                  <button
+                    type="button"
+                    title="Copy address"
+                    className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
+                    onClick={() => navigator.clipboard.writeText(deployedAddress)}
+                  >
+                    <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRedeploy}
+                  className="self-start text-xs text-green-700 underline hover:no-underline"
+                >
+                  Deploy a new contract instead
+                </button>
+              </div>
+            )}
+
             {/* Primary Action */}
+            {!deployedAddress && (
             <div className="pt-6 relative pb-20">
               <button
                 className={`w-full py-4 bg-gradient-to-r from-primary to-blue-600 font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 ${isDeploying ? "opacity-80 cursor-wait" : ""}`}
                 type="submit"
-                disabled={isDeploying || deployed}
+                disabled={isDeploying}
               >
                 {isDeploying ? (
                   <>
@@ -169,13 +211,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                       sync
                     </span>
                     <span>{t.deploying}</span>
-                  </>
-                ) : deployed ? (
-                  <>
-                    <span className="material-symbols-outlined">
-                      check_circle
-                    </span>
-                    <span>{t.deploySuccess}</span>
                   </>
                 ) : (
                   <>
@@ -187,6 +222,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                 )}
               </button>
             </div>
+            )}
           </form>
         </div>
       </div>

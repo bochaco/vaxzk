@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import { CONTRACTID } from "./components/ConfigNetwork";
+import { getContractId } from "./components/ConfigNetwork";
 import DeployContractView from "./components/DeployContractView";
 import { ProfileProvider } from './Profile';
 import { LanguageProvider, useLanguage } from './LanguageContext';
@@ -59,7 +59,7 @@ function AppContent() {
         <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
       ) : (
         <>
-        {!CONTRACTID ? (
+        {!getContractId() ? (
           <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
         ) : (
           <>
