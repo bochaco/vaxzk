@@ -16,6 +16,7 @@ contract/managed
 mockup
 src/utils/managed/
 public/keys/*
+public/zkir/*
 
 # Editor directories and files
 .vscode/*
