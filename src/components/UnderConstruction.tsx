@@ -1,5 +1,5 @@
 
-const UnderConstruction: React.FC<> = () => {
+const UnderConstruction: React.FC = () => {
  
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">

@@ -9,6 +9,7 @@ import AccessAdmin from "./AccessAdmin";
 import VaccinesAdmin from "./VaccinesAdmin";
 import CountriesAdmin from "./CountriesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
+import UnderConstruction from "./UnderConstruction";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -16,7 +17,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "listvaccine" | "listcountries" | "access";
+type Tab = "home" | "wallet" | "listclinics" | "listcountries" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "admincountries" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -26,12 +27,11 @@ const Dashboard: React.FC<DashboardProps> = ({
   const { t } = useLanguage();
   const { profile } = useProfile();
   const [activeTab, setActiveTab] = useState<Tab>("home");
-  const [prevTab, setPrevTab] = useState<Tab>("home");
+  const [prevTab ] = useState<Tab>("home");
 
   // React.useEffect(() => {}, [walletAddress, connectedApi]);
 
   const handleTabChange = (tab: Tab) => {
-    if (tab !== "add" && tab !== "access") setPrevTab(activeTab);
     setActiveTab(tab);
   };
 
@@ -41,18 +41,25 @@ const Dashboard: React.FC<DashboardProps> = ({
         return (
           <HomeView
             walletAddress={walletAddress}
-            onSchedule={() => handleTabChange("add")}
           />
         );
-      case "wallet":
+      case "wallet": // USER
         return <WalletView />;
-      case "add":
+      case "listclinics": // USER
+        return <UnderConstruction />;
+      case "listcountries": // USER
+        return <UnderConstruction />;
+      case "userprofile": // USER
+        return <UnderConstruction />;
+      case "addvaccine": // CLINIC
         return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
-      case "access":
+      case "clinicprofile": // CLINIC
+        return <UnderConstruction />;
+      case "access": // ADMIN
         return <AccessAdmin connectedApi={connectedApi!} />;
-      case "listvaccine":
+      case "adminvaccine": // ADMIN
         return <VaccinesAdmin connectedApi={connectedApi!} />;
-      case "listcountries":
+      case "admincountries": // ADMIN
         return <CountriesAdmin connectedApi={connectedApi!} />;
       default:
         switch (profile) {
@@ -64,7 +71,6 @@ const Dashboard: React.FC<DashboardProps> = ({
             return (
               <HomeView
                 walletAddress={walletAddress}
-                onSchedule={() => handleTabChange("add")}
               />
             );
         }
@@ -161,11 +167,83 @@ const Dashboard: React.FC<DashboardProps> = ({
         </button>
         )}
 
+        {profile == "user" && (
+        <button
+          onClick={() => handleTabChange("listclinics")}
+          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+            activeTab === "listclinics"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
+          }`}
+        >
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "listclinics" ? "'FILL' 1" : undefined,
+            }}
+          >
+            local_hospital
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            Clinics
+          </span>
+        </button>
+        )}
+
+        {profile == "user" && (
+        <button
+          onClick={() => handleTabChange("listcountries")}
+          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+            activeTab === "listcountries"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
+          }`}
+        >
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "listcountries" ? "'FILL' 1" : undefined,
+            }}
+          >
+            flag
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            Countries
+          </span>
+        </button>
+        )}
+
+        {profile == "user" && (
+        <button
+          onClick={() => handleTabChange("userprofile")}
+          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+            activeTab === "userprofile"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
+          }`}
+        >
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "userprofile" ? "'FILL' 1" : undefined,
+            }}
+          >
+            person
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            Profile
+          </span>
+        </button>
+        )}
+
         {profile == "clinic" && (
           <button
-            onClick={() => handleTabChange("add")}
+            onClick={() => handleTabChange("addvaccine")}
             className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "add"
+              activeTab === "addvaccine"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
@@ -174,7 +252,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
-                  activeTab === "add" ? "'FILL' 1" : undefined,
+                  activeTab === "addvaccine" ? "'FILL' 1" : undefined,
               }}
             >
               add_circle
@@ -184,6 +262,31 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
           </button>
         )}
+
+        {profile == "clinic" && (
+          <button
+            onClick={() => handleTabChange("clinicprofile")}
+            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "clinicprofile"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "clinicprofile" ? "'FILL' 1" : undefined,
+              }}
+            >
+              local_hospital
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Profile
+            </span>
+          </button>
+        )}
+
 
         {profile == "admin" && (
           <button
@@ -211,9 +314,9 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         {profile == "admin" && (
           <button
-            onClick={() => handleTabChange("listvaccine")}
+            onClick={() => handleTabChange("adminvaccine")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "listvaccine"
+              activeTab === "adminvaccine"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
@@ -222,7 +325,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
-                  activeTab === "listvaccine" ? "'FILL' 1" : undefined,
+                  activeTab === "adminvaccine" ? "'FILL' 1" : undefined,
               }}
             >
               vaccines
@@ -235,9 +338,9 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         {profile == "admin" && (
           <button
-            onClick={() => handleTabChange("listcountries")}
+            onClick={() => handleTabChange("admincountries")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "listcountries"
+              activeTab === "admincountries"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
@@ -246,7 +349,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
-                  activeTab === "listcountries" ? "'FILL' 1" : undefined,
+                  activeTab === "admincountries" ? "'FILL' 1" : undefined,
               }}
             >
               south_america

@@ -3,10 +3,9 @@ import { useLanguage } from '../LanguageContext';
 
 interface HomeViewProps {
   walletAddress: string | null;
-  onSchedule: () => void;
 }
 
-const HomeView: React.FC<HomeViewProps> = ({ onSchedule }) => {
+const HomeView: React.FC<HomeViewProps> = () => {
   const { t } = useLanguage();
 
   return (
@@ -45,12 +44,6 @@ const HomeView: React.FC<HomeViewProps> = ({ onSchedule }) => {
               <h3 className="text-4xl font-bold mt-4 mb-2">{t.nextVaccineName}</h3>
               <p className="text-blue-100 text-lg mb-8 opacity-90">{t.nextVaccineDesc}</p>
               <div className="flex flex-wrap gap-4">
-                <button 
-                  onClick={onSchedule}
-                  className="bg-surface-container-lowest text-primary px-8 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition-transform active:scale-95"
-                >
-                  {t.scheduleNow}
-                </button>
                 <button className="bg-white/10 backdrop-blur-md border border-white/20 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-colors">
                   {t.viewDetails}
                 </button>
