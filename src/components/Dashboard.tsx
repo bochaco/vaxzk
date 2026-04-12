@@ -5,7 +5,6 @@ import { useProfile, ProfileSelector } from "../Profile";
 import HomeView from "./HomeView";
 import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
-import CalendarView from "./CalendarView";
 import AccessAdmin from "./AccessAdmin";
 import VaccinesAdmin from "./VaccinesAdmin";
 import CountriesAdmin from "./CountriesAdmin";
@@ -17,7 +16,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "add" | "calendar" | "listvaccine" | "listcountries" | "access";
+type Tab = "home" | "wallet" | "add" | "listvaccine" | "listcountries" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -55,15 +54,18 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <VaccinesAdmin connectedApi={connectedApi!} />;
       case "listcountries":
         return <CountriesAdmin connectedApi={connectedApi!} />;
-      case "calendar":
-        return <CalendarView />;
       default:
-        return (
-          <HomeView
-            walletAddress={walletAddress}
-            onSchedule={() => handleTabChange("add")}
-          />
-        );
+        switch (profile) {
+          case "admin":
+            <VaccinesAdmin connectedApi={connectedApi!} />
+          case "clinic":
+            <AddVaccineView onBack={() => setActiveTab(prevTab)} />
+          default:
+            <HomeView
+              walletAddress={walletAddress}
+              onSchedule={() => handleTabChange("add")}
+            />
+        }
     }
   };
 
@@ -108,6 +110,8 @@ const Dashboard: React.FC<DashboardProps> = ({
 
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:flex">
+
+        {profile == "user" && (
         <button
           onClick={() => handleTabChange("home")}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -129,6 +133,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             Home
           </span>
         </button>
+        )}
 
         {profile == "user" && (
         <button
@@ -249,28 +254,6 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
           </button>
         )}
-
-        <button
-          onClick={() => handleTabChange("calendar")}
-          className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "calendar"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "calendar" ? "'FILL' 1" : undefined,
-            }}
-          >
-            south_america
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            Calendar
-          </span>
-        </button>
 
       </nav>
     </div>
