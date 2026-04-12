@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from '../LanguageContext';
-import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import { networkId, CONTRACTID } from "./ConfigNetwork";
+import { useLanguage } from '../../LanguageContext';
+import { buildProviders, VaxZkAPI } from "../../contract-api/index";
+import { networkId, CONTRACTID } from "../ConfigNetwork";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 

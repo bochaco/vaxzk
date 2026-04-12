@@ -5,9 +5,9 @@ import { useProfile, ProfileSelector } from "../Profile";
 import HomeView from "./HomeView";
 import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
-import AccessAdmin from "./AccessAdmin";
-import VaccinesAdmin from "./VaccinesAdmin";
-import CountriesAdmin from "./CountriesAdmin";
+import AccessAdmin from "./admin/AccessAdmin";
+import VaccinesAdmin from "./admin/VaccinesAdmin";
+import CountriesAdmin from "./admin/CountriesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
 

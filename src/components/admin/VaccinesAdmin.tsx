@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { useLanguage } from "../LanguageContext";
+import { useLanguage } from "../../LanguageContext";
 import {
   buildProviders,
   VaxZkAPI,
   type DerivedIssuer,
   type DerivedProofRequest,
-} from "../contract-api/index";
-import { networkId, CONTRACTID } from "./ConfigNetwork";
-import { getPublicKey } from "../contract-api/signing";
+} from "../../contract-api/index";
+import { networkId, CONTRACTID } from "../ConfigNetwork";
+import { getPublicKey } from "../../contract-api/signing";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 import { toHex } from "@midnight-ntwrk/midnight-js-utils";
