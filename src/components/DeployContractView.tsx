@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
+import { LanguageSelector } from "../App";
 import { networkId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 
-const DeployContractView: React.FC = () => {
+interface DeployContractProps {
+  onLogout: () => void;
+  walletAddress: string | null;
+}
+
+
+const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddress}) => {
   const { t } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployed, setDeployed] = useState(false);
@@ -50,6 +57,41 @@ const DeployContractView: React.FC = () => {
   };
 
   return (
+    <div className="bg-background text-on-background min-h-screen">
+      {/* TopAppBar */}
+      <header className="fixed top-0 w-full z-50 bg-slate-50/70 backdrop-blur-xl shadow-sm">
+        <div className="flex justify-between items-center px-6 py-4 w-full max-w-screen-xl mx-auto">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col text-left">
+                <span className="text-xs font-medium text-slate-500">
+                  {t.loggedInAs}
+                </span>
+                <span className="text-sm font-bold text-on-surface">
+                  Midnight{" "}
+                  {walletAddress ? `(...${walletAddress.slice(-6)})` : ""}
+                </span>
+              </div>
+            </div>
+            <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2"></div>
+            <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">
+              VaxZk
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <LanguageSelector />
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
+            >
+              <span className="material-symbols-outlined text-lg">logout</span>
+              <span className="hidden sm:inline">{t.logout}</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
     <main className="pt-24 px-6 max-w-screen-md mx-auto">
       {/* Page Title & Editorial Intro */}
       <section className="mb-12 text-left">
@@ -149,6 +191,9 @@ const DeployContractView: React.FC = () => {
         </div>
       </div>
     </main>
+
+
+    </div>        
   );
 };
 

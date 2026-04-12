@@ -60,7 +60,7 @@ function AppContent() {
       ) : (
         <>
         {!CONTRACTID ? (
-          <DeployContractView />
+          <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
         ) : (
           <>
             <LanguageSelector fixed />
