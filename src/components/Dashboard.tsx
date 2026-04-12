@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
-import { networkId, CONTRACTID } from "./ConfigNetwork";
 import { LanguageSelector } from "../App";
+import { useProfile, ProfileSelector } from "../Profile";
 import HomeView from "./HomeView";
 import WalletView from "./WalletView";
 import AddVaccineView from "./AddVaccineView";
@@ -9,9 +9,6 @@ import CalendarView from "./CalendarView";
 import AccessAdmin from "./AccessAdmin";
 import VaccinesAdmin from "./VaccinesAdmin";
 import CountriesAdmin from "./CountriesAdmin";
-import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import { firstValueFrom } from "rxjs";
-import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 
 interface DashboardProps {
@@ -28,36 +25,11 @@ const Dashboard: React.FC<DashboardProps> = ({
   connectedApi,
 }) => {
   const { t } = useLanguage();
+  const { profile } = useProfile();
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [prevTab, setPrevTab] = useState<Tab>("home");
-  const [isClinicUser, setIsClinicUser] = useState<boolean | null>(null);
-  const isAdmin = true; // TODO: IMPLEMENTAR DEPOIS
 
-  React.useEffect(() => {
-    async function checkClinicStatus() {
-      if (!walletAddress || !CONTRACTID || !connectedApi) return;
-      try {
-        const providers = await buildProviders(connectedApi, networkId);
-
-        // TODO: derive from wallet or secure user input instead of zeros
-        // For this check, we need a secret key. In a real-world scenario,
-        // this would be retrieved from secure storage or derivation.
-        // For now, we try to join with a placeholder or the stored state.
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          CONTRACTID as unknown as ContractAddress,
-          secretKey,
-        );
-        const { isClinic } = await firstValueFrom(api.state$);
-        setIsClinicUser(isClinic);
-      } catch (err) {
-        console.error("Failed to check clinic status:", err);
-        setIsClinicUser(false);
-      }
-    }
-    checkClinicStatus();
-  }, [walletAddress, connectedApi]);
+  // React.useEffect(() => {}, [walletAddress, connectedApi]);
 
   const handleTabChange = (tab: Tab) => {
     if (tab !== "add" && tab !== "access") setPrevTab(activeTab);
@@ -104,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex items-center gap-3">
               <div className="flex flex-col text-left">
                 <span className="text-xs font-medium text-slate-500">
-                  {t.loggedInAs}
+                  {t.loggedInAs} {profile}
                 </span>
                 <span className="text-sm font-bold text-on-surface">
                   Midnight{" "}
@@ -120,6 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
           <div className="flex items-center gap-3">
             <LanguageSelector />
+            <ProfileSelector />
             <button
               onClick={onLogout}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
@@ -157,7 +130,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </span>
         </button>
 
-        {CONTRACTID && (
+        {profile == "user" && (
         <button
           onClick={() => handleTabChange("wallet")}
           className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -181,7 +154,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         </button>
         )}
 
-        {CONTRACTID && isClinicUser && (
+        {profile == "clinic" && (
           <button
             onClick={() => handleTabChange("add")}
             className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
@@ -205,7 +178,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {CONTRACTID && isAdmin && (
+        {profile == "admin" && (
           <button
             onClick={() => handleTabChange("access")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
@@ -229,7 +202,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {CONTRACTID && isAdmin && (
+        {profile == "admin" && (
           <button
             onClick={() => handleTabChange("listvaccine")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
@@ -253,7 +226,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
-        {CONTRACTID && isAdmin && (
+        {profile == "admin" && (
           <button
             onClick={() => handleTabChange("listcountries")}
             className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${

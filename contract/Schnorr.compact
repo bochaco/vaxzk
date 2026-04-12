@@ -36,14 +36,8 @@ module Schnorr {
                    ): [] {
     const {announcement, response} = signature;
     const cFull: Field =
-            transientHash<VaxZkSchnorrHashInput>(
-              VaxZkSchnorrHashInput { ann: announcement,
-                                      pk: pk,
-                                      vaccine: vaccine,
-                                      personalId: personalId,
-                                      expirationDate: expirationDate,
-                                      userPubKey: userPubKey }
-              );
+            schnorrChallengeVaxZk(announcement, pk, vaccine, personalId, expirationDate, userPubKey);
+
     // Truncate challenge to 248 bits via witness-assisted division by 2^248.
     // The witness provides (quotient, remainder) such that cFull == q * 2^248 + r
     // where r : Uint<248>, guaranteeing r < 2^248 < Jubjub subgroup order.
