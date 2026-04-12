@@ -57,14 +57,16 @@ const Dashboard: React.FC<DashboardProps> = ({
       default:
         switch (profile) {
           case "admin":
-            <VaccinesAdmin connectedApi={connectedApi!} />
+            return <VaccinesAdmin connectedApi={connectedApi!} />;
           case "clinic":
-            <AddVaccineView onBack={() => setActiveTab(prevTab)} />
+            return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
           default:
-            <HomeView
-              walletAddress={walletAddress}
-              onSchedule={() => handleTabChange("add")}
-            />
+            return (
+              <HomeView
+                walletAddress={walletAddress}
+                onSchedule={() => handleTabChange("add")}
+              />
+            );
         }
     }
   };
