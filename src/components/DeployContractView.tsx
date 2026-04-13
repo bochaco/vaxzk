@@ -41,6 +41,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       // Fresh 32-byte secret key for this admin identity. Its derived public
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
+      console.log("VaxZkAPI");
       const api = await VaxZkAPI.deploy(providers, secretKey);
       console.log("deployng...");
       const address = api.deployedContractAddress as unknown as string;
