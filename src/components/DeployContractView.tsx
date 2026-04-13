@@ -3,6 +3,7 @@ import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { networkId, saveContractId, clearContractId, getContractId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
+import { TxFailedError } from "@midnight-ntwrk/midnight-js-contracts"
 
 interface DeployContractProps {
   onLogout: () => void;
@@ -54,18 +55,25 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       console.error("Deployment failed:", err);
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
-        console.log('Causa raiz _tag:', cause?._tag);
-        var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
-        errorMessage = errorMessage + '\n';
-        const uint8Array = new Uint8Array(cause?.failure?.cause?.txData);
-        console.log(uint8Array);
-        const decoder = new TextDecoder(); // default = utf-8
-        const txDataStr = decoder.decode(uint8Array);
-        console.log('txData:', txDataStr);
-        errorMessage = errorMessage + txDataStr;
-        console.log('Mensagem:', cause?.failure?.message );
-        setError(errorMessage);
-        console.log('txData:', txDataStr);
+        console.log(cause instanceof TxFailedError);
+       if (cause instanceof TxFailedError) {
+        // error.message já é um JSON formatado e legível
+        console.log(JSON.parse(cause.message));
+        setError(JSON.parse(cause.message));
+        // ou acesse diretamente os dados:
+        console.log(cause.finalizedTxData);
+      }
+    //    console.log('Causa raiz _tag:', cause?._tag);
+      //  var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
+//        errorMessage = errorMessage + '\n';
+  //      const txData = cause?.failure?.cause?.txData as ArrayLike<number>;
+    //    const bytes = Object.values(txData);
+      //  const txDataStr = new TextDecoder().decode(new Uint8Array(bytes));
+//        console.log('txData:', txDataStr);
+  //      errorMessage = errorMessage + txDataStr;
+    //    console.log('Mensagem:', cause?.failure?.message );
+    //    setError(errorMessage);
+//        console.log('txData:', txDataStr);
       }
       setIsDeploying(false);
     }
