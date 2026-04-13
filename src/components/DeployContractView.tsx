@@ -41,10 +41,8 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       // Fresh 32-byte secret key for this admin identity. Its derived public
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
-      console.log("VaxZkAPI");
       
       const api = await VaxZkAPI.deploy(providers, secretKey);
-      console.log("deployng...");
       const address = api.deployedContractAddress as unknown as string;
       console.log(api);
 
@@ -57,10 +55,12 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
         console.log('Causa raiz _tag:', cause?._tag);
-        console.log('Mensagem:', cause?.failure?.message);
-        setError(cause?.failure?.message ? String(cause?.failure?.message) : String(""));
-        console.log('Causa interna:', cause?.failure?.txData);
+        var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
+        errorMessage = errorMessage + '\n';
         const bytes = cause?.failure?.txData;
+        errorMessage = errorMessage + new TextDecoder().decode(new Uint8Array(bytes));
+        console.log('Mensagem:', cause?.failure?.message + '\n' + );
+        setError(errorMessage);
         console.log('txData:', new TextDecoder().decode(new Uint8Array(bytes)));
       }
       setIsDeploying(false);
