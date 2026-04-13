@@ -5,13 +5,14 @@ import CompactStandardLibrary;
 import "./Types";
 include 'Invites';
 
-export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk, ClinicProfileInfo, UserProfileInfo };
+export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk, UserProfileInfo };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
 
 // Public ledger of shielded clinic IDs.
-export ledger clinics: Map<Bytes<32>, ClinicProfileInfo>;
+// export ledger clinics: Map<Bytes<32>, ClinicProfileInfo>;
+export ledger clinics: Set<Bytes<32>>;
 
 // Private ledger of shielded user Profiles IDs.
 ledger userProfiles: Map<Bytes<32>, UserProfileInfo>;
@@ -121,10 +122,10 @@ export circuit revokeAdmin(adminId: Bytes<32>): [] {
 }
 
 // Registers a clinic by their shielded ID and profile info. Caller must be an admin.
-export circuit addClinic(clinicId: Bytes<32>, info: ClinicProfileInfo): [] {
+export circuit addClinic(clinicId: Bytes<32>): [] {
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
-  clinics.insert(disclose(clinicId), disclose(info));
+  clinics.insert(disclose(clinicId));
 }
 
 // Removes a clinic by their shielded ID. Caller must be an admin.
