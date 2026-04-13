@@ -10,7 +10,7 @@
     "format": "eslint . --fix",
     "preview": "vite preview",
     "contract:compile": "compact compile contract/vaxzk.compact contract/managed && npm run contract:copy-assets",
-    "contract:copy-assets": "mkdir -p public && cp -r contract/managed/keys public/keys && cp -r contract/managed/zkir public/zkir",
+    "contract:copy-assets": "mkdir -p public && cp -r contract/managed/keys public/ && cp -r contract/managed/zkir public/",
     "test": "vitest run",
     "test:watch": "vitest"
   },
