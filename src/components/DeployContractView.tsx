@@ -87,6 +87,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
 
           <div className="flex items-center gap-3">
             <LanguageSelector />
+            log
             <button
               onClick={onLogout}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
