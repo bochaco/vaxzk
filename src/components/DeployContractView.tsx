@@ -59,8 +59,9 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         console.log('Causa raiz _tag:', cause?._tag);
         console.log('Mensagem:', cause?.failure?.message);
         setError(cause?.failure?.message ? String(cause?.failure?.message) : String(""));
-        console.log('Causa interna:', cause?.cause);
-        console.log('txData:', cause?.txData);
+        console.log('Causa interna:', cause?.failure?.txData);
+        const bytes = cause?.failure?.txData;
+        console.log('txData:', new TextDecoder().decode(new Uint8Array(bytes)));
       }
       setIsDeploying(false);
     }
