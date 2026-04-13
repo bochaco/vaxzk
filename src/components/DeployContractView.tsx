@@ -57,11 +57,15 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         console.log('Causa raiz _tag:', cause?._tag);
         var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
         errorMessage = errorMessage + '\n';
-        const bytes = cause?.failure?.txData;
-        errorMessage = errorMessage + new TextDecoder().decode(new Uint8Array(bytes));
+        const uint8Array = new Uint8Array(cause?.failure?.cause?.txData);
+        console.log(uint8Array);
+        const decoder = new TextDecoder(); // default = utf-8
+        const txDataStr = decoder.decode(uint8Array);
+        console.log('txData:', txDataStr);
+        errorMessage = errorMessage + txDataStr;
         console.log('Mensagem:', cause?.failure?.message );
         setError(errorMessage);
-        console.log('txData:', new TextDecoder().decode(new Uint8Array(bytes)));
+        console.log('txData:', txDataStr);
       }
       setIsDeploying(false);
     }
