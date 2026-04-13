@@ -36,7 +36,7 @@ jobs:
            cp -r contract/managed/keys/* public/keys/
            cp -r contract/managed/zkir/* public/zkir/
 
-      - name: DEPLOY
+      - name: TEST
         run: |
            npm run test
 
