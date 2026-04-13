@@ -59,7 +59,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         errorMessage = errorMessage + '\n';
         const bytes = cause?.failure?.txData;
         errorMessage = errorMessage + new TextDecoder().decode(new Uint8Array(bytes));
-        console.log('Mensagem:', cause?.failure?.message + '\n' + );
+        console.log('Mensagem:', cause?.failure?.message );
         setError(errorMessage);
         console.log('txData:', new TextDecoder().decode(new Uint8Array(bytes)));
       }
