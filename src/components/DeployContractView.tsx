@@ -136,12 +136,14 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               </div>
             </div>
 
-            <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200 text-sm flex items-start gap-3 mt-6">
-              <span className="material-symbols-outlined text-red-500">
-                error
-              </span>
-              <span>{error}</span>
-            </div>
+            {error && (
+              <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200 text-sm flex items-start gap-3 mt-6">
+                <span className="material-symbols-outlined text-red-500">
+                  error
+                </span>
+                <span>{error}</span>
+              </div>
+            )}
 
             {/* Visual Aid Card */}
             <div className="bg-blue-50 p-5 rounded-lg border-none flex items-start gap-4 mt-6">
