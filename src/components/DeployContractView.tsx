@@ -54,12 +54,11 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       setIsDeploying(false);
     } catch (err) {
       console.error("Deployment failed:", err);
-      setError(err instanceof Error ? err.message : String(err));
-
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
         console.log('Causa raiz _tag:', cause?._tag);
-        console.log('Mensagem:', cause?.message);
+        console.log('Mensagem:', cause?.failure?.message);
+        setError(cause?.failure?.message ? String(cause?.failure?.message) : String(""));
         console.log('Causa interna:', cause?.cause);
         console.log('txData:', cause?.txData);
       }
