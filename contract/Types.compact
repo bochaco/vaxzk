@@ -56,14 +56,4 @@ module Types {
     image: Opaque<'string'>,
   }
 
-  // User Profile
-  export struct UserProfileInfo {
-    // User DID or URL (e.g., "did:example:user" or "https://user.example.com")
-    uri: Opaque<'string'>,
-    // Human-readable nickname
-    nickname: Opaque<'string'>,
-    // Human-readable country of origin
-    country: Opaque<'string'>,
-  }
-
 }

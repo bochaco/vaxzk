@@ -5,7 +5,7 @@ import CompactStandardLibrary;
 import "./Types";
 include 'Invites';
 
-export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk, UserProfileInfo };
+export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
@@ -13,9 +13,6 @@ export ledger admins: Set<Bytes<32>>;
 // Public ledger of shielded clinic IDs.
 // export ledger clinics: Map<Bytes<32>, ClinicProfileInfo>;
 export ledger clinics: Set<Bytes<32>>;
-
-// Private ledger of shielded user Profiles IDs.
-ledger userProfiles: Map<Bytes<32>, UserProfileInfo>;
 
 // Public ledger of vaccines list.
 export ledger vaccines: Set<Bytes<20>>;
@@ -59,20 +56,6 @@ constructor() {
 // Derives a deterministic shielded ID using a persistent hash.
 export circuit getShieldedId(id: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<2, Bytes<32>>>([pad(32, "registered-entity-id:"), id]);
-}
-
-// Creates or updates the caller's user profile in private state.
-export circuit updateUserProfile(profileInfo: UserProfileInfo): [] {
-  const own = ownPublicKey();
-  const profileId = getShieldedId(own.bytes);
-  userProfiles.insert(profileId, disclose(profileInfo));
-}
-
-// Retrieves the caller's user profile from private state.
-export circuit getUserProfile(): UserProfileInfo {
-  const own = ownPublicKey();
-  const profileId = getShieldedId(own.bytes);
-  return userProfiles.lookup(profileId);
 }
 
 // Generate a new cert issuer ID.
