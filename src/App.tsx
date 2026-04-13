@@ -6,6 +6,8 @@ import DeployContractView from "./components/DeployContractView";
 import { ProfileProvider } from './Profile';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
+import { InvitePage } from './InvitePage';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 
 const LANGUAGES = [
@@ -55,17 +57,24 @@ function AppContent() {
 
   return (
     <>
-      {isConnected ? (
-        <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
-      ) : (
-        <>
-        {!getContractId() ? (
-          <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+        {isConnected ? (
+          <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
         ) : (
           <>
-            <LanguageSelector fixed />
-            <Login onLoginSuccess={handleLoginSuccess} />
-          </>
+          {!getContractId() ? (
+            <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+          ) : (
+          <BrowserRouter>
+            <Routes>
+              <Route path="/invite" element={<InvitePage />} />
+              <Route path="/" element={
+                <>
+                  <LanguageSelector fixed />
+                  <Login onLoginSuccess={handleLoginSuccess} />
+                </>  
+              } />
+            </Routes>
+          </BrowserRouter>
           )}
         </>
       )}
