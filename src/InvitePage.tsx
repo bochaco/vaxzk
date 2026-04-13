@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSearchParams } from "react-router-dom";
+/*
 import {
   Contract,
   ledger,
@@ -11,7 +12,7 @@ import {
   sampleContractAddress,
 } from "@midnight-ntwrk/compact-runtime";
 import { witnesses, createInvitePrivateState } from "./witnesses.js";
-
+*/
 const InvitePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const secretKey = searchParams.get("key") ?? "";
@@ -23,6 +24,7 @@ const InvitePage: React.FC = () => {
     return "code is necessary"
   }
 
+/*
   // Timestamp de quando o convite foi registrado (salvo no momento do registerInvite)
   const registeredAt: number; // Date.now() salvo no momento do registro
   // TTL de 48 horas em milissegundos
@@ -56,7 +58,7 @@ const InvitePage: React.FC = () => {
   } else {
     console.error("Convite expirado. Não é possível usar após 48 horas.");
   }
-
+*/
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
 
