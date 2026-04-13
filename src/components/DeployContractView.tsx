@@ -42,7 +42,9 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
       const api = await VaxZkAPI.deploy(providers, secretKey);
+      console.log("deployng...");
       const address = api.deployedContractAddress as unknown as string;
+      console.log(api);
 
       console.log("Successfully deployed contract at:", address);
       saveContractId(address);
@@ -86,7 +88,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
 
           <div className="flex items-center gap-3">
             <LanguageSelector />
-            log
             <button
               onClick={onLogout}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
