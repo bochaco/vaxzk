@@ -51,7 +51,7 @@ export interface DeployedVaxZkAPI {
 
   addAdmin: (id: Uint8Array) => Promise<void>;
   revokeAdmin: (id: Uint8Array) => Promise<void>;
-  addClinic: (id: Uint8Array) => Promise<void>;
+  addClinic: (id: Uint8Array, info: ClinicProfileInfo) => Promise<void>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
