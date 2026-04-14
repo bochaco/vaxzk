@@ -3,7 +3,6 @@ import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { networkId, saveContractId, clearContractId, getContractId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import { toHex } from '@midnight-ntwrk/midnight-js-utils';
 
 interface DeployContractProps {
   onLogout: () => void;
