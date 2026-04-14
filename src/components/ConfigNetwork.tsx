@@ -1,3 +1,4 @@
+
 export const networkId = "preprod";
 
 export function getContractId(): string {

@@ -73,7 +73,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
   };
 
   return (
-    <div className="bg-background text-on-background min-h-screen">
+   <div className="bg-background text-on-background min-h-screen">
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 bg-slate-50/70 backdrop-blur-xl shadow-sm">
         <div className="flex justify-between items-center px-6 py-4 w-full max-w-screen-xl mx-auto">
@@ -172,8 +172,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               </div>
             </div>
 
-            {/* Deployed address banner */}
-            {deployedAddress && (
+             {deployedAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>
@@ -197,13 +196,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                     <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
                   </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleRedeploy}
-                  className="self-start text-xs text-green-700 underline hover:no-underline"
-                >
-                  Deploy a new contract instead
-                </button>
               </div>
             )}
 
@@ -237,8 +229,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         </div>
       </div>
     </main>
-
-
     </div>        
   );
 };
