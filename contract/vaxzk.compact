@@ -3,9 +3,12 @@ pragma language_version >= 0.20;
 import CompactStandardLibrary;
 
 import "./Types";
-// include 'Invites';
 
 export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
+
+import "./Invites";
+
+export { registerInvite, useInvite };
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
