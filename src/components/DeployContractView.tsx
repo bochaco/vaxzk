@@ -56,21 +56,9 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
         var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
-        const txData = cause?.failure?.cause?.txData as Uint8Array;
-        const hex = toHex(txData);
-        console.log('txData:', hex);
-        try {
-          if (txData) {
-            // If txData is a JSON-serialized Buffer (e.g. {type: 'Buffer', data: [...]})
-            const bufferData = (txData as any).type === 'Buffer' ? (txData as any).data : txData;
-            const uint8TxData = bufferData instanceof Uint8Array ? bufferData : new Uint8Array(Object.values(bufferData));
-            console.log('uint8TxData:', uint8TxData);
-            const hexString = toHex(uint8TxData);
-            console.log('txData (hex):', hexString);
-          }
-        } catch (hexErr) {
-          console.log('txData (json fallback):', JSON.stringify(txData));
-        }
+ //       const txData = cause?.failure?.cause?.txData as Uint8Array;
+ //       const hex = toHex(txData);
+ //       console.log('txData:', hex);
         setError(errorMessage);
       }
       setIsDeploying(false);
