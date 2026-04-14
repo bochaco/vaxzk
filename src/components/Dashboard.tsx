@@ -52,7 +52,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "userprofile": // USER
         return <UnderConstruction />;
       case "addvaccine": // CLINIC
-        return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
+        return <AddVaccineView connectedApi={connectedApi!} />;
       case "clinicprofile": // CLINIC
         return <UnderConstruction />;
       case "access": // ADMIN
@@ -66,7 +66,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           case "admin":
             return <VaccinesAdmin connectedApi={connectedApi!} />;
           case "clinic":
-            return <AddVaccineView onBack={() => setActiveTab(prevTab)} />;
+            return <AddVaccineView connectedApi={connectedApi!} />;
           default:
             return (
               <HomeView
