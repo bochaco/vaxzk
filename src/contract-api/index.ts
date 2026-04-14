@@ -54,9 +54,7 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-//  circuit "getCertIssuerId" (k=13, rows=4591)  
-//  circuit "getProofReqId" (k=13, rows=4591) /
-//  circuit "registerInvite" (k=13, rows=4426) |
+//  registerInvite: () => Promise<Uint8Array>;
 //  circuit "useInvite" (k=13, rows=4477) |
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;

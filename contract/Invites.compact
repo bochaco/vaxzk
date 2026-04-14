@@ -11,10 +11,11 @@ circuit createInviteHash(secret: Bytes<32>, nonce: Bytes<32>): Bytes<32> {
   return persistentCommit<Bytes<32>>(secret, nonce);
 }
 
-export circuit registerInvite(): [] {
+export circuit registerInvite(): Bytes<32> {
   const secret = inviteSecret();
   const nonce = inviteNonce();
   inviteHash = createInviteHash(secret, nonce);
+  return inviteHash;
 }
 
 // Para usar o convite, prova que conhece o segredo sem revelá-lo

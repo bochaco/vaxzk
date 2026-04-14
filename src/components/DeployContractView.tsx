@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
-import { networkId, saveContractId, clearContractId, getContractId } from "./ConfigNetwork";
+import { networkId, getContractId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 
 interface DeployContractProps {
@@ -47,7 +47,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       console.log(api);
 
       console.log("Successfully deployed contract at:", address);
-      saveContractId(address);
       setDeployedAddress(address);
       setIsDeploying(false);
     } catch (err) {
@@ -56,11 +55,12 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         const cause = (err as any).cause;
         var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
         const txData = cause?.failure?.cause?.txData;
-        const bytes = new Uint8Array(Object.values(txData));
-        const str = String.fromCharCode(...bytes);
-//        const str = new TextDecoder().decode(bytes);
-        console.log(str);
-        errorMessage = errorMessage + '<br>' + str;
+        if (txData) {
+          const bytes = new Uint8Array(Object.values(txData));
+          const str = String.fromCharCode(...bytes);
+          console.log(str);
+          errorMessage = errorMessage + '\n' + str;
+        }
         setError(errorMessage);
       }
       setIsDeploying(false);
@@ -68,7 +68,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
   };
 
   const handleRedeploy = () => {
-    clearContractId();
     setDeployedAddress(null);
     setError(null);
   };
