@@ -27,7 +27,6 @@ const Dashboard: React.FC<DashboardProps> = ({
   const { t } = useLanguage();
   const { profile } = useProfile();
   const [activeTab, setActiveTab] = useState<Tab>("home");
-  const [prevTab ] = useState<Tab>("home");
 
   // React.useEffect(() => {}, [walletAddress, connectedApi]);
 
