@@ -55,9 +55,11 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
         var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
- //       const txData = cause?.failure?.cause?.txData as Uint8Array;
- //       const hex = toHex(txData);
- //       console.log('txData:', hex);
+        const txData = cause?.failure?.cause?.txData as Uint8Array;
+        const bytes = Object.values(txData);
+        const str = String.fromCharCode(...bytes);
+        console.log(str);
+        errorMessage = errorMessage + '<br>' + str;
         setError(errorMessage);
       }
       setIsDeploying(false);
