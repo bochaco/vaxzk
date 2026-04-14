@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
-import { CONTRACTID, networkId } from "./ConfigNetwork";
+import { networkId, getContractId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
 
 interface DeployContractProps {
@@ -12,9 +12,8 @@ interface DeployContractProps {
 const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddress}) => {
   const { t } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
-  const [deployed, setDeployed] = useState(false);
   const [deployedAddress, setDeployedAddress] = useState<string | null>(
-    CONTRACTID || null,
+    getContractId() || null,
   );
   const [error, setError] = useState<string | null>(null);
 
@@ -42,22 +41,26 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       // Fresh 32-byte secret key for this admin identity. Its derived public
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
+      
       const api = await VaxZkAPI.deploy(providers, secretKey);
       const address = api.deployedContractAddress as unknown as string;
+      console.log(api);
 
-      console.log(
-        "Successfully deployed contract at:",
-        address,
-      );
-      setIsDeploying(false);
-      setDeployed(true);
+      console.log("Successfully deployed contract at:", address);
       setDeployedAddress(address);
-      setTimeout(() => setDeployed(false), 5000);
+      setIsDeploying(false);
     } catch (err) {
       console.error("Deployment failed:", err);
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
         var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
+        const txData = cause?.failure?.cause?.txData;
+        if (txData) {
+          const bytes = new Uint8Array(Object.values(txData));
+          const str = String.fromCharCode(...bytes);
+          console.log(str);
+          errorMessage = errorMessage + '\n' + str;
+        }
         setError(errorMessage);
       }
       setIsDeploying(false);
@@ -197,7 +200,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               <button
                 className={`w-full py-4 bg-gradient-to-r from-primary to-blue-600 font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 ${isDeploying ? "opacity-80 cursor-wait" : ""}`}
                 type="submit"
-                disabled={isDeploying || deployed}
+                disabled={isDeploying}
               >
                 {isDeploying ? (
                   <>
@@ -205,13 +208,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                       sync
                     </span>
                     <span>{t.deploying}</span>
-                  </>
-                ) : deployed ? (
-                  <>
-                    <span className="material-symbols-outlined">
-                      check_circle
-                    </span>
-                    <span>{t.deploySuccess}</span>
                   </>
                 ) : (
                   <>
@@ -228,7 +224,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         </div>
       </div>
     </main>
-    </div>
+    </div>        
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from '../LanguageContext';
-import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import { networkId, CONTRACTID } from "./ConfigNetwork";
+import { useLanguage } from '../../LanguageContext';
+import { buildProviders, VaxZkAPI } from "../../contract-api/index";
+import { networkId, getContractId } from "../ConfigNetwork";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 
@@ -21,14 +21,15 @@ const CountriesAdmin: React.FC<CountriesAdminProps> = ({ connectedApi }) => {
     let subscription: { unsubscribe: () => void } | undefined;
     
     async function init() {
-      if (!connectedApi || !CONTRACTID) return;
+      const contractId = getContractId();
+      if (!connectedApi || !contractId) return;
       try {
         const providers = await buildProviders(connectedApi, networkId);
         // Using placeholder secret key as in Dashboard.tsx
         const secretKey = new Uint8Array(32);
         const api = await VaxZkAPI.join(
           providers,
-          CONTRACTID as unknown as ContractAddress,
+          contractId as unknown as ContractAddress,
           secretKey,
         );
         setVaxApi(api);

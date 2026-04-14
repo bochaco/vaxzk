@@ -39,4 +39,5 @@ module Types {
     // Issuer signature over the vaccine certificate
     issuerSignature: SchnorrSignature
   }
+
 }
