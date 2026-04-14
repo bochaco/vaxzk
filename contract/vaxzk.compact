@@ -8,8 +8,6 @@ export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schn
 
 include 'Invites';
 
-export { registerInvite, useInvite };
-
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;
 
