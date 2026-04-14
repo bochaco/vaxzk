@@ -3,7 +3,7 @@ import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { networkId, saveContractId, clearContractId, getContractId } from "./ConfigNetwork";
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import { TxFailedError } from "@midnight-ntwrk/midnight-js-contracts"
+import { toHex } from '@midnight-ntwrk/midnight-js-utils';
 
 interface DeployContractProps {
   onLogout: () => void;
@@ -55,25 +55,23 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       console.error("Deployment failed:", err);
       if (err && typeof err === 'object' && 'cause' in err) {
         const cause = (err as any).cause;
-        console.log(cause instanceof TxFailedError);
-       if (cause instanceof TxFailedError) {
-        // error.message já é um JSON formatado e legível
-        console.log(JSON.parse(cause.message));
-        setError(JSON.parse(cause.message));
-        // ou acesse diretamente os dados:
-        console.log(cause.finalizedTxData);
-      }
-    //    console.log('Causa raiz _tag:', cause?._tag);
-      //  var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
-//        errorMessage = errorMessage + '\n';
-  //      const txData = cause?.failure?.cause?.txData as ArrayLike<number>;
-    //    const bytes = Object.values(txData);
-      //  const txDataStr = new TextDecoder().decode(new Uint8Array(bytes));
-//        console.log('txData:', txDataStr);
-  //      errorMessage = errorMessage + txDataStr;
-    //    console.log('Mensagem:', cause?.failure?.message );
-    //    setError(errorMessage);
-//        console.log('txData:', txDataStr);
+        var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
+        const txData = cause?.failure?.cause?.txData as Uint8Array;
+        const hex = toHex(txData);
+        console.log('txData:', hex);
+        try {
+          if (txData) {
+            // If txData is a JSON-serialized Buffer (e.g. {type: 'Buffer', data: [...]})
+            const bufferData = (txData as any).type === 'Buffer' ? (txData as any).data : txData;
+            const uint8TxData = bufferData instanceof Uint8Array ? bufferData : new Uint8Array(Object.values(bufferData));
+            console.log('uint8TxData:', uint8TxData);
+            const hexString = toHex(uint8TxData);
+            console.log('txData (hex):', hexString);
+          }
+        } catch (hexErr) {
+          console.log('txData (json fallback):', JSON.stringify(txData));
+        }
+        setError(errorMessage);
       }
       setIsDeploying(false);
     }

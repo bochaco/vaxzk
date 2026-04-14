@@ -1,9 +1,8 @@
-export const CONTRACTID = "140b5d4c7b538b989682bb251d7729b544092caa9e53a8059f686fd9fb0fc8b9"
-// export const CONTRACTID = "";
+export const CONTRACTID = "";
 export const FIRSTCONTRACTID = "";
 export const networkId = "preprod";
 
-export const CONTRACT_STORAGE_KEY = "vaxzk_contract_1.0";
+export const CONTRACT_STORAGE_KEY = "vaxzk_contract";
 
 /** Returns the active contract address: localStorage first, then falls back to empty. */
 export function getContractId(): string {
@@ -19,5 +18,3 @@ export function saveContractId(address: string): void {
 export function clearContractId(): void {
   localStorage.removeItem(CONTRACT_STORAGE_KEY);
 }
-
-// export const CONTRACTID: string = getContractId();
