@@ -1,8 +1,13 @@
-export const CONTRACT_STORAGE_KEY = "vaxzk_contract_address";
+export const CONTRACTID = "140b5d4c7b538b989682bb251d7729b544092caa9e53a8059f686fd9fb0fc8b9"
+// export const CONTRACTID = "";
+export const FIRSTCONTRACTID = "";
+export const networkId = "preprod";
+
+export const CONTRACT_STORAGE_KEY = "vaxzk_contract";
 
 /** Returns the active contract address: localStorage first, then falls back to empty. */
 export function getContractId(): string {
-  return localStorage.getItem(CONTRACT_STORAGE_KEY) ?? "";
+  return localStorage.getItem(CONTRACT_STORAGE_KEY) ?? CONTRACTID;
 }
 
 /** Persists a newly deployed contract address so all views pick it up on reload. */
@@ -15,11 +20,4 @@ export function clearContractId(): void {
   localStorage.removeItem(CONTRACT_STORAGE_KEY);
 }
 
-/**
- * CONTRACTID is kept for backwards-compatibility with components that import
- * it as a module-level constant. At module load time we read localStorage so
- * the value is fresh after a page reload triggered by the deploy flow.
- */
-export const CONTRACTID: string = getContractId();
-
-export const networkId = "preprod";
+// export const CONTRACTID: string = getContractId();

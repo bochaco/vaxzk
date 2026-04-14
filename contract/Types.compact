@@ -40,20 +40,4 @@ module Types {
     issuerSignature: SchnorrSignature
   }
 
-  // Clinic Profile
-  export struct ClinicProfileInfo {
-    // Clinic DID or URL (e.g., "did:example:clinic" or "https://clinic.example.com")
-    uri: Opaque<'string'>,
-    // Human-readable clinic name
-    name: Opaque<'string'>,
-    // Human-readable location description (city, address, etc.)
-    location: Opaque<'string'>,
-    // Latitude in microdegrees (degrees × 10^6, signed as Field)
-    latitude: Field,
-    // Longitude in microdegrees (degrees × 10^6, signed as Field)
-    longitude: Field,
-    // Image URL or base64-encoded image data
-    image: Opaque<'string'>,
-  }
-
 }
