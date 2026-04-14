@@ -67,11 +67,6 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
     }
   };
 
-  const handleRedeploy = () => {
-    setDeployedAddress(null);
-    setError(null);
-  };
-
   return (
    <div className="bg-background text-on-background min-h-screen">
       {/* TopAppBar */}
