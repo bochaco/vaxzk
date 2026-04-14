@@ -1,26 +1,24 @@
-module Invites {
-  import CompactStandardLibrary;
+import CompactStandardLibrary;
 
-  export ledger inviteHash: Bytes<32>;
+export ledger inviteHash: Bytes<32>;
 
-  witness inviteSecret(): Bytes<32>;
+witness inviteSecret(): Bytes<32>;
 
-  witness inviteNonce(): Bytes<32>;
+witness inviteNonce(): Bytes<32>;
 
-  // Cria o hash do convite com um nonce para evitar correlação
-  circuit createInviteHash(secret: Bytes<32>, nonce: Bytes<32>): Bytes<32> {
-    return persistentCommit<Bytes<32>>(secret, nonce);
-  }
+// Cria o hash do convite com um nonce para evitar correlação
+circuit createInviteHash(secret: Bytes<32>, nonce: Bytes<32>): Bytes<32> {
+  return persistentCommit<Bytes<32>>(secret, nonce);
+}
 
-  export circuit registerInvite(): [] {
-    const secret = inviteSecret();
-    const nonce = inviteNonce();
-    inviteHash = createInviteHash(secret, nonce);
-  }
+export circuit registerInvite(): [] {
+  const secret = inviteSecret();
+  const nonce = inviteNonce();
+  inviteHash = createInviteHash(secret, nonce);
+}
 
-  // Para usar o convite, prova que conhece o segredo sem revelá-lo
-  export circuit useInvite(_secret: Bytes<32>, _nonce: Bytes<32>): [] {
-    const hash = createInviteHash(_secret, _nonce);
-    assert(inviteHash == disclose(hash), "Convite inválido");
-  }
+// Para usar o convite, prova que conhece o segredo sem revelá-lo
+export circuit useInvite(_secret: Bytes<32>, _nonce: Bytes<32>): [] {
+  const hash = createInviteHash(_secret, _nonce);
+  assert(inviteHash == disclose(hash), "Convite inválido");
 }

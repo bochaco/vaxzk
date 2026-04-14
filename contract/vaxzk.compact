@@ -1,4 +1,4 @@
-pragma language_version >= 0.20;
+pragma language_version >= 0.2;
 
 import CompactStandardLibrary;
 
@@ -6,7 +6,7 @@ import "./Types";
 
 export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
-import "./Invites";
+include 'Invites';
 
 export { registerInvite, useInvite };
 
@@ -14,7 +14,6 @@ export { registerInvite, useInvite };
 export ledger admins: Set<Bytes<32>>;
 
 // Public ledger of shielded clinic IDs.
-// export ledger clinics: Map<Bytes<32>, ClinicProfileInfo>;
 export ledger clinics: Set<Bytes<32>>;
 
 // Public ledger of vaccines list.
