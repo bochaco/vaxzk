@@ -4,7 +4,7 @@ import { LanguageSelector } from "../App";
 import { useProfile, ProfileSelector } from "../Profile";
 import HomeView from "./HomeView";
 import WalletView from "./WalletView";
-import AddVaccineView from "./AddVaccineView";
+import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
 import CountriesAdmin from "./admin/CountriesAdmin";
