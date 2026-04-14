@@ -22,9 +22,6 @@ interface AddVaccineViewProps {
 
 const AddVaccineView: React.FC<AddVaccineViewProps> = ({ connectedApi }) => {
   const { t } = useLanguage();
-  const [newVaccineName, setNewVaccineName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [issuers, setIssuers] = useState<DerivedIssuer[]>([]);
   const [issuerLoading, setIssuerLoading] = useState(false);
   const [issuerError, setIssuerError] = useState<string | null>(null);
@@ -58,7 +55,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({ connectedApi }) => {
         });
       } catch (err) {
         console.error("Failed to join contract:", err);
-        setError("Erro ao conectar ao contrato");
+        setIssuerError("Erro ao conectar ao contrato");
       }
     }
 
