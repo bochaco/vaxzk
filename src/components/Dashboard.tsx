@@ -10,7 +10,7 @@ import AccessAdmin from "./admin/AccessAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
-import { getContractId } from "./ConfigNetwork";
+import { networkId, getContractId } from "./ConfigNetwork";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -92,12 +92,12 @@ const Dashboard: React.FC<DashboardProps> = ({
             <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">
               VaxZk
             {getContractId() && (
-              <>
+              <a href={`https://${networkId}.nightforge.jp/address/${getContractId()}`} target="_blank">
                 <br/>
                 <span className="text-xs font-medium text-slate-500">
                   ContractID: {getContractId()}
                 </span>
-              </>
+              </a>
             )}
             </h1>
           </div>
