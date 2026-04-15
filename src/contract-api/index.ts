@@ -19,7 +19,7 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
-import type { UserProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
+import type { UserProfile, ClinicProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
 import { signVaxZkCertificate } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
@@ -51,7 +51,7 @@ export interface DeployedVaxZkAPI {
 
   addAdmin: (id: Uint8Array) => Promise<void>;
   addCertificateIssuer: (issuerInfo: CertIssuerInfo) => Promise<Uint8Array>;
-  addClinic: (id: Uint8Array) => Promise<void>;
+  addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
   inviteAdmin: () => Promise<Uint8Array>;
@@ -250,14 +250,14 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async addClinic(id: Uint8Array): Promise<void> {
+  async addClinic(id: Uint8Array, clinic: ClinicProfile): Promise<void> {
     console.log(`adding Clinic with ID ${toHex(id)}`);
     if (id.length !== 32) {
       throw new Error(
         `Clinic ID shall be 32 bytes long but it is ${id.length}`,
       );
     }
-    const txData = await this.deployedContract.callTx.addClinic(id);
+    const txData = await this.deployedContract.callTx.addClinic(id, clinic);
     console.log({
       transactionAdded: {
         circuit: "addClinic",
@@ -347,12 +347,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     return txData.private.result as Uint8Array;
   }
 
-  async addSelfAsClinic(): Promise<void> {
-    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
-    if (!privateState) throw new Error("Private state not found");
-    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
-    await this.addClinic(clinicId);
-  }
+//  async addSelfAsClinic(): Promise<void> {
+//    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
+//    if (!privateState) throw new Error("Private state not found");
+//    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
+//    await this.addClinic(clinicId);
+//  }
 
   async requestVaccineProof(req: VaccineProofRequest): Promise<Uint8Array> {
     console.log(`requesting vaccine proof for vaccine ${toHex(req.vaccine)}`);

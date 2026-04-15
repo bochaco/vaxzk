@@ -41,12 +41,12 @@ const TWO_248 =
   452312848583266388373324160190187140051835877600158453279131187530910662656n;
 
 export const witnesses: Witnesses<VaxZkPrivateState> = {
-  localSk: ({
-    privateState,
-  }: WitnessContext<Ledger, VaxZkPrivateState>): [
-    VaxZkPrivateState,
-    Uint8Array,
-  ] => [privateState, privateState.secretKey],
+//  localSk: ({
+//    privateState,
+//  }: WitnessContext<Ledger, VaxZkPrivateState>): [
+//    VaxZkPrivateState,
+//   Uint8Array,
+//  ] => [privateState, privateState.secretKey],
   getAttestedCertProofWitness: ({
     privateState,
   }: WitnessContext<Ledger, VaxZkPrivateState>): [
