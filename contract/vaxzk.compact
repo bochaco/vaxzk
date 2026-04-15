@@ -54,9 +54,9 @@ constructor() {
   vaccines.insert(disclose(pad(20, "Tdap")));
 
   // Init clinics
-  clinics.insert(disclose(pad(32, "clinic1")), disclose(ClinicProfile { name: pad(32, "Clinic 1"), address: pad(32, "123 Main St"), owner: disclose(pad(32, adminId)) }));
+  clinics.insert(disclose(pad(32, "clinic1")), disclose(ClinicProfile { name: pad(32, "Clinic 1"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic1.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
   ownerClinicIndex.insert(disclose(adminId), disclose(true));
-  clinics.insert(disclose(pad(32, "clinic22")), disclose(ClinicProfile { name: pad(32, "Clinic Local 22"), address: pad(32, "123 Main St"), latitude: -23.5990263, longitude: -46.6419712 }));
+  clinics.insert(disclose(pad(32, "clinic22")), disclose(ClinicProfile { name: pad(32, "Clinic Local 22"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic22.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
 }
 
 // Derives a deterministic shielded ID using a persistent hash.
