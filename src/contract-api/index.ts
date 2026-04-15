@@ -55,8 +55,8 @@ export interface DeployedVaxZkAPI {
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
   registerInvite: (key: string) => Promise<Uint8Array>;
+  isValidInvite: (key: string) => Promise<boolean>;
   getProfile: () => Promise<UserProfile>;
-//  circuit "useInvite" (k=13, rows=4477) |
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
   revokeAdmin: (id: Uint8Array) => Promise<void>;
@@ -315,6 +315,24 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
+  async isValidInvite(uuid: string): Promise<boolean> {
+    console.log(`isValidInvite`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(uuid);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData = await this.deployedContract.callTx.isValidInvite(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "isValidInvite",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as boolean;
+
+  }
+
+  
   async registerInvite(uuid: string): Promise<Uint8Array> {
     console.log(`registerInvite`);
     const padded = new Uint8Array(32);
