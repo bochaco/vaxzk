@@ -104,10 +104,10 @@ export circuit revokeAdmin(adminId: Bytes<32>): [] {
 }
 
 // Registers a clinic by their shielded ID and profile info. Caller must be an admin.
-export circuit addClinic(clinicId: Bytes<32>, clinic ClinicProfile): [] {
+export circuit addClinic(clinicId: Bytes<32>, clinicProfile ClinicProfile): [] {
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
-  clinics.insert(disclose(clinicId), disclose(clinic));
+  clinics.insert(disclose(clinicId), disclose(clinicProfile));
 }
 
 // Removes a clinic by their shielded ID. Caller must be an admin.
