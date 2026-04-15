@@ -75,18 +75,25 @@ Login Page
 ### 5. Profiles
 
 - **Admin**:
-  - Can create and revoke other admins ( using their nicknames profiles ).
-  - Can create and revoke Health Facilities ( using their nicknames profiles ).
+  - Can invite and revoke other admins ( using their nicknames profiles ).
+  - Can invite and revoke Health Facilities ( using their nicknames profiles ).
   - ✅ Can create and edit existing vaccine types.
-  - Can create and edit country and mandatory vaccination list to enter the country.
 - **Users**:
-  - Create a private profile, with nickname.
-  - List all the countries and see which vaccines are required to enter them.
   - List the clinics that administer vaccines, and you can refine the list by vaccine and location.
   - View all vaccination certificates generated for him.
 - **Health Facilities**: Like Clinics, Pharmacies and Hospitals.
   - Can create and edit their clinic profile, specifying the type of vaccine they can administer.
   - Generate vaccination certificates for users ( using their nicknames profiles ).
+
+### 6. Future Features
+
+Vacina para Viajantes / Viagens Internacionais
+
+- **Admin**:
+  - Can create and edit country and mandatory vaccination list to enter the country.
+- **Users**:
+  - List all the countries and see which vaccines are required to enter them.
+  - Ao selecionar um pais, o sistema verifica se o usuario tem todas as vacinas necessarias para visitar este pais.
 
 ### ACTUAL CONTRACT ID
      https://preprod.nightforge.jp/address/927b02ceb1bc3776e87cd5c316b1e43c2a93d6c5b92295f2609c010d1f51a678

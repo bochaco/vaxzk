@@ -142,8 +142,8 @@ export const translations = {
     add: 'Add',
     loading: 'Processing...',
 
-    countriesAdminTitleEnd: 'Countries',
-    countriesAdminSubtitle: 'List all the countries and what types of cows are needed to visit them.',
+    accessAdminTitleEnd: 'Acessos',
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
   },
   pt: {
     // Login
@@ -285,9 +285,9 @@ export const translations = {
     vaccinesList: 'Vacinas Cadastradas',
     add: 'Adicionar',
     loading: 'Processando...',
-
-    countriesAdminTitleEnd: 'Paises',
-    countriesAdminSubtitle: 'Liste todos os países e quais vacas são necessárias para visitá-los.',
+ 
+    accessAdminTitleEnd: 'Acessos',
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
   },
   es: {
     // Login
@@ -430,8 +430,8 @@ export const translations = {
     add: 'Agregar',
     loading: 'Procesando...',
 
-    countriesAdminTitleEnd: 'Países',
-    countriesAdminSubtitle: 'Enumera todos los países y qué tipos de vacas se necesitan para visitarlos.',
+    accessAdminTitleEnd: 'Acessos',
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
   },
 };
 
