@@ -48,12 +48,12 @@ module Types {
 
   // Clinig Profile
   export struct ClinicProfile {
+    ownerId: Bytes<32>,
     name: Opaque<'string'>,
     urlImage: Opaque<'string'>,
     address: Opaque<'string'>,
     latitud: Uint<128>,
     longitud: Uint<128>,
-    vaccines: Set<Bytes<20>>,
     isOnline: Boolean
   }
 

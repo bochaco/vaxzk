@@ -13,6 +13,7 @@ export ledger admins: Set<Bytes<32>>;
 
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Map<Bytes<32>, ClinicProfile>;
+export ledger ownerClinicIndex: Map<Bytes<32>, Boolean>;
 
 // Public ledger of vaccines list.
 export ledger vaccines: Set<Bytes<20>>;
@@ -74,19 +75,17 @@ circuit getProofReqId(): Bytes<32> {
 }
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
-circuit isAdmin(): Boolean {
+circuit isAdmin(): [] {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
   assert(admins.member(disclose(adminId)), "You are not an admin");
-  return true;
 }
 
 // Guards: aborts the calling circuit if the caller is not a registered clinic.
-circuit isClinic(): Boolean {
-  const _sk = localSk();
-  const clinicId = getShieldedId(_sk);
-  assert(clinics.member(disclose(clinicId)), "You are not a registered clinic");
-  return true;
+circuit isClinic(): [] {
+  const own = ownPublicKey();
+  const ownerId = getShieldedId(own.bytes);
+  assert(ownerClinicIndex.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
 // Adds a new admin by their shielded ID. Caller must be an existing admin.
@@ -130,7 +129,7 @@ export circuit getProfile(): UserProfile {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
   const validAdmin = admins.member(disclose(adminId));
-  const validClinic = clinics.member(disclose(adminId));
+  const validClinic = ownerClinicIndex.member(disclose(adminId));
 
   return UserProfile { isAdmin: validAdmin, isClinic: validClinic };
 }
