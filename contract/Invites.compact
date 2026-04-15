@@ -9,5 +9,5 @@ export circuit registerInviteAdmin(secret: Bytes<32>): Bytes<32> {
   const hash = persistentCommit<Bytes<32>>(secret, nonce);
 
   inviteAdminHash.insert(disclose(hash));
-  return disclose(hash);
+  return hash;
 }
