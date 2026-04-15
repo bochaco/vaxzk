@@ -4,7 +4,7 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
+export { UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
 // include 'Invites';
 
@@ -124,6 +124,13 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
   assert(!issuers.member(disclose(newIssuerId)), "The ID is already in the issuers list");
   issuers.insert(disclose(newIssuerId), disclose(issuerInfo));
   return newIssuerId;
+}
+
+export circuit getProfile(): UserProfile {
+  const user = UserProfile{};
+  UserProfile.isAdmin = isAdmin();
+  UserProfile.isClinic = isClinic();
+  return user;
 }
 
 // Vaccines

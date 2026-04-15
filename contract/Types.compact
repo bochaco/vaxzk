@@ -40,4 +40,10 @@ module Types {
     issuerSignature: SchnorrSignature
   }
 
+  // User Profile
+  export struct UserProfile {
+    isAdmin: Boolean,
+    isClinic: Boolean
+  }
+
 }
