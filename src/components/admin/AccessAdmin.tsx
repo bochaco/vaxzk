@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../LanguageContext';
 import { buildProviders, VaxZkAPI } from "../../contract-api/index";
-import { networkId, getContractId } from "../ConfigNetwork";
+import { urlApp, networkId, getContractId } from "../ConfigNetwork";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 
@@ -28,7 +28,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
         const newLink = await vaxApi.inviteAdmin();
         console.log('running');
         console.log(newLink);
-        setLinkAddress("https://vaxzk.beerhouse.io/invite?link=adadad");
+        setLinkAddress(urlApp + "/invite?link=" + newLink);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
@@ -81,38 +81,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       </section>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um Admin</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite para o usuario se tornar admin.</p>
-        <form
-          onSubmit={handleAddInviteAdmin}
-          className="flex flex-col sm:flex-row gap-4"
-        >
-            <button 
-              className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
-              type="submit"
-              disabled={loading}
-            >
-                {loading ? (
-                  <>
-                    <span className="material-symbols-outlined animate-spin">
-                      sync
-                    </span>
-                    <span>{t.loading}</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="material-symbols-outlined">verified_user</span>
-                    <span>Criar Convite</span>
-                  </>
-                )}
-            </button>
-          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
-        </form>
-      </div>
-
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um Admin</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite para o usuario se tornar admin.</p>
+        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um novo Admin</h3>
+        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite e envie para o usuario se tornar admin.</p>
         <form
           onSubmit={handleAddInviteAdmin}
           className="flex flex-col sm:flex-row gap-4"
