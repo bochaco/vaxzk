@@ -127,10 +127,7 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
 }
 
 export circuit getProfile(): UserProfile {
-  const user = UserProfile{};
-  UserProfile.isAdmin = isAdmin();
-  UserProfile.isClinic = isClinic();
-  return user;
+  return UserProfile { isAdmin: isAdmin(), isClinic: isClinic() };
 }
 
 // Vaccines
