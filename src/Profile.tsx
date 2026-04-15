@@ -1,12 +1,13 @@
 import { createContext, useContext, useState } from 'react';
+// import { buildProviders, VaxZkAPI } from "./contract-api/index";
 
 const ProfileOptions = [
   { code: 'admin', label: 'Admin' },
   { code: 'clinic', label: 'Clinic' },
   { code: 'user', label: 'User' },
 ]
-export type Profile = 'admin' | 'clinic' | 'user';
 
+export type Profile = 'admin' | 'clinic' | 'user';
 export type Tab = "home" | "wallet" | "listclinics" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "access";
 
 interface ProfileContextValue {
@@ -26,7 +27,25 @@ const ProfileContext = createContext<ProfileContextValue>({
 export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
   const {profile, setProfile, setActiveTab} = useProfile();
 
-  // React.useEffect(() => {}, [walletAddress, connectedApi]);
+  /*
+  React.useEffect(() => {
+   
+    const providers = await buildProviders(connectedApi, networkId);
+    const secretKey = new Uint8Array(32);
+    const api = await VaxZkAPI.join(
+      providers,
+      getContractId(),
+      secretKey,
+    );
+//        setVaxApi(api);
+//        try {
+//        const newLink = await vaxApi.inviteAdmin();
+      console.log('running');
+      const profile = await api.getProfile();
+      console.log(profile);
+
+  }, [walletAddress, connectedApi]);
+  */
 
   const handleProfileChange = (newProfile: Profile) => {
     if (newProfile === profile) return;
@@ -57,6 +76,4 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
   );
 };
 
-
-// eslint-disable-next-line react-refresh/only-export-components
 export const useProfile = () => useContext(ProfileContext);

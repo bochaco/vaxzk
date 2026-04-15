@@ -4,7 +4,7 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
+export { ClinicProfile, UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
 // include 'Invites';
 
@@ -12,7 +12,7 @@ export { UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSi
 export ledger admins: Set<Bytes<32>>;
 
 // Public ledger of shielded clinic IDs.
-export ledger clinics: Set<Bytes<32>>;
+export ledger clinics: Map<Bytes<32>, ClinicProfile>;
 
 // Public ledger of vaccines list.
 export ledger vaccines: Set<Bytes<20>>;
@@ -104,10 +104,10 @@ export circuit revokeAdmin(adminId: Bytes<32>): [] {
 }
 
 // Registers a clinic by their shielded ID and profile info. Caller must be an admin.
-export circuit addClinic(clinicId: Bytes<32>): [] {
+export circuit addClinic(clinicId: Bytes<32>, clinic ClinicProfile): [] {
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
-  clinics.insert(disclose(clinicId));
+  clinics.insert(disclose(clinicId), disclose(clinic));
 }
 
 // Removes a clinic by their shielded ID. Caller must be an admin.
@@ -126,7 +126,7 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
   return newIssuerId;
 }
 
-export pure circuit getProfile(): UserProfile {
+export circuit getProfile(): UserProfile {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
   const validAdmin = admins.member(disclose(adminId));
