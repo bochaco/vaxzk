@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import { useLanguage } from "../../LanguageContext";
 import {
   buildProviders,
   VaxZkAPI,
-  type DerivedIssuer,
-  type DerivedProofRequest,
 } from "../../contract-api/index";
 import { networkId, getContractId } from "../ConfigNetwork";
-import { getPublicKey } from "../../contract-api/signing";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
-import { toHex } from "@midnight-ntwrk/midnight-js-utils";
-
-const HARDCODED_ISSUER_SK =
-  1234567890123456789012345678901234567890123456789012345678901234n;
 
 interface VaccinesAdminProps {
   connectedApi: ConnectedAPI;
@@ -26,12 +18,6 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
   const [newVaccineName, setNewVaccineName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [issuerLoading, setIssuerLoading] = useState(false);
-  const [issuerError, setIssuerError] = useState<string | null>(null);
-  const [proofReqLoading, setProofReqLoading] = useState(false);
-  const [proofReqError, setProofReqError] = useState<string | null>(null);
-  const [submitingProofId, setSubmitingProofId] = useState<string | null>(null);
-  const [submitProofError, setSubmitProofError] = useState<string | null>(null);
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
   useEffect(() => {
