@@ -7,7 +7,6 @@ import WalletView from "./WalletView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
-import CountriesAdmin from "./admin/CountriesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
 import { getContractId } from "./ConfigNetwork";
@@ -18,7 +17,7 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "listclinics" | "listcountries" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "admincountries" | "access";
+type Tab = "home" | "wallet" | "listclinics" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -47,8 +46,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <WalletView />;
       case "listclinics": // USER
         return <UnderConstruction />;
-      case "listcountries": // USER
-        return <UnderConstruction />;
       case "userprofile": // USER
         return <UnderConstruction />;
       case "addvaccine": // CLINIC
@@ -59,8 +56,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <AccessAdmin connectedApi={connectedApi!} />;
       case "adminvaccine": // ADMIN
         return <VaccinesAdmin connectedApi={connectedApi!} />;
-      case "admincountries": // ADMIN
-        return <CountriesAdmin connectedApi={connectedApi!} />;
       default:
         switch (profile) {
           case "admin":
@@ -101,7 +96,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               <>
                 <br/>
                 <span className="text-xs font-medium text-slate-500">
-                  {getContractId()}
+                  ContractID: {getContractId()}
                 </span>
               </>
             )}
@@ -195,30 +190,6 @@ const Dashboard: React.FC<DashboardProps> = ({
           </span>
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
             Clinics
-          </span>
-        </button>
-        )}
-
-        {profile == "user" && (
-        <button
-          onClick={() => handleTabChange("listcountries")}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "listcountries"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "listcountries" ? "'FILL' 1" : undefined,
-            }}
-          >
-            flag
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            Countries
           </span>
         </button>
         )}
@@ -340,30 +311,6 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Vaccines
-            </span>
-          </button>
-        )}
-
-        {profile == "admin" && (
-          <button
-            onClick={() => handleTabChange("admincountries")}
-            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "admincountries"
-                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-                : "text-slate-400 hover:text-blue-600"
-            }`}
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{
-                fontVariationSettings:
-                  activeTab === "admincountries" ? "'FILL' 1" : undefined,
-              }}
-            >
-              south_america
-            </span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Countries
             </span>
           </button>
         )}

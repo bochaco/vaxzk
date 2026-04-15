@@ -140,10 +140,7 @@ export const translations = {
     vaccinesAdminSubtitle: 'List and add new vaccines to the system.',
     vaccinesList: 'Registered Vaccines',
     add: 'Add',
-    loading: 'Processing...',
-
-    countriesAdminTitleEnd: 'Countries',
-    countriesAdminSubtitle: 'List all the countries and what types of cows are needed to visit them.',
+    loading: 'Processing...'
   },
   pt: {
     // Login
@@ -284,10 +281,7 @@ export const translations = {
     vaccinesAdminSubtitle: 'Liste e adicione novas vacinas ao sistema.',
     vaccinesList: 'Vacinas Cadastradas',
     add: 'Adicionar',
-    loading: 'Processando...',
-
-    countriesAdminTitleEnd: 'Paises',
-    countriesAdminSubtitle: 'Liste todos os países e quais vacas são necessárias para visitá-los.',
+    loading: 'Processando...'
   },
   es: {
     // Login
@@ -428,10 +422,7 @@ export const translations = {
     vaccinesAdminSubtitle: 'Listar y agregar nuevas vacunas al sistema.',
     vaccinesList: 'Vacunas Registradas',
     add: 'Agregar',
-    loading: 'Procesando...',
-
-    countriesAdminTitleEnd: 'Países',
-    countriesAdminSubtitle: 'Enumera todos los países y qué tipos de vacas se necesitan para visitarlos.',
+    loading: 'Procesando...'
   },
 };
 
