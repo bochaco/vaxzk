@@ -15,6 +15,30 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
   const [error, setError] = useState<string | null>(null);
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
+  const handleAddInviteAdmin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!vaxApi) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+        const newLink = await vaxApi.inviteAdmin();
+        console.log('running');
+        console.log(newLink);
+    } catch (err) {
+      console.error("Failed to add vaccine:", err);
+      if (err instanceof Error) {
+        setError("Erro ao adicionar vacina: " + err.message);
+      } else {
+        setError("Erro ao adicionar vacina: " + String(err));
+      }
+      //    setError("Erro ao adicionar vacina");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     let subscription: { unsubscribe: () => void } | undefined;
     
@@ -32,9 +56,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
         );
         setVaxApi(api);
 
-        subscription = api.state$.subscribe((state) => {
-          setVaccines(state.vaccines);
-        });
+//        subscription = api.state$.subscribe((state) => {
+//          setVaccines(state.vaccines);
+//        });
       } catch (err) {
         console.error("Failed to join contract:", err);
         setError("Erro ao conectar ao contrato");
@@ -42,29 +66,11 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
     }
     
     init();
-    
+
     return () => {
       if (subscription) subscription.unsubscribe();
     };
   }, [connectedApi]);
-
-  const handleAddVaccine = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!vaxApi || !newVaccineName.trim()) return;
-
-    setLoading(true);
-    setError(null);
-    try {
-      await vaxApi.addVaccine(newVaccineName.trim());
-      setNewVaccineName('');
-      // The list should update automatically via subscription
-    } catch (err) {
-      console.error("Failed to add vaccine:", err);
-      setError("Erro ao adicionar vacina");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
@@ -76,13 +82,33 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       </section>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">Certificate Issuers</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Register the hard-coded demo issuer on-chain so patients can submit signed vaccine proofs.</p>
-        <button className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2">
-        <span className="material-symbols-outlined">verified_user</span>
-        <span>Add Issuer</span>
-        </button>
-        <p className="text-error text-sm mt-3 px-1">Erro ao conectar ao contrato</p>
+        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um Admin</h3>
+        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite para o usuario se tornar admin.</p>
+        <form
+          onSubmit={handleAddInviteAdmin}
+          className="flex flex-col sm:flex-row gap-4"
+        >
+            <button 
+              className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
+              type="submit"
+              disabled={loading}
+            >
+                {loading ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin">
+                      sync
+                    </span>
+                    <span>{t.loading}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined">verified_user</span>
+                    <span>Criar Convite</span>
+                  </>
+                )}
+            </button>
+          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+        </form>
       </div>
 
     </main>

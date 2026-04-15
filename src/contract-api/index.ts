@@ -54,6 +54,7 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
+  inviteAdmin: () => Promise<Uint8Array>;
 //  registerInvite: () => Promise<Uint8Array>;
 //  circuit "useInvite" (k=13, rows=4477) |
   revokeClinic: (id: Uint8Array) => Promise<void>;
@@ -303,6 +304,23 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       },
     });
   }
+
+  async inviteAdmin(): Promise<Uint8Array> {
+    console.log(`inviteAdmin`);
+//    const txData =
+//      await this.deployedContract.callTx.addCertificateIssuer(issuerInfo);
+//    console.log({
+//      transactionAdded: {
+//        circuit: "addCertificateIssuer",
+//        txHash: txData.public.txHash,
+//        blockHeight: txData.public.blockHeight,
+//      },
+//    });
+//    return txData.private.result as Uint8Array;
+      const uint8 = new TextEncoder().encode("marco");
+      return uint8;
+  }
+
 
   async addCertificateIssuer(issuerInfo: CertIssuerInfo): Promise<Uint8Array> {
     console.log(`adding certificate issuer: ${issuerInfo.name}`);
