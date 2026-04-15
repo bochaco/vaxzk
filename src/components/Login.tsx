@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import type { ConnectedAPI, InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { useLanguage } from '../LanguageContext';
-import { networkId } from './ConfigNetwork';
+import { networkId, getContractId } from './ConfigNetwork';
+import { buildProviders, VaxZkAPI } from "../contract-api/index";
+import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 
 const getCompatibleWallet = (): InitialAPI | undefined => {
   if (!window.midnight) return undefined;
@@ -22,6 +24,7 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const { t } = useLanguage();
   const [status, setStatus] = useState<'connecting' | 'connected' | 'idle' | 'error'>('idle');
+  const [setVaxApi] = useState<VaxZkAPI | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const connectWallet = async () => {
@@ -47,13 +50,27 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       const connectionStatus = await connectedApi.getConnectionStatus();
       if (connectionStatus) {
 
+        const providers = await buildProviders(connectedApi, networkId);
+        const secretKey = new Uint8Array(32);
+        const api = await VaxZkAPI.join(
+          providers,
+          getContractId(),
+          secretKey,
+        );
+//        setVaxApi(api);
+//        try {
+//        const newLink = await vaxApi.inviteAdmin();
+        console.log('running');
+        const profile = await api.getProfile();
+        console.log(profile);
+
         // Retrieve shielded address
         const addresses = await connectedApi.getShieldedAddresses();
         if (addresses.shieldedAddress) {
           setStatus('connected');
           onLoginSuccess(addresses.shieldedAddress, connectedApi);
         }
-        
+
       } else {
         throw new Error(t.shieldedAddressNotFound);
       }
