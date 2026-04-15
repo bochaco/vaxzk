@@ -57,8 +57,11 @@ function AppContent() {
 
   return (
     <>
-      {isConnected ? (
-        <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
+      {!isConnected ? (
+        <>
+          <LanguageSelector fixed />
+          <Login onLoginSuccess={handleLoginSuccess} />
+        </>  
       ) : (
           <>
           {!getContractId() ? (
@@ -67,12 +70,7 @@ function AppContent() {
           <BrowserRouter>
             <Routes>
               <Route path="/invite" element={<InvitePage />} />
-              <Route path="/" element={
-                <>
-                  <LanguageSelector fixed />
-                  <Login onLoginSuccess={handleLoginSuccess} />
-                </>  
-              } />
+              <Route path="/" element={<Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />} />
             </Routes>
           </BrowserRouter>
           )}
