@@ -48,22 +48,25 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       const connectionStatus = await connectedApi.getConnectionStatus();
       if (connectionStatus) {
 
-        const providers = await buildProviders(connectedApi, networkId);
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          getContractId(),
-          secretKey,
-        );
-//        setVaxApi(api);
-//        try {
-//        const newLink = await vaxApi.inviteAdmin();
-        console.log('running');
-        const profile = await api.getProfile();
-        console.log(profile);
-
         // Retrieve shielded address
         const addresses = await connectedApi.getShieldedAddresses();
+        
+        if (getContractId()) {
+          const providers = await buildProviders(connectedApi, networkId);
+          const secretKey = new Uint8Array(32);
+          const api = await VaxZkAPI.join(
+            providers,
+            getContractId(),
+            secretKey,
+          );
+  //        setVaxApi(api);
+  //        try {
+  //        const newLink = await vaxApi.inviteAdmin();
+          console.log('running');
+          const profile = await api.getProfile();
+          console.log(profile);
+        }
+
         if (addresses.shieldedAddress) {
           setStatus('connected');
           onLoginSuccess(addresses.shieldedAddress, connectedApi);
