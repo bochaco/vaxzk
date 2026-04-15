@@ -3,7 +3,6 @@ import type { ConnectedAPI, InitialAPI } from '@midnight-ntwrk/dapp-connector-ap
 import { useLanguage } from '../LanguageContext';
 import { networkId, getContractId } from './ConfigNetwork';
 import { buildProviders, VaxZkAPI } from "../contract-api/index";
-import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 
 const getCompatibleWallet = (): InitialAPI | undefined => {
   if (!window.midnight) return undefined;
@@ -24,7 +23,6 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const { t } = useLanguage();
   const [status, setStatus] = useState<'connecting' | 'connected' | 'idle' | 'error'>('idle');
-  const [setVaxApi] = useState<VaxZkAPI | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const connectWallet = async () => {
