@@ -6,7 +6,7 @@ import "./Types";
 
 export { ClinicProfile, UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
-// include 'Invites';
+include 'Invites';
 
 // Public ledger of shielded admin IDs.
 export ledger admins: Set<Bytes<32>>;

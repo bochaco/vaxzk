@@ -81,8 +81,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       </section>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um novo Admin</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite e envie para o usuario se tornar admin.</p>
+        <h3 className="text-lg font-semibold text-on-surface mb-4">{t.accessAddAdminTitle}</h3>
+        <p className="text-on-surface-variant text-sm mb-4">{t.accessAddAdminDesc}</p>
         <form
           onSubmit={handleAddInviteAdmin}
           className="flex flex-col sm:flex-row gap-4"
@@ -102,7 +102,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
                 ) : (
                   <>
                     <span className="material-symbols-outlined">verified_user</span>
-                    <span>Criar Convite</span>
+                    <span>{t.accessAddAdminLink}</span>
                   </>
                 )}
             </button>

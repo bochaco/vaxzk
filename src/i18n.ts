@@ -142,8 +142,11 @@ export const translations = {
     add: 'Add',
     loading: 'Processing...',
 
-    accessAdminTitleEnd: 'Acessos',
-    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
+    accessAdminTitleEnd: 'Access',
+    accessAdminSubtitle: 'Manage user permissions',
+    accessAddAdminTitle: 'Add a new Admin',
+    accessAddAdminLink: 'Create invitation link',
+    accessAddAdminDesc: 'Create an invitation link and send it to the user to become an admin.'
   },
   pt: {
     // Login
@@ -287,7 +290,10 @@ export const translations = {
     loading: 'Processando...',
  
     accessAdminTitleEnd: 'Acessos',
-    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios',
+    accessAddAdminTitle: 'Adicionar um novo Admin',
+    accessAddAdminLink: 'Criar link de convite',
+    accessAddAdminDesc: 'Crie um link de convite e envie para o usuario se tornar admin.'
   },
   es: {
     // Login
@@ -431,7 +437,10 @@ export const translations = {
     loading: 'Procesando...',
 
     accessAdminTitleEnd: 'Acessos',
-    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios',
+    accessAddAdminTitle: 'Adicionar um novo Admin',
+    accessAddAdminLink: 'Crear enlace de invitación',
+    accessAddAdminDesc: 'Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.'
   },
 };
 
