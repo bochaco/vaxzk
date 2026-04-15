@@ -19,7 +19,7 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
-import type { CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
+import type { UserProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
 import { signVaxZkCertificate } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
@@ -55,6 +55,7 @@ export interface DeployedVaxZkAPI {
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
   inviteAdmin: () => Promise<Uint8Array>;
+  getProfile: () => UserProfile;
 //  registerInvite: () => Promise<Uint8Array>;
 //  circuit "useInvite" (k=13, rows=4477) |
   revokeClinic: (id: Uint8Array) => Promise<void>;
@@ -207,6 +208,17 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     const existingPrivateState =
       await providers.privateStateProvider.get(vaxZkPrivateStateKey);
     return existingPrivateState ?? createVaxZkPrivateState(secretKey);
+  }
+
+  async getProfile(): Promise<UserProfile> {
+    const txData = await this.deployedContract.callTx.getProfile();
+    console.log({
+      transactionAdded: {
+        circuit: "getProfile",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
   }
 
   async addAdmin(id: Uint8Array): Promise<void> {
