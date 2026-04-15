@@ -55,7 +55,7 @@ export interface DeployedVaxZkAPI {
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
   inviteAdmin: () => Promise<Uint8Array>;
-  getProfile: () => UserProfile;
+  getProfile: () => Promise<UserProfile>;
 //  registerInvite: () => Promise<Uint8Array>;
 //  circuit "useInvite" (k=13, rows=4477) |
   revokeClinic: (id: Uint8Array) => Promise<void>;
