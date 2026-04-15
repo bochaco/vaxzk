@@ -19,7 +19,7 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
-import type { CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
+import type { UserProfile, ClinicProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
 import { signVaxZkCertificate } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
@@ -51,12 +51,12 @@ export interface DeployedVaxZkAPI {
 
   addAdmin: (id: Uint8Array) => Promise<void>;
   addCertificateIssuer: (issuerInfo: CertIssuerInfo) => Promise<Uint8Array>;
-  addClinic: (id: Uint8Array) => Promise<void>;
+  addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-  inviteAdmin: () => Promise<Uint8Array>;
-//  registerInvite: () => Promise<Uint8Array>;
-//  circuit "useInvite" (k=13, rows=4477) |
+  registerInvite: (key: string) => Promise<Uint8Array>;
+  isValidInvite: (key: string) => Promise<boolean>;
+  getProfile: () => Promise<UserProfile>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
   revokeAdmin: (id: Uint8Array) => Promise<void>;
@@ -114,9 +114,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       ],
       (ledgerState, privateState) => {
         const clinics = new Array<string>();
-        for (const clinic of ledgerState.clinics) {
-          clinics.push(toHex(clinic));
-        }
+        // TODO: CHANGE THIS
         const vaccines = new Array<string>();
         for (const vaccineBytes of ledgerState.vaccines) {
           vaccines.push(
@@ -209,6 +207,18 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     return existingPrivateState ?? createVaxZkPrivateState(secretKey);
   }
 
+  async getProfile(): Promise<UserProfile> {
+    const txData = await this.deployedContract.callTx.getProfile();
+    console.log({
+      transactionAdded: {
+        circuit: "getProfile",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as UserProfile;
+  }
+
   async addAdmin(id: Uint8Array): Promise<void> {
     console.log(`adding Admin with ID ${toHex(id)}`);
     if (id.length !== 32) {
@@ -239,14 +249,14 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async addClinic(id: Uint8Array): Promise<void> {
+  async addClinic(id: Uint8Array, clinic: ClinicProfile): Promise<void> {
     console.log(`adding Clinic with ID ${toHex(id)}`);
     if (id.length !== 32) {
       throw new Error(
         `Clinic ID shall be 32 bytes long but it is ${id.length}`,
       );
     }
-    const txData = await this.deployedContract.callTx.addClinic(id);
+    const txData = await this.deployedContract.callTx.addClinic(id, clinic);
     console.log({
       transactionAdded: {
         circuit: "addClinic",
@@ -305,20 +315,39 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async inviteAdmin(): Promise<Uint8Array> {
-    console.log(`inviteAdmin`);
-//    const txData =
-//      await this.deployedContract.callTx.addCertificateIssuer(issuerInfo);
-//    console.log({
-//      transactionAdded: {
-//        circuit: "addCertificateIssuer",
-//        txHash: txData.public.txHash,
-//        blockHeight: txData.public.blockHeight,
-//      },
-//    });
-//    return txData.private.result as Uint8Array;
-      const uint8 = new TextEncoder().encode("marco");
-      return uint8;
+  async isValidInvite(uuid: string): Promise<boolean> {
+    console.log(`isValidInvite`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(uuid);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData = await this.deployedContract.callTx.isValidInvite(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "isValidInvite",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as boolean;
+
+  }
+
+  
+  async registerInvite(uuid: string): Promise<Uint8Array> {
+    console.log(`registerInvite`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(uuid);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData =
+      await this.deployedContract.callTx.registerInvite(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "registerInvite",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as Uint8Array;
   }
 
 
@@ -336,12 +365,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     return txData.private.result as Uint8Array;
   }
 
-  async addSelfAsClinic(): Promise<void> {
-    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
-    if (!privateState) throw new Error("Private state not found");
-    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
-    await this.addClinic(clinicId);
-  }
+//  async addSelfAsClinic(): Promise<void> {
+//    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
+//    if (!privateState) throw new Error("Private state not found");
+//    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
+//    await this.addClinic(clinicId);
+//  }
 
   async requestVaccineProof(req: VaccineProofRequest): Promise<Uint8Array> {
     console.log(`requesting vaccine proof for vaccine ${toHex(req.vaccine)}`);

@@ -1,25 +1,22 @@
 import CompactStandardLibrary;
 
-export ledger inviteHash: Bytes<32>;
-
-witness inviteSecret(): Bytes<32>;
-
 witness inviteNonce(): Bytes<32>;
 
-// Cria o hash do convite com um nonce para evitar correlação
-circuit createInviteHash(secret: Bytes<32>, nonce: Bytes<32>): Bytes<32> {
-  return persistentCommit<Bytes<32>>(secret, nonce);
-}
+ledger inviteAdminHash: Set<Bytes<32>>;
 
-export circuit registerInvite(): Bytes<32> {
-  const secret = inviteSecret();
+export circuit registerInvite(secret: Bytes<32>): Bytes<32> {
   const nonce = inviteNonce();
-  inviteHash = createInviteHash(secret, nonce);
-  return inviteHash;
+  const hash = persistentCommit<Bytes<32>>(secret, nonce);
+
+  inviteAdminHash.insert(disclose(hash));
+  return disclose(hash);
 }
 
-// Para usar o convite, prova que conhece o segredo sem revelá-lo
-export circuit useInvite(_secret: Bytes<32>, _nonce: Bytes<32>): [] {
-  const hash = createInviteHash(_secret, _nonce);
-  assert(inviteHash == disclose(hash), "Convite inválido");
+/*
+export circuit isValidInvite(secret: Bytes<32>): [] {
+  const nonce = inviteNonce();
+  const newHash = persistentCommit<Bytes<32>>(secret, nonce);
+  assert(!inviteAdminHash.member(disclose(newHash)), "not exist!");
+  inviteAdminHash.remove(disclose(newHash));
 }
+*/

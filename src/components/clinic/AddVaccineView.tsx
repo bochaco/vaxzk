@@ -97,16 +97,16 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({ connectedApi }) => {
     setProofReqLoading(true);
     setProofReqError(null);
     try {
-      try {
-        await vaxApi.addSelfAsClinic();
-      } catch (clinicErr) {
-        const msg = clinicErr instanceof Error ? clinicErr.message : String(clinicErr);
-        if (msg.includes("already in the clinics list")) {
-          console.log("Already registered as clinic, continuing.");
-        } else {
-          throw clinicErr;
-        }
-      }
+//      try {
+//        await vaxApi.addSelfAsClinic();
+//      } catch (clinicErr) {
+//        const msg = clinicErr instanceof Error ? clinicErr.message : String(clinicErr);
+//        if (msg.includes("already in the clinics list")) {
+//          console.log("Already registered as clinic, continuing.");
+//        } else {
+//          throw clinicErr;
+//       }
+//      }
 
       const enc = new TextEncoder();
       const vaccine = new Uint8Array(20);

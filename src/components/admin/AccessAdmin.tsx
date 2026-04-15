@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../LanguageContext';
 import { buildProviders, VaxZkAPI } from "../../contract-api/index";
-import { networkId, getContractId } from "../ConfigNetwork";
+import { urlApp, networkId, getContractId } from "../ConfigNetwork";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
+import {v4 as uuidv4} from 'uuid';
 
 interface AccessAdminProps {
   connectedApi: ConnectedAPI;
@@ -25,10 +26,11 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
     setError(null);
     setLinkAddress("");
     try {
-        const newLink = await vaxApi.inviteAdmin();
-        console.log('running');
-        console.log(newLink);
-        setLinkAddress("https://vaxzk.beerhouse.io/invite?link=adadad");
+      let myuuid = uuidv4();
+      console.log('Your UUID is: ' + myuuid);
+      const newLink = await vaxApi.registerInvite(myuuid);
+      console.log('newLink: ' + newLink);
+      setLinkAddress(urlApp + "/invite/" + myuuid);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
@@ -81,8 +83,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       </section>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um Admin</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite para o usuario se tornar admin.</p>
+        <h3 className="text-lg font-semibold text-on-surface mb-4">{t.accessAddAdminTitle}</h3>
+        <p className="text-on-surface-variant text-sm mb-4">{t.accessAddAdminDesc}</p>
         <form
           onSubmit={handleAddInviteAdmin}
           className="flex flex-col sm:flex-row gap-4"
@@ -101,7 +103,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
                 ) : (
                   <>
                     <span className="material-symbols-outlined">verified_user</span>
-                    <span>Criar Convite</span>
+                    <span>{t.accessAddAdminLink}</span>
                   </>
                 )}
             </button>

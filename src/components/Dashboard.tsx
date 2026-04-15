@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { useProfile, ProfileSelector } from "../Profile";
-import HomeView from "./HomeView";
-import WalletView from "./WalletView";
+import type { Tab } from "../Profile";
+import HomeView from "./user/HomeView";
+import WalletView from "./user/WalletView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
-import { getContractId } from "./ConfigNetwork";
+import { networkId, getContractId } from "./ConfigNetwork";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -17,7 +18,6 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "listclinics" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -25,8 +25,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   connectedApi,
 }) => {
   const { t } = useLanguage();
-  const { profile } = useProfile();
-  const [activeTab, setActiveTab] = useState<Tab>("home");
+  const { profile, activeTab, setActiveTab } = useProfile();
 
   // React.useEffect(() => {}, [walletAddress, connectedApi]);
 
@@ -63,11 +62,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           case "clinic":
             return <AddVaccineView connectedApi={connectedApi!} />;
           default:
-            return (
-              <HomeView
-                walletAddress={walletAddress}
-              />
-            );
+            return <HomeView walletAddress={walletAddress} />;
         }
     }
   };
@@ -93,12 +88,12 @@ const Dashboard: React.FC<DashboardProps> = ({
             <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">
               VaxZk
             {getContractId() && (
-              <>
+              <a href={`https://${networkId}.nightforge.jp/address/${getContractId()}`} target="_blank">
                 <br/>
                 <span className="text-xs font-medium text-slate-500">
                   ContractID: {getContractId()}
                 </span>
-              </>
+              </a>
             )}
             </h1>
           </div>
