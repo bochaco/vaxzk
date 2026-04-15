@@ -38,11 +38,22 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       setError(null);
 
       const connectedApi = await wallet.connect(networkId);
-      // Retrieve shielded address
-      const addresses = await connectedApi.getShieldedAddresses();
-      if (addresses.shieldedAddress) {
-        setStatus('connected');
-        onLoginSuccess(addresses.shieldedAddress, connectedApi);
+
+      // Optional: Get the service URI configuration
+      const serviceUriConfig = await connectedApi.getConfiguration();
+      console.log('Service URI Config:', serviceUriConfig);
+  
+      // Check if the connection is established
+      const connectionStatus = await connectedApi.getConnectionStatus();
+      if (connectionStatus) {
+
+        // Retrieve shielded address
+        const addresses = await connectedApi.getShieldedAddresses();
+        if (addresses.shieldedAddress) {
+          setStatus('connected');
+          onLoginSuccess(addresses.shieldedAddress, connectedApi);
+        }
+        
       } else {
         throw new Error(t.shieldedAddressNotFound);
       }
