@@ -1,18 +1,22 @@
 import CompactStandardLibrary;
 
-export ledger inviteAdminHash: Bytes<32>;
-
 witness inviteNonce(): Bytes<32>;
+
+ledger inviteAdminHash: Set<Bytes<32>>;
 
 export circuit registerInvite(secret: Bytes<32>): Bytes<32> {
   const nonce = inviteNonce();
-  const hash = disclose(persistentHash<Vector<2, Bytes<32>>>([secret, nonce]));
-  inviteAdminHash = hash;
-  return hash;
+  const hash = persistentCommit<Bytes<32>>(secret, nonce);
+
+  inviteAdminHash.insert(disclose(hash));
+  return disclose(hash);
 }
 
-export circuit isValidInvite(_secret: Bytes<32>): Bytes<32> {
+/*
+export circuit isValidInvite(secret: Bytes<32>): [] {
   const nonce = inviteNonce();
-  const actualHash = disclose(persistentHash<Vector<2, Bytes<32>>>([_secret, nonce]));
-  return actualHash;
+  const newHash = persistentCommit<Bytes<32>>(secret, nonce);
+  assert(!inviteAdminHash.member(disclose(newHash)), "not exist!");
+  inviteAdminHash.remove(disclose(newHash));
 }
+*/
