@@ -10,6 +10,7 @@ import VaccinesAdmin from "./admin/VaccinesAdmin";
 import CountriesAdmin from "./admin/CountriesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
+import { getContractId } from "./ConfigNetwork";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -96,6 +97,14 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2"></div>
             <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">
               VaxZk
+            {getContractId() && (
+              <>
+                <br/>
+                <span className="text-xs font-medium text-slate-500">
+                  {getContractId()}
+                </span>
+              </>
+            )}
             </h1>
           </div>
 
