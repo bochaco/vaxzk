@@ -219,6 +219,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         blockHeight: txData.public.blockHeight,
       },
     });
+    return txData.private.result as UserProfile;
   }
 
   async addAdmin(id: Uint8Array): Promise<void> {
