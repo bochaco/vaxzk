@@ -14,6 +14,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
+  const [linkAddress, setLinkAddress] = useState<string | null>(null);
 
   const handleAddInviteAdmin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,10 +23,12 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
 
     setLoading(true);
     setError(null);
+    setLinkAddress("");
     try {
         const newLink = await vaxApi.inviteAdmin();
         console.log('running');
         console.log(newLink);
+        setLinkAddress("https://vaxzk.beerhouse.io/invite?link=adadad");
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
@@ -55,10 +58,6 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
           secretKey,
         );
         setVaxApi(api);
-
-//        subscription = api.state$.subscribe((state) => {
-//          setVaccines(state.vaccines);
-//        });
       } catch (err) {
         console.error("Failed to join contract:", err);
         setError("Erro ao conectar ao contrato");
@@ -108,6 +107,62 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
                 )}
             </button>
           {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+        </form>
+      </div>
+
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
+        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um Admin</h3>
+        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite para o usuario se tornar admin.</p>
+        <form
+          onSubmit={handleAddInviteAdmin}
+          className="flex flex-col sm:flex-row gap-4"
+        >
+            <button 
+              className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
+              type="submit"
+              disabled={loading}
+            >
+                {loading ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin">
+                      sync
+                    </span>
+                    <span>{t.loading}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined">verified_user</span>
+                    <span>Criar Convite</span>
+                  </>
+                )}
+            </button>
+          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+          {linkAddress && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-green-700 font-bold">
+                  <span className="material-symbols-outlined">check_circle</span>
+                  <span>Contract deployed &amp; saved!</span>
+                </div>
+                <p className="text-xs text-green-800/70">
+                  This address is stored in your browser. All views will use it
+                  automatically on the next page load.
+                </p>
+                <div className="flex items-center gap-2 bg-white border border-green-100 rounded-lg px-4 py-3">
+                  <span className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
+                  <code className="text-xs font-mono text-green-900 break-all select-all flex-1">
+                    {linkAddress}
+                  </code>
+                  <button
+                    type="button"
+                    title="Copy address"
+                    className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
+                    onClick={() => navigator.clipboard.writeText(linkAddress)}
+                  >
+                    <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
+                  </button>
+                </div>
+              </div>
+            )}
         </form>
       </div>
 
