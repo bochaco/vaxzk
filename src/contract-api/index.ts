@@ -54,9 +54,8 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-  inviteAdmin: () => Promise<Uint8Array>;
+  registerInvite: (key: string) => Promise<Uint8Array>;
   getProfile: () => Promise<UserProfile>;
-//  registerInvite: () => Promise<Uint8Array>;
 //  circuit "useInvite" (k=13, rows=4477) |
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
@@ -316,20 +315,21 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async inviteAdmin(): Promise<Uint8Array> {
-    console.log(`inviteAdmin`);
-//    const txData =
-//      await this.deployedContract.callTx.addCertificateIssuer(issuerInfo);
-//    console.log({
-//      transactionAdded: {
-//        circuit: "addCertificateIssuer",
-//        txHash: txData.public.txHash,
-//        blockHeight: txData.public.blockHeight,
-//      },
-//    });
-//    return txData.private.result as Uint8Array;
-      const uint8 = new TextEncoder().encode("marco");
-      return uint8;
+  async registerInvite(uuid: string): Promise<Uint8Array> {
+    console.log(`registerInvite`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(uuid);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData =
+      await this.deployedContract.callTx.registerInvite(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "registerInvite",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+    return txData.private.result as Uint8Array;
   }
 
 

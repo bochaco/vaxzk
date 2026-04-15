@@ -4,6 +4,7 @@ import { buildProviders, VaxZkAPI } from "../../contract-api/index";
 import { urlApp, networkId, getContractId } from "../ConfigNetwork";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
+import {v4 as uuidv4} from 'uuid';
 
 interface AccessAdminProps {
   connectedApi: ConnectedAPI;
@@ -25,10 +26,11 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
     setError(null);
     setLinkAddress("");
     try {
-        const newLink = await vaxApi.inviteAdmin();
-        console.log('running');
-        console.log(newLink);
-        setLinkAddress(urlApp + "/invite?link=" + newLink);
+      let myuuid = uuidv4();
+      console.log('Your UUID is: ' + myuuid);
+      const newLink = await vaxApi.registerInvite(myuuid);
+      console.log('newLink: ' + newLink);
+      setLinkAddress(urlApp + "/invite?link=" + myuuid);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
