@@ -88,8 +88,8 @@ circuit isAdmin(): [] {
 
 // Guards: aborts the calling circuit if the caller is not a registered clinic.
 circuit isClinic(): [] {
-  const own = ownPublicKey();
-  const ownerId = getShieldedId(own.bytes);
+  const _sk = localSk();
+  const ownerId = getShieldedId(_sk);
   assert(ownerClinicIndex.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
