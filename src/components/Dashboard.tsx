@@ -62,11 +62,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           case "clinic":
             return <AddVaccineView connectedApi={connectedApi!} />;
           default:
-            return (
-              <HomeView
-                walletAddress={walletAddress}
-              />
-            );
+            return <HomeView walletAddress={walletAddress} />;
         }
     }
   };
