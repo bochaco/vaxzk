@@ -126,11 +126,11 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
   return newIssuerId;
 }
 
-export circuit getProfile(): UserProfile {
+export pure circuit getProfile(): UserProfile {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
   const validAdmin = admins.member(disclose(adminId));
-  const validClinic = admins.member(disclose(adminId));
+  const validClinic = clinics.member(disclose(adminId));
 
   return UserProfile { isAdmin: validAdmin, isClinic: validClinic };
 }
