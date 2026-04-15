@@ -28,9 +28,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
     try {
       let myuuid = uuidv4();
       console.log('Your UUID is: ' + myuuid);
-      const newLink = await vaxApi.registerInvite(myuuid);
-      console.log('newLink: ' + newLink);
-      setLinkAddress(urlApp + "/invite/" + myuuid);
+      const newLink = await vaxApi.registerInviteAdmin(myuuid);
+      console.log('newLink: ' + newLink.toString());
+      setLinkAddress(urlApp + "/invite/" + newLink.toString());
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
@@ -38,7 +38,6 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       } else {
         setError("Erro ao adicionar vacina: " + String(err));
       }
-      //    setError("Erro ao adicionar vacina");
     } finally {
       setLoading(false);
     }
@@ -108,34 +107,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
                 )}
             </button>
           {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
-        </form>
-      </div>
-
-      <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">Adicionar um Admin</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Crie um link de convite para o usuario se tornar admin.</p>
-        <form onSubmit={handleAddInviteAdmin} className="flex flex-col gap-4">
-            <button 
-              className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
-              type="submit"
-              disabled={loading}
-            >
-                {loading ? (
-                  <>
-                    <span className="material-symbols-outlined animate-spin">
-                      sync
-                    </span>
-                    <span>{t.loading}</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="material-symbols-outlined">verified_user</span>
-                    <span>Criar Convite</span>
-                  </>
-                )}
-            </button>
-          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
-          {linkAddress && (
+                    {linkAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>

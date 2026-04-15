@@ -49,13 +49,12 @@ export interface DeployedVaxZkAPI {
   readonly deployedContractAddress: ContractAddress;
   readonly state$: Observable<VaxZkDerivedState>;
 
-  addAdmin: (id: Uint8Array) => Promise<void>;
   addCertificateIssuer: (issuerInfo: CertIssuerInfo) => Promise<Uint8Array>;
   addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-  registerInvite: (key: string) => Promise<Uint8Array>;
-  isValidInvite: (key: string) => Promise<boolean>;
+  registerInviteAdmin: (key: string) => Promise<Uint8Array>;
+//  acceptInviteAdmin: (key: string) => Promise<void>;
   getProfile: () => Promise<UserProfile>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
@@ -219,21 +218,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     return txData.private.result as UserProfile;
   }
 
-  async addAdmin(id: Uint8Array): Promise<void> {
-    console.log(`adding Admin with ID ${toHex(id)}`);
-    if (id.length !== 32) {
-      throw new Error(`Admin ID shall be 32 bytes long but it is ${id.length}`);
-    }
-    const txData = await this.deployedContract.callTx.addAdmin(id);
-    console.log({
-      transactionAdded: {
-        circuit: "addAdmin",
-        txHash: txData.public.txHash,
-        blockHeight: txData.public.blockHeight,
-      },
-    });
-  }
-
   async revokeAdmin(id: Uint8Array): Promise<void> {
     console.log(`revoking Admin with ID ${toHex(id)}`);
     if (id.length !== 32) {
@@ -315,12 +299,13 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async isValidInvite(uuid: string): Promise<boolean> {
-    console.log(`isValidInvite`);
+/*
+  async acceptInviteAdmin(uuid: string): Promise<boolean> {
+    console.log(`acceptInviteAdmin`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(uuid);
     padded.set(uuidBytes.slice(0, 32));
-    const txData = await this.deployedContract.callTx.isValidInvite(padded);
+    const txData = await this.deployedContract.callTx.acceptInviteAdmin(padded);
     console.log({
       transactionAdded: {
         circuit: "isValidInvite",
@@ -329,17 +314,16 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       },
     });
     return txData.private.result as boolean;
-
   }
+*/
 
-  
-  async registerInvite(uuid: string): Promise<Uint8Array> {
+  async registerInviteAdmin(uuid: string): Promise<Uint8Array> {
     console.log(`registerInvite`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(uuid);
     padded.set(uuidBytes.slice(0, 32));
     const txData =
-      await this.deployedContract.callTx.registerInvite(padded);
+      await this.deployedContract.callTx.registerInviteAdmin(padded);
     console.log({
       transactionAdded: {
         circuit: "registerInvite",

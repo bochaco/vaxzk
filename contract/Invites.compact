@@ -4,19 +4,10 @@ witness inviteNonce(): Bytes<32>;
 
 ledger inviteAdminHash: Set<Bytes<32>>;
 
-export circuit registerInvite(secret: Bytes<32>): Bytes<32> {
+export circuit registerInviteAdmin(secret: Bytes<32>): Bytes<32> {
   const nonce = inviteNonce();
   const hash = persistentCommit<Bytes<32>>(secret, nonce);
 
   inviteAdminHash.insert(disclose(hash));
   return disclose(hash);
 }
-
-/*
-export circuit isValidInvite(secret: Bytes<32>): [] {
-  const nonce = inviteNonce();
-  const newHash = persistentCommit<Bytes<32>>(secret, nonce);
-  assert(!inviteAdminHash.member(disclose(newHash)), "not exist!");
-  inviteAdminHash.remove(disclose(newHash));
-}
-*/

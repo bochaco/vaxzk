@@ -101,27 +101,6 @@ describe("VaxZk contract", () => {
     });
   });
 
-  // ── Admin management ───────────────────────────────────────────────────────
-
-  describe("addAdmin", () => {
-    it("admin can add another admin", () => {
-      const newAdmin = randomUser();
-      simulator.addAdmin(adminId(newAdmin));
-      expect(simulator.getLedger().admins.member(adminId(newAdmin))).toBe(true);
-      expect(simulator.getLedger().admins.size()).toBe(2n);
-    });
-
-    it("rejects a duplicate admin ID", () => {
-      expect(() => simulator.addAdmin(adminId(admin))).toThrow();
-    });
-
-    it("non-admin cannot add an admin", () => {
-      const stranger = randomUser();
-      simulator.switchUser(stranger);
-      expect(() => simulator.addAdmin(adminId(randomUser()))).toThrow("You are not an admin");
-    });
-  });
-
   // ── Clinic management ──────────────────────────────────────────────────────
 
   describe("addClinic", () => {

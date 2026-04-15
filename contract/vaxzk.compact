@@ -93,13 +93,6 @@ circuit isClinic(): [] {
   assert(ownerClinicIndex.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
-// Adds a new admin by their shielded ID. Caller must be an existing admin.
-export circuit addAdmin(adminId: Bytes<32>): [] {
-  isAdmin();
-  assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
-  admins.insert(disclose(adminId));
-}
-
 // Removes an admin by their shielded ID. Caller must be an existing admin.
 export circuit revokeAdmin(adminId: Bytes<32>): [] {
   isAdmin();

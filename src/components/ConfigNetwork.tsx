@@ -3,5 +3,5 @@ export const networkId = "preprod";
 export const urlApp = "https://vaxzk.beerhouse.io";
 
 export function getContractId(): string {
-  return "71ef882292ead886597f4eb6415eb73c895c0218287af75563c432241096c4d1";
+  return "540b1c02110950b3d460d853859f5dc4a981608cdaf0cbec1caaef8c6a9d60ad";
 }
