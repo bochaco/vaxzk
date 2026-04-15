@@ -48,6 +48,16 @@ const adminId = (user: TestUser): Uint8Array =>
 const clinicId = (user: TestUser): Uint8Array =>
   pureCircuits.getShieldedId(user.secretKey);
 
+const mockProfile = (user?: TestUser) => ({
+  ownerId: user ? adminId(user) : randomBytes(32),
+  name: randomBytes(32),
+  urlImage: randomBytes(64),
+  address: randomBytes(64),
+  latitud: randomBytes(20),
+  longitud: randomBytes(20),
+  isOnline: true,
+});
+
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe("VaxZk contract", () => {
@@ -78,9 +88,9 @@ describe("VaxZk contract", () => {
       expect(l.vaccines.size()).toBe(3n);
     });
 
-    it("starts with empty clinics and issuers maps", () => {
+    it("starts with initial clinics and empty issuers map", () => {
       const l = simulator.getLedger();
-      expect(l.clinics.isEmpty()).toBe(true);
+      expect(l.clinics.size()).toBe(2n);
       expect(l.issuers.isEmpty()).toBe(true);
     });
 
@@ -117,20 +127,20 @@ describe("VaxZk contract", () => {
   describe("addClinic", () => {
     it("admin can register a clinic", () => {
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       expect(simulator.getLedger().clinics.member(clinicId(clinic))).toBe(true);
     });
 
     it("rejects a duplicate clinic ID", () => {
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
-      expect(() => simulator.addClinic(clinicId(clinic))).toThrow();
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
+      expect(() => simulator.addClinic(clinicId(clinic), mockProfile(clinic))).toThrow();
     });
 
     it("non-admin cannot register a clinic", () => {
       const stranger = randomUser();
       simulator.switchUser(stranger);
-      expect(() => simulator.addClinic(clinicId(randomUser()))).toThrow("You are not an admin");
+      expect(() => simulator.addClinic(clinicId(randomUser()), mockProfile())).toThrow("You are not an admin");
     });
   });
 
@@ -199,7 +209,7 @@ describe("VaxZk contract", () => {
   describe("requestVaccineProof", () => {
     it("registered clinic can create a proof request and gets back a request ID", () => {
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.switchUser(clinic);
 
       const proofReqId = simulator.requestVaccineProof({
@@ -241,7 +251,7 @@ describe("VaxZk contract", () => {
 
       // 2. Register a clinic and have it create a proof request.
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.switchUser(clinic);
 
       const vaccine = encodeBytes20("HepB");
@@ -297,7 +307,7 @@ describe("VaxZk contract", () => {
       });
 
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.switchUser(clinic);
 
       const vaccine = encodeBytes20("PCV");
@@ -329,7 +339,7 @@ describe("VaxZk contract", () => {
       });
 
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.switchUser(clinic);
 
       const validUntil = randomTimestamp();
@@ -365,7 +375,7 @@ describe("VaxZk contract", () => {
       const unknownIssuerId = randomBytes(32); // not in issuers map
 
       const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic));
+      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.switchUser(clinic);
 
       const vaccine = encodeBytes20("Tdap");

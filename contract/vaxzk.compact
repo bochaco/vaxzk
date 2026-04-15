@@ -112,6 +112,7 @@ export circuit addClinic(clinicId: Bytes<32>, clinicProfile: ClinicProfile): [] 
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
   clinics.insert(disclose(clinicId), disclose(clinicProfile));
+  ownerClinicIndex.insert(disclose(clinicProfile.ownerId), disclose(true));
 }
 
 // Removes a clinic by their shielded ID. Caller must be an admin.

@@ -12,6 +12,7 @@ import {
   type Ledger,
   ledger,
   type CertIssuerInfo,
+  type ClinicProfile,
   type VaccineProofRequest,
   type VaxZkProof,
 } from "../../managed/contract/index.js";
@@ -100,8 +101,8 @@ export class VaxZkSimulator {
     return res.result;
   }
 
-  public addClinic(clinicId: Uint8Array): [] {
-    const res = this.contract.impureCircuits.addClinic(this.circuitContext, clinicId);
+  public addClinic(clinicId: Uint8Array, clinicProfile: ClinicProfile): [] {
+    const res = this.contract.impureCircuits.addClinic(this.circuitContext, clinicId, clinicProfile);
     this.circuitContext = res.context;
     return res.result;
   }
