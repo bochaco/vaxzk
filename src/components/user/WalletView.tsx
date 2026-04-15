@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from '../LanguageContext';
+import { useLanguage } from '../../LanguageContext';
 
 const WalletView: React.FC = () => {
   const { t } = useLanguage();

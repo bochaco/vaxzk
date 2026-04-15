@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { useProfile, ProfileSelector } from "../Profile";
-import HomeView from "./HomeView";
-import WalletView from "./WalletView";
+import type { Tab } from "../Profile";
+import HomeView from "./user/HomeView";
+import WalletView from "./user/WalletView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
@@ -17,7 +18,6 @@ interface DashboardProps {
   connectedApi: ConnectedAPI;
 }
 
-type Tab = "home" | "wallet" | "listclinics" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "access";
 
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
@@ -25,8 +25,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   connectedApi,
 }) => {
   const { t } = useLanguage();
-  const { profile } = useProfile();
-  const [activeTab, setActiveTab] = useState<Tab>("home");
+  const { profile, activeTab, setActiveTab } = useProfile();
 
   // React.useEffect(() => {}, [walletAddress, connectedApi]);
 
