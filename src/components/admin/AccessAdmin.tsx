@@ -11,8 +11,6 @@ interface AccessAdminProps {
 
 const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
   const { t } = useLanguage();
-  const [vaccines, setVaccines] = useState<string[]>([]);
-  const [newVaccineName, setNewVaccineName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
@@ -73,70 +71,20 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
 
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-          <span className="text-primary">{t.manage}</span> {t.vaccinesAdminTitleEnd} </h2>
-        <p className="text-on-surface-variant text-lg leading-relaxed">{t.vaccinesAdminSubtitle}</p>
+          <span className="text-primary">{t.manage}</span> {t.accessAdminTitleEnd} </h2>
+        <p className="text-on-surface-variant text-lg leading-relaxed">{t.accessAdminSubtitle}</p>
       </section>
 
-      {/* Add Vaccine Form */}
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <form onSubmit={handleAddVaccine} className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 space-y-3">
-            <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-              {t.vaccineName}
-            </label>
-            <input 
-              className="w-full px-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300" 
-              placeholder={t.vaccinePlaceholder}
-              value={newVaccineName}
-              onChange={(e) => setNewVaccineName(e.target.value)}
-              disabled={loading}
-              type="text"
-            />
-          </div>
-          <div className="flex items-end">
-            <button 
-              className="w-full sm:w-auto px-8 py-4 bg-primary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2" 
-              type="submit"
-              disabled={loading || !newVaccineName.trim()}
-            >
-              {loading ? (
-                <>
-                  <span className="material-symbols-outlined animate-spin">sync</span>
-                  <span>{t.loading}</span>
-                </>
-              ) : (
-                <>
-                  <span className="material-symbols-outlined">add</span>
-                  <span>{t.add}</span>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-        {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+        <h3 className="text-lg font-semibold text-on-surface mb-4">Certificate Issuers</h3>
+        <p className="text-on-surface-variant text-sm mb-4">Register the hard-coded demo issuer on-chain so patients can submit signed vaccine proofs.</p>
+        <button className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2">
+        <span className="material-symbols-outlined">verified_user</span>
+        <span>Add Issuer</span>
+        </button>
+        <p className="text-error text-sm mt-3 px-1">Erro ao conectar ao contrato</p>
       </div>
 
-      {/* Vaccines List */}
-      <div className="space-y-4 text-left">
-        <h3 className="text-2xl font-bold mb-6">{t.vaccinesList}</h3>
-        {vaccines.length === 0 ? (
-          <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
-            <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">vaccines</span>
-            <p className="text-on-surface-variant italic">Nenhuma vacina cadastrada no contrato.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vaccines.map((v, i) => (
-              <div key={i} className="bg-surface-container-low p-6 rounded-xl border border-slate-50 flex items-center gap-4 hover:bg-surface-container-high transition-colors">
-                <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined">vaccines</span>
-                </div>
-                <span className="font-bold text-lg text-on-surface">{v}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </main>
   );
 };

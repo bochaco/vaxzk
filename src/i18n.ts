@@ -140,7 +140,10 @@ export const translations = {
     vaccinesAdminSubtitle: 'List and add new vaccines to the system.',
     vaccinesList: 'Registered Vaccines',
     add: 'Add',
-    loading: 'Processing...'
+    loading: 'Processing...',
+
+    accessAdminTitleEnd: 'Acessos',
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
   },
   pt: {
     // Login
@@ -281,7 +284,10 @@ export const translations = {
     vaccinesAdminSubtitle: 'Liste e adicione novas vacinas ao sistema.',
     vaccinesList: 'Vacinas Cadastradas',
     add: 'Adicionar',
-    loading: 'Processando...'
+    loading: 'Processando...',
+ 
+    accessAdminTitleEnd: 'Acessos',
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
   },
   es: {
     // Login
@@ -422,7 +428,10 @@ export const translations = {
     vaccinesAdminSubtitle: 'Listar y agregar nuevas vacunas al sistema.',
     vaccinesList: 'Vacunas Registradas',
     add: 'Agregar',
-    loading: 'Procesando...'
+    loading: 'Procesando...',
+
+    accessAdminTitleEnd: 'Acessos',
+    accessAdminSubtitle: 'Gerencie as permissoes dos usuarios'
   },
 };
 
