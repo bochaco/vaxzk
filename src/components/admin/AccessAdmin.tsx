@@ -33,9 +33,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
-        setError("Erro ao adicionar vacina: " + err.message);
+        setError("Erro ao criar um novo convite: " + err.message);
       } else {
-        setError("Erro ao adicionar vacina: " + String(err));
+        setError("Erro ao criar um novo convite: " + String(err));
       }
     } finally {
       setLoading(false);
@@ -59,8 +59,11 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
         );
         setVaxApi(api);
       } catch (err) {
-        console.error("Failed to join contract:", err);
-        setError(err);
+        if (err instanceof Error) {
+          setError("Erro ao criar um novo convite: " + err.message);
+        } else {
+          setError("Erro ao criar um novo convite: " + String(err));
+        }
       }
     }
     
