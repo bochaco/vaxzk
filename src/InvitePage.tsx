@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import { buildProviders, VaxZkAPI } from "./contract-api/index";
 import { networkId, getContractId } from "./components/ConfigNetwork";
@@ -10,8 +9,8 @@ interface InvitePageProps {
 }
 
 const InvitePage: React.FC<InvitePageProps> = ({ connectedApi }) => {
-  const { uuid } = useParams();
-  if (!uuid) {
+  const code = new URLSearchParams(window.location.search).get("code");
+  if (!code) {
     return "code is necessary"
   }
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
@@ -47,12 +46,12 @@ const InvitePage: React.FC<InvitePageProps> = ({ connectedApi }) => {
   const handleAceptInvite = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('a');
-    console.log(uuid);
+    console.log(code);
 
     if (!vaxApi) return;
 
     try {
-      await vaxApi.acceptInviteAdmin(uuid.trim());
+      await vaxApi.acceptInviteAdmin(code.trim());
     } catch (err) {
       console.error("Failed to add vaccine:", err);
 //    } finally {

@@ -29,7 +29,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       const uuid = uuidv4();
       const txData = await vaxApi.registerInviteAdmin(uuid);
       console.log("txData", txData);
-      setLinkAddress(urlApp + "/invite/" + uuid);
+      setLinkAddress(urlApp + "/invite?code=" + uuid);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
