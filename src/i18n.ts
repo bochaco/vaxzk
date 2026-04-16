@@ -146,7 +146,20 @@ export const translations = {
     accessAdminSubtitle: 'Manage user permissions',
     accessAddAdminTitle: 'Add a new Admin',
     accessAddAdminLink: 'Create invitation link',
-    accessAddAdminDesc: 'Create an invitation link and send it to the user to become an admin.'
+    accessAddAdminDesc: 'Create an invitation link and send it to the user to become an admin.',
+
+    // List Clinics View
+    listClinicsTitle: 'List of Clinics',
+    listClinicsSubtitle: 'Find authorized vaccination centers near you',
+    registeredClinics: 'Registered Clinics',
+    searchClinics: 'Search clinics...',
+    authorizedCenter: 'Authorized Vaccination Center',
+    verifiedProvider: 'Verified Provider',
+    noClinicsFound: 'No clinics found',
+    tryDifferentSearch: 'Try a different search term',
+    noClinicsRegistered: 'No clinics have been registered yet',
+    needHelpFinding: 'Need help finding a clinic?',
+    contactLocalHealth: 'Contact your local health authority for the most up-to-date information about vaccination centers.'
   },
   pt: {
     // Login
@@ -293,7 +306,20 @@ export const translations = {
     accessAdminSubtitle: 'Gerencie as permissoes dos usuarios',
     accessAddAdminTitle: 'Adicionar um novo Admin',
     accessAddAdminLink: 'Criar link de convite',
-    accessAddAdminDesc: 'Crie um link de convite e envie para o usuario se tornar admin.'
+    accessAddAdminDesc: 'Crie um link de convite e envie para o usuario se tornar admin.',
+
+    // List Clinics View
+    listClinicsTitle: 'Lista de Clínicas',
+    listClinicsSubtitle: 'Encontre centros de vacinacao autorizados perto de voce',
+    registeredClinics: 'Clinicas Cadastradas',
+    searchClinics: 'Buscar clinicas...',
+    authorizedCenter: 'Centro de Vacinacao Autorizado',
+    verifiedProvider: 'Prestador Verificado',
+    noClinicsFound: 'Nenhuma clinica encontrada',
+    tryDifferentSearch: 'Tente um termo de busca diferente',
+    noClinicsRegistered: 'Nenhuma clinica foi cadastrada ainda',
+    needHelpFinding: 'Precisa de ajuda para encontrar uma clinica?',
+    contactLocalHealth: 'Entre em contato com a autoridade de saude local para informacoes atualizadas sobre centros de vacinacao.'
   },
   es: {
     // Login
@@ -440,7 +466,20 @@ export const translations = {
     accessAdminSubtitle: 'Gerencie as permissoes dos usuarios',
     accessAddAdminTitle: 'Adicionar um novo Admin',
     accessAddAdminLink: 'Crear enlace de invitación',
-    accessAddAdminDesc: 'Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.'
+    accessAddAdminDesc: 'Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.',
+
+    // List Clinics View
+    listClinicsTitle: 'Lista de Clínicas',
+    listClinicsSubtitle: 'Encuentra centros de vacunacion autorizados cerca de ti',
+    registeredClinics: 'Clínicas Registradas',
+    searchClinics: 'Buscar clínicas...',
+    authorizedCenter: 'Centro de Vacunación Autorizado',
+    verifiedProvider: 'Proveedor Verificado',
+    noClinicsFound: 'No se encontraron clínicas',
+    tryDifferentSearch: 'Intenta con otro término de búsqueda',
+    noClinicsRegistered: 'Aún no hay clínicas registradas',
+    needHelpFinding: '¿Necesitas ayuda para encontrar una clínica?',
+    contactLocalHealth: 'Contacta a tu autoridad de salud local para obtener información actualizada sobre los centros de vacunación.'
   },
 };
 

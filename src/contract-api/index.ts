@@ -112,8 +112,10 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         ),
       ],
       (ledgerState, _) => {
-        const clinics = new Array<string>();
-        // TODO: CHANGE THIS
+        const clinics = new Array<ClinicProfile>();
+        for (const [_, clinic] of ledgerState.clinics) {
+          clinics.push(clinic);
+        }
         const vaccines = new Array<string>();
         for (const vaccineBytes of ledgerState.vaccines) {
           vaccines.push(

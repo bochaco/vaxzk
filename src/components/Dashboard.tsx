@@ -5,6 +5,7 @@ import { useProfile, ProfileSelector } from "../Profile";
 import type { Tab } from "../Profile";
 import HomeView from "./user/HomeView";
 import WalletView from "./user/WalletView";
+import ListClinicsView from "./user/ListClinicsView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import MetricsAdmin from "./admin/MetricsAdmin";
@@ -48,7 +49,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "wallet": // USER
         return <WalletView />;
       case "listclinics": // USER
-        return <UnderConstruction />;
+        return <ListClinicsView />;
       case "userprofile": // USER
         return <UnderConstruction />;
       case "addvaccine": // CLINIC
