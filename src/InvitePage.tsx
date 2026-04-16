@@ -45,21 +45,15 @@ const InvitePage: React.FC = () => {
           <div className="bg-secondary-container/20 p-5 rounded-lg border-none flex items-start gap-4 mt-12"
           style={{"background": "rgb(161 190 253 / 0.2)"}}>
             <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-              <span
-                className="material-symbols-outlined text-on-secondary-container"
-              >
+              <span className="material-symbols-outlined text-on-secondary-container">
                 verified_user
               </span>
             </div>
             <div>
-              <h4
-                className="font-bold text-on-secondary-container text-sm"
-              >
+              <h4 className="font-bold text-on-secondary-container text-sm">
                 Registro Seguro
               </h4>
-              <p
-                className="text-xs text-on-secondary-container/80 leading-relaxed"
-              >
+              <p className="text-xs text-on-secondary-container/80 leading-relaxed">
                 Suas informações de saúde são criptografadas e utilizadas apenas
                 para o seu controle pessoal de imunização.
               </p>
