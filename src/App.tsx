@@ -71,34 +71,33 @@ function AppContent() {
 
   return (
     <HashRouter>
-      <Routes>
-        <Route path="/invite" element={
-            <>
-              {!isConnected ? (
-                <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
-              ) : (
-                <InvitePage vaxApi={vaxApi!} />
-              )
-              }
-            </>
-        } />
-        <Route path="/" element={
-            <>
-              {!isConnected ? (
-                <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
-              ) : (
+      <>
+        {!getContractId() ? (
+          <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+        ) : (
+          <Routes>
+            <Route path="/invite" element={
                 <>
-                  {!getContractId() ? (
-                    <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+                  {!isConnected ? (
+                    <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
+                  ) : (
+                    <InvitePage vaxApi={vaxApi!} />
+                  )
+                  }
+                </>
+            } />
+            <Route path="/" element={
+                <>
+                  {!isConnected ? (
+                    <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
                   ) : (
                     <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
-                  )
-                }
+                  )}
                 </>
-              )}
-            </>
-          } />
-      </Routes>
+              } />
+          </Routes>
+          )}
+        </>
     </HashRouter>
   );
 }
