@@ -8,6 +8,7 @@ import WalletView from "./user/WalletView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
+import ClinicsAdmin from "./admin/ClinicsAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
 import { networkId, getContractId } from "./ConfigNetwork";
@@ -55,6 +56,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <AccessAdmin connectedApi={connectedApi!} />;
       case "adminvaccine": // ADMIN
         return <VaccinesAdmin connectedApi={connectedApi!} />;
+      case "adminclinic": // ADMIN
+        return <ClinicsAdmin connectedApi={connectedApi!} />;
       default:
         switch (profile) {
           case "admin":
@@ -306,6 +309,30 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Vaccines
+            </span>
+          </button>
+        )}
+
+        {profile == "admin" && (
+          <button
+            onClick={() => handleTabChange("adminclinic")}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "adminclinic"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "adminclinic" ? "'FILL' 1" : undefined,
+              }}
+            >
+              local_hospital
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Clinics
             </span>
           </button>
         )}
