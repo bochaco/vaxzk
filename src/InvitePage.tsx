@@ -26,11 +26,10 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
       await vaxApi.acceptInviteAdmin(code.trim());
     } catch (err) {
       console.error("Contract failed:", err);
-      if (err && typeof err === 'object' && 'cause' in err) {
-        console.log("aqui!");
-        const cause = (err as any).cause;
-        var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
-        setError(errorMessage);
+      if (err instanceof Error) {
+        setError("Erro ao usar o convite: " + err.message);
+      } else {
+        setError("Erro ao usar o convite: " + String(err));
       }
     }
   };
