@@ -8,7 +8,7 @@ const ProfileOptions = [
 ]
 
 export type Profile = 'admin' | 'clinic' | 'user';
-export type Tab = "home" | "wallet" | "listclinics" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "access";
+export type Tab = "home" | "wallet" | "listclinics" | "userprofile" | "addvaccine" | "clinicprofile" | "adminvaccine" | "metrics" | "access";
 
 interface ProfileContextValue {
   profile: Profile;
@@ -30,7 +30,7 @@ export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
   const handleProfileChange = (newProfile: Profile) => {
     if (newProfile === profile) return;
     console.log("handleProfileChange", newProfile);
-    setActiveTab(newProfile === "user" ? "home" : newProfile === "clinic" ? "addvaccine" : "adminvaccine");
+    setActiveTab(newProfile === "user" ? "home" : newProfile === "clinic" ? "addvaccine" : "metrics");
     setProfile(newProfile);
   };
 

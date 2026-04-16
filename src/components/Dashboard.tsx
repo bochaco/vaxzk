@@ -7,6 +7,7 @@ import HomeView from "./user/HomeView";
 import WalletView from "./user/WalletView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
+import MetricsAdmin from "./admin/MetricsAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
@@ -54,6 +55,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <AddVaccineView connectedApi={connectedApi!} />;
       case "clinicprofile": // CLINIC
         return <UnderConstruction />;
+      case "metrics": // ADMIN
+        return <MetricsAdmin vaxApi={vaxApi!} />;
       case "access": // ADMIN
         return <AccessAdmin vaxApi={vaxApi!} />;
       case "adminvaccine": // ADMIN
@@ -264,6 +267,29 @@ const Dashboard: React.FC<DashboardProps> = ({
           </button>
         )}
 
+        {profile == "admin" && (
+          <button
+            onClick={() => handleTabChange("metrics")}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "metrics"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "metrics" ? "'FILL' 1" : undefined,
+              }}
+            >
+              dashboard
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Metrics
+            </span>
+          </button>
+        )}
 
         {profile == "admin" && (
           <button

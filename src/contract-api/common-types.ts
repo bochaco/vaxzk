@@ -101,4 +101,8 @@ export type VaxZkDerivedState = {
   readonly vaccines: Array<string>;
   readonly issuers: Array<DerivedIssuer>;
   readonly vaccineProofReqs: Array<DerivedProofRequest>;
+  readonly totalAdmin: bigint;
+  readonly totalInvites: bigint;
+  readonly totalVaccines: number;
+  readonly totalClinics: number;
 };

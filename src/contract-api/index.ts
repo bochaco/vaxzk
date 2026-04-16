@@ -137,7 +137,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           });
         }
 
-        return { clinics, vaccines, issuers, vaccineProofReqs };
+        const totalAdmin = ledgerState.totalAdmin;
+        const totalInvites = ledgerState.totalInviteAdmin;
+        const totalClinics = clinics.length;
+        const totalVaccines = vaccines.length;
+
+        return { clinics, vaccines, issuers, vaccineProofReqs, totalAdmin, totalInvites, totalVaccines, totalClinics };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
