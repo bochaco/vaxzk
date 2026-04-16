@@ -53,8 +53,8 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-  registerInviteAdmin: (key: string) => Promise<Uint8Array>;
-//  acceptInviteAdmin: (key: string) => Promise<void>;
+  registerInviteAdmin: (key: string) => Promise<void>;
+  acceptInviteAdmin: (key: string) => Promise<void>;
   getProfile: () => Promise<UserProfile>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
@@ -101,7 +101,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: admins ${ledgerState.admins.size()}, clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -111,7 +111,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           ) as Promise<VaxZkPrivateState>,
         ),
       ],
-      (ledgerState, privateState) => {
+      (ledgerState, _) => {
         const clinics = new Array<string>();
         // TODO: CHANGE THIS
         const vaccines = new Array<string>();
@@ -137,13 +137,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           });
         }
 
-        const myId = privateState
-          ? VaxZk.pureCircuits.getShieldedId(privateState.secretKey)
-          : null;
-        const isClinic = myId ? ledgerState.clinics.member(myId) : false;
-        const isAdmin = myId ? ledgerState.admins.member(myId) : false;
-
-        return { clinics, vaccines, issuers, vaccineProofReqs, isClinic, isAdmin };
+        return { clinics, vaccines, issuers, vaccineProofReqs };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
@@ -299,41 +293,36 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-/*
-  async acceptInviteAdmin(uuid: string): Promise<boolean> {
+  async registerInviteAdmin(inviteCode: string): Promise<void> {
+    console.log(`registerInviteAdmin`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(inviteCode);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData = await this.deployedContract.callTx.registerInviteAdmin(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "registerInviteAdmin",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async acceptInviteAdmin(uuid: string): Promise<void> {
     console.log(`acceptInviteAdmin`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(uuid);
     padded.set(uuidBytes.slice(0, 32));
-    const txData = await this.deployedContract.callTx.acceptInviteAdmin(padded);
-    console.log({
-      transactionAdded: {
-        circuit: "isValidInvite",
-        txHash: txData.public.txHash,
-        blockHeight: txData.public.blockHeight,
-      },
-    });
-    return txData.private.result as boolean;
-  }
-*/
-
-  async registerInviteAdmin(uuid: string): Promise<Uint8Array> {
-    console.log(`registerInvite`);
-    const padded = new Uint8Array(32);
-    const uuidBytes = new TextEncoder().encode(uuid);
-    padded.set(uuidBytes.slice(0, 32));
     const txData =
-      await this.deployedContract.callTx.registerInviteAdmin(padded);
+      await this.deployedContract.callTx.acceptInviteAdmin(padded);
     console.log({
       transactionAdded: {
-        circuit: "registerInvite",
+        circuit: "acceptInviteAdmin",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },
     });
-    return txData.private.result as Uint8Array;
   }
-
 
   async addCertificateIssuer(issuerInfo: CertIssuerInfo): Promise<Uint8Array> {
     console.log(`adding certificate issuer: ${issuerInfo.name}`);

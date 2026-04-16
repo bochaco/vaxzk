@@ -8,9 +8,6 @@ export { ClinicProfile, UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkP
 
 include 'Invites';
 
-// Public ledger of shielded admin IDs.
-export ledger admins: Set<Bytes<32>>;
-
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Map<Bytes<32>, ClinicProfile>;
 export ledger ownerClinicIndex: Map<Bytes<32>, Boolean>;

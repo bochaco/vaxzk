@@ -72,14 +72,6 @@ describe("VaxZk contract", () => {
   // ── Initial state ──────────────────────────────────────────────────────────
 
   describe("initial state", () => {
-    it("registers the deployer as the first admin", () => {
-      expect(simulator.getLedger().admins.member(adminId(admin))).toBe(true);
-    });
-
-    it("starts with exactly one admin", () => {
-      expect(simulator.getLedger().admins.size()).toBe(1n);
-    });
-
     it("starts with the three built-in vaccines (HepB, PCV, Tdap)", () => {
       const l = simulator.getLedger();
       expect(l.vaccines.member(encodeBytes20("HepB"))).toBe(true);
