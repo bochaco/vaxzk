@@ -69,7 +69,7 @@ function AppContent() {
           ) : (
           <BrowserRouter>
             <Routes>
-              <Route path="/invite/:uuid" element={<InvitePage />} />
+              <Route path="/invite/:uuid" element={<InvitePage connectedApi={connectedApi!} />} />
               <Route path="/" element={<Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />} />
             </Routes>
           </BrowserRouter>
