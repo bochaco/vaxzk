@@ -6,7 +6,6 @@ ledger admins: Set<Bytes<32>>;
 ledger inviteAdminHash: Set<Bytes<32>>;
 
 
-
 export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {
   inviteAdminHash.insert(disclose(inviteCode));
 }
@@ -17,7 +16,7 @@ export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
 
-  assert(admins.member(disclose(adminId)), "Admin ID is not in the admins list");
+  assert(!admins.member(disclose(adminId)), "user is already an admin");
   admins.insert(disclose(adminId));
 
   inviteAdminHash.remove(disclose(inviteCode));
