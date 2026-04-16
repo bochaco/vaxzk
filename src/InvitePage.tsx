@@ -1,15 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import {
-  VaxZkAPI,
-} from "./contract-api/index";
+import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
+import { buildProviders, VaxZkAPI } from "./contract-api/index";
+import { networkId, getContractId } from "./components/ConfigNetwork";
+import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
 
-const InvitePage: React.FC = () => {
+interface InvitePageProps {
+  connectedApi: ConnectedAPI;
+}
+
+const InvitePage: React.FC<InvitePageProps> = ({ connectedApi }) => {
   const { uuid } = useParams();
-  const [vaxApi ] = useState<VaxZkAPI | null>(null);
   if (!uuid) {
     return "code is necessary"
   }
+  const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
+
+  useEffect(() => {
+    let subscription: { unsubscribe: () => void } | undefined;
+    
+    async function init() {
+      const contractId = getContractId();
+      if (!connectedApi || !contractId) return;
+      try {
+        const providers = await buildProviders(connectedApi, networkId);
+        // Using placeholder secret key as in Dashboard.tsx
+        const secretKey = new Uint8Array(32);
+        const api = await VaxZkAPI.join(
+          providers,
+          contractId as unknown as ContractAddress,
+          secretKey,
+        );
+        setVaxApi(api);
+      } catch (err) {
+        console.error("Failed to join contract:", err);
+      }
+    }
+    
+    init();
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
+  }, [connectedApi]);
 
   const handleAceptInvite = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
