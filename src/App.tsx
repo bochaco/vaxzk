@@ -85,7 +85,7 @@ function AppContent() {
         <Route path="/" element={
             <>
               {!isConnected ? (
-                <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>  
+                <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
               ) : (
                 <>
                   {!getContractId() ? (
