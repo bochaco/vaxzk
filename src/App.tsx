@@ -46,10 +46,6 @@ function AppContent() {
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
   const handleLoginSuccess = async (address: string, connectedApi: ConnectedAPI) => {
-    setWalletAddress(address);
-    setConnectedApi(connectedApi);
-    setIsConnected(true);
-
     const providers = await buildProviders(connectedApi, networkId);
     // Using placeholder secret key as in Dashboard.tsx
     const secretKey = new Uint8Array(32);
@@ -59,6 +55,10 @@ function AppContent() {
       secretKey,
     );
     setVaxApi(vaxApi);
+
+    setWalletAddress(address);
+    setConnectedApi(connectedApi);
+    setIsConnected(true);
   };
 
   const handleLogout = () => {
