@@ -54,6 +54,10 @@ constructor() {
   clinics.insert(disclose(pad(32, "clinic1")), disclose(ClinicProfile { name: pad(32, "Clinic 1"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic1.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
   ownerClinicIndex.insert(disclose(adminId), disclose(true));
   clinics.insert(disclose(pad(32, "clinic22")), disclose(ClinicProfile { name: pad(32, "Clinic Local 22"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic22.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
+
+  // Summarize
+  totalAdmin = admins.size();
+  totalInviteAdmin = inviteAdminHash.size();
 }
 
 // Derives a deterministic shielded ID using a persistent hash.
@@ -76,25 +80,11 @@ circuit getProofReqId(): Bytes<32> {
   return newProofReqId;
 }
 
-// Guards: aborts the calling circuit if the caller is not a registered admin.
-circuit isAdmin(): [] {
-  const own = ownPublicKey();
-  const adminId = getShieldedId(own.bytes);
-  assert(admins.member(disclose(adminId)), "You are not an admin");
-}
-
 // Guards: aborts the calling circuit if the caller is not a registered clinic.
 circuit isClinic(): [] {
   const own = ownPublicKey();
   const ownerId = getShieldedId(own.bytes);
   assert(ownerClinicIndex.member(disclose(ownerId)), "You are not a registered clinic");
-}
-
-// Removes an admin by their shielded ID. Caller must be an existing admin.
-export circuit revokeAdmin(adminId: Bytes<32>): [] {
-  isAdmin();
-  assert(!admins.member(disclose(adminId)), "Admin ID is not in the admins list");
-  admins.remove(disclose(adminId));
 }
 
 // Registers a clinic by their shielded ID and profile info. Caller must be an admin.

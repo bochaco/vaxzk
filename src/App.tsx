@@ -48,15 +48,17 @@ function AppContent() {
   const handleLoginSuccess = async (address: string, connectedApi: ConnectedAPI) => {
     console.log('loading...');
 
-    const providers = await buildProviders(connectedApi, networkId);
-    // Using placeholder secret key as in Dashboard.tsx
-    const secretKey = new Uint8Array(32);
-    const vaxApi =  await VaxZkAPI.join(
-      providers,
-      getContractId(),
-      secretKey,
-    );
-    setVaxApi(vaxApi);
+    if (getContractId()) {
+      const providers = await buildProviders(connectedApi, networkId);
+      // Using placeholder secret key as in Dashboard.tsx
+      const secretKey = new Uint8Array(32);
+      const vaxApi =  await VaxZkAPI.join(
+        providers,
+        getContractId(),
+        secretKey,
+      );
+      setVaxApi(vaxApi);
+    }
 
     setWalletAddress(address);
     setConnectedApi(connectedApi);
@@ -72,32 +74,21 @@ function AppContent() {
   return (
     <HashRouter>
       <>
-        {!getContractId() ? (
-          <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+        {!isConnected ? (
+          <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
         ) : (
-          <Routes>
-            <Route path="/invite" element={
-                <>
-                  {!isConnected ? (
-                    <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
-                  ) : (
-                    <InvitePage vaxApi={vaxApi!} />
-                  )
-                  }
-                </>
-            } />
-            <Route path="/" element={
-                <>
-                  {!isConnected ? (
-                    <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
-                  ) : (
-                    <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} vaxApi={vaxApi!} />
-                  )}
-                </>
-              } />
-          </Routes>
-          )}
-        </>
+          <>
+            {!getContractId() ? (
+              <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+            ) : (
+              <Routes>
+                <Route path="/invite" element={ <InvitePage vaxApi={vaxApi!} />} />
+                <Route path="/" element={ <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} vaxApi={vaxApi!} /> } />
+              </Routes>
+            )}
+          </>
+        )}
+      </>
     </HashRouter>
   );
 }
