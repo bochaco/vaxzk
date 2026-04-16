@@ -66,11 +66,19 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
 <h2 className="text-3xl font-bold tracking-tight">{totalClinics}</h2>
 </div>
 </div>
+
 <div className="md:col-span-2 bg-surface-container-highest rounded-xl p-8 flex items-center justify-between shadow-sm">
 <div className="space-y-1">
 <p className="text-on-surface-variant font-medium">Pending Admin Invites</p>
 <h2 className="text-5xl font-extrabold tracking-tight">{totalInvites}</h2>
 </div>
+
+<div className="md:col-span-2 bg-surface-container-highest rounded-xl p-8 flex items-center justify-between shadow-sm">
+<div className="space-y-1">
+<p className="text-on-surface-variant font-medium">Pending Clinic Invites</p>
+<h2 className="text-5xl font-extrabold tracking-tight">{totalInvites}</h2>
+</div>
+
 <div className="h-20 w-20 rounded-full border-4 border-primary/20 border-t-primary animate-spin-slow"></div>
 </div>
 </section>
