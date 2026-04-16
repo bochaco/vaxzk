@@ -112,8 +112,23 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         ),
       ],
       (ledgerState, _) => {
-        const clinics = new Array<string>();
-        // TODO: CHANGE THIS
+        const dec = new TextDecoder();
+        const decodeBytes = (b: Uint8Array) => dec.decode(b).replace(/\0/g, "").trim();
+
+        const clinics = [];
+        for (const [id, profile] of ledgerState.clinics) {
+          clinics.push({
+            id,
+            ownerId: profile.ownerId,
+            name: decodeBytes(profile.name),
+            urlImage: decodeBytes(profile.urlImage),
+            address: decodeBytes(profile.address),
+            latitud: decodeBytes(profile.latitud),
+            longitud: decodeBytes(profile.longitud),
+            isOnline: profile.isOnline,
+          });
+        }
+
         const vaccines = new Array<string>();
         for (const vaccineBytes of ledgerState.vaccines) {
           vaccines.push(
@@ -123,7 +138,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
 
         const issuers = [];
         for (const [id, info] of ledgerState.issuers) {
-          issuers.push({ id, name: info.name });
+          issuers.push({ id, name: info.name, uri: info.uri, verificationEndpoint: info.verificationEndpoint });
         }
 
         const vaccineProofReqs = [];
