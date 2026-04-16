@@ -50,8 +50,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <WalletView />;
       case "listclinics": // USER
         return <ListClinicsView vaxApi={vaxApi!} />;
-      case "userprofile": // USER
-        return <UnderConstruction />;
       case "addvaccine": // CLINIC
         return <AddVaccineView connectedApi={connectedApi!} />;
       case "clinicprofile": // CLINIC
@@ -192,30 +190,6 @@ const Dashboard: React.FC<DashboardProps> = ({
           </span>
           <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
             Clinics
-          </span>
-        </button>
-        )}
-
-        {profile == "user" && (
-        <button
-          onClick={() => handleTabChange("userprofile")}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "userprofile"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "userprofile" ? "'FILL' 1" : undefined,
-            }}
-          >
-            person
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            Profile
           </span>
         </button>
         )}
