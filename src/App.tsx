@@ -46,6 +46,8 @@ function AppContent() {
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
   const handleLoginSuccess = async (address: string, connectedApi: ConnectedAPI) => {
+    console.log('loading...');
+
     const providers = await buildProviders(connectedApi, networkId);
     // Using placeholder secret key as in Dashboard.tsx
     const secretKey = new Uint8Array(32);
@@ -68,27 +70,42 @@ function AppContent() {
   };
 
   return (
-    <>
-      {!isConnected ? (
-        <>
-          <LanguageSelector fixed />
-          <Login onLoginSuccess={handleLoginSuccess} />
-        </>  
-      ) : (
-          <>
-          {!getContractId() ? (
-            <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
-          ) : (
-          <BrowserRouter>
-            <Routes>
-              <Route path="/invite" element={<InvitePage vaxApi={vaxApi!} />} />
-              <Route path="/" element={<Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />} />
-            </Routes>
-          </BrowserRouter>
-          )}
-        </>
-      )}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/invite" element={
+              <>
+                {!isConnected ? (
+                  <>
+                    <LanguageSelector fixed />
+                    <Login onLoginSuccess={handleLoginSuccess} />
+                  </>  
+                ) : (
+                  <InvitePage vaxApi={vaxApi!} />
+                )
+                }
+            </>
+            } />
+        <Route path="/" element={
+              <>
+                {!isConnected ? (
+                  <>
+                    <LanguageSelector fixed />
+                    <Login onLoginSuccess={handleLoginSuccess} />
+                  </>  
+                ) : (
+                  <>
+                    {!getContractId() ? (
+                      <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+                    ) : (
+                      <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
+                    )
+                  }
+                  </>
+                )}
+              </>
+          } />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
