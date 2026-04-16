@@ -58,10 +58,4 @@ export const witnesses: Witnesses<VaxZkPrivateState> = {
     const r = challengeHash % TWO_248;
     return [privateState, [q, r]];
   },
-  inviteNonce: ({
-    privateState,
-  }: WitnessContext<Ledger, VaxZkPrivateState>): [
-    VaxZkPrivateState,
-    Uint8Array,
-  ] => [privateState, privateState.inviteNonce],
 };

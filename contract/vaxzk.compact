@@ -8,9 +8,6 @@ export { ClinicProfile, UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkP
 
 include 'Invites';
 
-// Public ledger of shielded admin IDs.
-export ledger admins: Set<Bytes<32>>;
-
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Map<Bytes<32>, ClinicProfile>;
 export ledger ownerClinicIndex: Map<Bytes<32>, Boolean>;
@@ -91,13 +88,6 @@ circuit isClinic(): [] {
   const own = ownPublicKey();
   const ownerId = getShieldedId(own.bytes);
   assert(ownerClinicIndex.member(disclose(ownerId)), "You are not a registered clinic");
-}
-
-// Adds a new admin by their shielded ID. Caller must be an existing admin.
-export circuit addAdmin(adminId: Bytes<32>): [] {
-  isAdmin();
-  assert(!admins.member(disclose(adminId)), "Admin ID is are already in the admins list");
-  admins.insert(disclose(adminId));
 }
 
 // Removes an admin by their shielded ID. Caller must be an existing admin.

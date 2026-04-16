@@ -89,12 +89,6 @@ export class VaxZkSimulator {
     return ledger(this.circuitContext.currentQueryContext.state);
   }
 
-  public addAdmin(adminId: Uint8Array): [] {
-    const res = this.contract.impureCircuits.addAdmin(this.circuitContext, adminId);
-    this.circuitContext = res.context;
-    return res.result;
-  }
-
   public revokeAdmin(adminId: Uint8Array): [] {
     const res = this.contract.impureCircuits.revokeAdmin(this.circuitContext, adminId);
     this.circuitContext = res.context;
