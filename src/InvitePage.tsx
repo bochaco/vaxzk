@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   VaxZkAPI,
@@ -7,7 +7,7 @@ import {
 const InvitePage: React.FC = () => {
   const { uuid } = useParams();
   const [vaxApi ] = useState<VaxZkAPI | null>(null);
-  if (uuid == "") {
+  if (!uuid) {
     return "code is necessary"
   }
 
