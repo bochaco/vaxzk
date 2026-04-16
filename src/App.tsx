@@ -73,36 +73,33 @@ function AppContent() {
     <BrowserRouter>
       <Routes>
         <Route path="/invite" element={
-              <>
-                {!isConnected ? (
-                  <>
-                    <LanguageSelector fixed />
-                    <Login onLoginSuccess={handleLoginSuccess} />
-                  </>  
-                ) : (
-                  <InvitePage vaxApi={vaxApi!} />
-                )
-                }
+            <>
+              {!isConnected ? (
+                <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
+              ) : (
+                <InvitePage vaxApi={vaxApi!} />
+              )
+              }
             </>
-            } />
+        } />
         <Route path="/" element={
-              <>
-                {!isConnected ? (
-                  <>
-                    <LanguageSelector fixed />
-                    <Login onLoginSuccess={handleLoginSuccess} />
-                  </>  
-                ) : (
-                  <>
-                    {!getContractId() ? (
-                      <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
-                    ) : (
-                      <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
-                    )
-                  }
-                  </>
-                )}
-              </>
+            <>
+              {!isConnected ? (
+                <>
+                  <LanguageSelector fixed />
+                  <Login onLoginSuccess={handleLoginSuccess} />
+                </>  
+              ) : (
+                <>
+                  {!getContractId() ? (
+                    <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+                  ) : (
+                    <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
+                  )
+                }
+                </>
+              )}
+            </>
           } />
       </Routes>
     </BrowserRouter>
