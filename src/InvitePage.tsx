@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation } from "react-router-dom";
 import { VaxZkAPI } from "./contract-api/index";
 
 interface InvitePageProps {
@@ -6,22 +7,31 @@ interface InvitePageProps {
 }
 
 const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
-  const code = new URLSearchParams(window.location.search).get("code");
+  const [error, setError] = useState<string | null>(null);
+
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+  const code = params.get("code");
   if (!code) {
     return "code is necessary"
   }
 
   const handleAceptInvite = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('a');
-    console.log(code);
 
     if (!vaxApi) return;
 
     try {
       await vaxApi.acceptInviteAdmin(code.trim());
     } catch (err) {
-      console.error("Failed to add vaccine:", err);
+      console.error("Contract failed:", err);
+      if (err && typeof err === 'object' && 'cause' in err) {
+        console.log("aqui!");
+        const cause = (err as any).cause;
+        var errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
+        setError(errorMessage);
+      }
     }
   };
 
@@ -57,6 +67,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
               </p>
             </div>
           </div>
+          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
           <div className="pt-6">
             <button
               className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"

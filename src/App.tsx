@@ -7,7 +7,7 @@ import { ProfileProvider } from './Profile';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { InvitePage } from './InvitePage';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import { buildProviders, VaxZkAPI } from "./contract-api/index";
 
@@ -70,7 +70,7 @@ function AppContent() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/invite" element={
             <>
@@ -85,10 +85,7 @@ function AppContent() {
         <Route path="/" element={
             <>
               {!isConnected ? (
-                <>
-                  <LanguageSelector fixed />
-                  <Login onLoginSuccess={handleLoginSuccess} />
-                </>  
+                <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>  
               ) : (
                 <>
                   {!getContractId() ? (
@@ -102,7 +99,7 @@ function AppContent() {
             </>
           } />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

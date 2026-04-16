@@ -29,7 +29,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       const uuid = uuidv4();
       const txData = await vaxApi.registerInviteAdmin(uuid);
       console.log("txData", txData);
-      setLinkAddress(urlApp + "/invite?code=" + uuid);
+      setLinkAddress(urlApp + "/#/invite?code=" + uuid);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
@@ -60,7 +60,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
         setVaxApi(api);
       } catch (err) {
         console.error("Failed to join contract:", err);
-        setError("Erro ao conectar ao contrato");
+        setError(err);
       }
     }
     
@@ -103,7 +103,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
                 )}
             </button>
           {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
-                    {linkAddress && (
+          {linkAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>
