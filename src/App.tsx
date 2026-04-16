@@ -91,7 +91,7 @@ function AppContent() {
                   {!isConnected ? (
                     <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
                   ) : (
-                    <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />
+                    <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} vaxApi={vaxApi!} />
                   )}
                 </>
               } />

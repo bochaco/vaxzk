@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
-import { buildProviders, VaxZkAPI } from "../../contract-api/index";
-import { urlApp, networkId, getContractId } from "../ConfigNetwork";
-import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
-import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
+import { VaxZkAPI } from "../../contract-api/index";
+import { urlApp } from "../ConfigNetwork";
 import {v4 as uuidv4} from 'uuid';
 
 interface AccessAdminProps {
-  connectedApi: ConnectedAPI;
+  vaxApi: VaxZkAPI;
 }
 
-const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
+const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
   const [linkAddress, setLinkAddress] = useState<string | null>(null);
 
   const handleAddInviteAdmin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -41,38 +38,6 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ connectedApi }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    let subscription: { unsubscribe: () => void } | undefined;
-    
-    async function init() {
-      const contractId = getContractId();
-      if (!connectedApi || !contractId) return;
-      try {
-        const providers = await buildProviders(connectedApi, networkId);
-        // Using placeholder secret key as in Dashboard.tsx
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          contractId as unknown as ContractAddress,
-          secretKey,
-        );
-        setVaxApi(api);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError("Erro ao criar um novo convite: " + err.message);
-        } else {
-          setError("Erro ao criar um novo convite: " + String(err));
-        }
-      }
-    }
-    
-    init();
-
-    return () => {
-      if (subscription) subscription.unsubscribe();
-    };
-  }, [connectedApi]);
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">

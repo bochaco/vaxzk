@@ -11,11 +11,13 @@ import VaccinesAdmin from "./admin/VaccinesAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
 import { networkId, getContractId } from "./ConfigNetwork";
+import { VaxZkAPI } from "../contract-api/index";
 
 interface DashboardProps {
   onLogout: () => void;
   walletAddress: string | null;
   connectedApi: ConnectedAPI;
+  vaxApi: VaxZkAPI;
 }
 
 
@@ -23,6 +25,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
   walletAddress,
   connectedApi,
+  vaxApi,
 }) => {
   const { t } = useLanguage();
   const { profile, activeTab, setActiveTab } = useProfile();
@@ -52,13 +55,13 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "clinicprofile": // CLINIC
         return <UnderConstruction />;
       case "access": // ADMIN
-        return <AccessAdmin connectedApi={connectedApi!} />;
+        return <AccessAdmin vaxApi={vaxApi!} />;
       case "adminvaccine": // ADMIN
-        return <VaccinesAdmin connectedApi={connectedApi!} />;
+        return <VaccinesAdmin vaxApi={vaxApi!} />;
       default:
         switch (profile) {
           case "admin":
-            return <VaccinesAdmin connectedApi={connectedApi!} />;
+            return <VaccinesAdmin vaxApi={vaxApi!} />;
           case "clinic":
             return <AddVaccineView connectedApi={connectedApi!} />;
           default:
