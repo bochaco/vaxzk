@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
 import { VaxZkAPI } from "../../contract-api/index";
 import type { ClinicProfile } from "../../../contract/managed/contract/index.js";
+import ClinicMap from './ClinicMap';
 
 interface ListClinicsViewProps {
   vaxApi: VaxZkAPI;
@@ -36,6 +37,12 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
 
   const decodeField = (bytes: Uint8Array): string => {
     return new TextDecoder().decode(bytes).replace(/\0/g, '').trim();
+  };
+
+  const hasValidCoords = (latitud: Uint8Array, longitud: Uint8Array): boolean => {
+    const lat = parseFloat(decodeField(latitud));
+    const lng = parseFloat(decodeField(longitud));
+    return !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
   };
 
   const filteredClinics = clinics.filter(clinic =>
@@ -98,6 +105,12 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
                   <p className="text-sm text-on-surface-variant mt-1">
                     {decodeField(clinic.address)}
                   </p>
+                  {hasValidCoords(clinic.latitud, clinic.longitud) && (
+                    <ClinicMap
+                      latitud={decodeField(clinic.latitud)}
+                      longitud={decodeField(clinic.longitud)}
+                    />
+                  )}
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-surface-container-high">
