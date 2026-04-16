@@ -1,24 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
-import type { VaxZkDerivedState } from '../../contract-api/common-types';
+import { VaxZkAPI } from "../../contract-api/index";
+import type { ClinicProfile } from "../../../contract/managed/contract/index.js";
 
 interface ListClinicsViewProps {
-  derivedState?: VaxZkDerivedState;
+  vaxApi: VaxZkAPI;
 }
 
-const ListClinicsView: React.FC<ListClinicsViewProps> = ({ derivedState }) => {
+const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
-  const [clinics, setClinics] = useState<string[]>([]);
+  const [clinics, setClinics] = useState<ClinicProfile[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    if (derivedState?.clinics) {
-      setClinics(derivedState.clinics);
+   useEffect(() => {
+    let subscription: { unsubscribe: () => void } | undefined;
+
+    async function init() {
+      try {
+        console.log('init clinic list');
+        subscription = vaxApi.state$.subscribe((state) => {
+          console.log('clinics');
+          setClinics(state.clinics);
+        });
+      } catch (err) {
+        console.error("Failed to join contract:", err);
+      }
     }
-  }, [derivedState]);
+
+    init();
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
+  }, []);
+
+  const decodeField = (bytes: Uint8Array): string => {
+    return new TextDecoder().decode(bytes).replace(/\0/g, '').trim();
+  };
 
   const filteredClinics = clinics.filter(clinic =>
-    clinic.toLowerCase().includes(searchQuery.toLowerCase())
+    decodeField(clinic.name).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -73,9 +94,9 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ derivedState }) => {
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>medical_services</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-on-surface truncate">{clinic}</h3>
+                  <h3 className="font-bold text-on-surface truncate">{decodeField(clinic.name)}</h3>
                   <p className="text-sm text-on-surface-variant mt-1">
-                    {t.authorizedCenter || 'Authorized Vaccination Center'}
+                    {decodeField(clinic.address)}
                   </p>
                 </div>
               </div>

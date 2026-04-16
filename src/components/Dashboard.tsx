@@ -49,7 +49,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "wallet": // USER
         return <WalletView />;
       case "listclinics": // USER
-        return <ListClinicsView />;
+        return <ListClinicsView vaxApi={vaxApi!} />;
       case "userprofile": // USER
         return <UnderConstruction />;
       case "addvaccine": // CLINIC
