@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import { getContractId } from "./components/ConfigNetwork";
+import { networkId, getContractId } from "./components/ConfigNetwork";
 import DeployContractView from "./components/DeployContractView";
 import { ProfileProvider } from './Profile';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import type { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { InvitePage } from './InvitePage';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import './index.css';
+import { buildProviders, VaxZkAPI } from "./contract-api/index";
 
 const LANGUAGES = [
   { code: 'en', label: 'EN', flag: '🇺🇸' },
@@ -42,10 +43,25 @@ function AppContent() {
   const [isConnected, setIsConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [connectedApi, setConnectedApi] = useState<ConnectedAPI | null>(null);
+  const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
-  const handleLoginSuccess = (address: string, api: ConnectedAPI) => {
+  const handleLoginSuccess = async (address: string, connectedApi: ConnectedAPI) => {
+    console.log('loading...');
+
+    if (getContractId()) {
+      const providers = await buildProviders(connectedApi, networkId);
+      // Using placeholder secret key as in Dashboard.tsx
+      const secretKey = new Uint8Array(32);
+      const vaxApi =  await VaxZkAPI.join(
+        providers,
+        getContractId(),
+        secretKey,
+      );
+      setVaxApi(vaxApi);
+    }
+
     setWalletAddress(address);
-    setConnectedApi(api);
+    setConnectedApi(connectedApi);
     setIsConnected(true);
   };
 
@@ -56,27 +72,24 @@ function AppContent() {
   };
 
   return (
-    <>
-      {!isConnected ? (
-        <>
-          <LanguageSelector fixed />
-          <Login onLoginSuccess={handleLoginSuccess} />
-        </>  
-      ) : (
+    <HashRouter>
+      <>
+        {!isConnected ? (
+          <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
+        ) : (
           <>
-          {!getContractId() ? (
-            <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
-          ) : (
-          <BrowserRouter>
-            <Routes>
-              <Route path="/invite" element={<InvitePage connectedApi={connectedApi!} />} />
-              <Route path="/" element={<Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} />} />
-            </Routes>
-          </BrowserRouter>
-          )}
-        </>
-      )}
-    </>
+            {!getContractId() ? (
+              <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+            ) : (
+              <Routes>
+                <Route path="/invite" element={ <InvitePage vaxApi={vaxApi!} />} />
+                <Route path="/" element={ <Dashboard onLogout={handleLogout} walletAddress={walletAddress} connectedApi={connectedApi!} vaxApi={vaxApi!} /> } />
+              </Routes>
+            )}
+          </>
+        )}
+      </>
+    </HashRouter>
   );
 }
 

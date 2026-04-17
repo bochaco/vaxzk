@@ -1,13 +1,21 @@
 import CompactStandardLibrary;
 
-witness inviteNonce(): Bytes<32>;
-
 ledger admins: Set<Bytes<32>>;
 ledger inviteAdminHash: Set<Bytes<32>>;
+export ledger totalAdmin: Uint<64>;
+export ledger totalInviteAdmin: Uint<64>;
 
+witness inviteNonce(): Bytes<32>;
 
+// Guards: aborts the calling circuit if the caller is not a registered admin.
+circuit isAdmin(): [] {
+  const own = ownPublicKey();
+  const adminId = getShieldedId(own.bytes);
+  assert(admins.member(disclose(adminId)), "You are not an admin");
+}
 
 export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {
+  isAdmin();
   inviteAdminHash.insert(disclose(inviteCode));
 }
 
@@ -17,8 +25,28 @@ export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
 
-  assert(admins.member(disclose(adminId)), "Admin ID is not in the admins list");
+  assert(!admins.member(disclose(adminId)), "user is already an admin");
   admins.insert(disclose(adminId));
+  totalAdmin = admins.size();
 
   inviteAdminHash.remove(disclose(inviteCode));
+  totalInviteAdmin = inviteAdminHash.size();
 }
+
+export circuit revokeAdmin(): [] {
+  isAdmin();
+
+  const own = ownPublicKey();
+  const adminId = getShieldedId(own.bytes);
+
+  admins.remove(disclose(adminId));
+  totalAdmin = admins.size();
+}
+
+/*
+export circuit revokeAllInviteAdmin(): [] {
+  isAdmin();
+  inviteAdminHash.resetToDefault();
+  totalInviteAdmin = inviteAdminHash.size();
+}
+*/

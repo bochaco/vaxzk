@@ -9,7 +9,10 @@ import type {
   VaxZkPrivateState,
   Contract,
   Witnesses,
+  ClinicProfile,
 } from "../../contract/src/index";
+
+export type { ClinicProfile };
 
 /**
  * Minimal interface the adapter requires from a wallet provider passed via
@@ -113,8 +116,12 @@ export type DerivedProofRequest = {
  * A type that represents the derived combination of public (or ledger), and private state.
  */
 export type VaxZkDerivedState = {
-  readonly clinics: Array<DerivedClinic>;
+  readonly clinics: Array<ClinicProfile>;
   readonly vaccines: Array<string>;
   readonly issuers: Array<DerivedIssuer>;
   readonly vaccineProofReqs: Array<DerivedProofRequest>;
+  readonly totalAdmin: bigint;
+  readonly totalInvites: bigint;
+  readonly totalVaccines: number;
+  readonly totalClinics: number;
 };

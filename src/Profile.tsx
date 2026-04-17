@@ -30,7 +30,7 @@ export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
   const handleProfileChange = (newProfile: Profile) => {
     if (newProfile === profile) return;
     console.log("handleProfileChange", newProfile);
-    setActiveTab(newProfile === "user" ? "home" : newProfile === "clinic" ? "addvaccine" : "adminvaccine");
+    setActiveTab(newProfile === "user" ? "home" : newProfile === "clinic" ? "addvaccine" : "metrics");
     setProfile(newProfile);
   };
 

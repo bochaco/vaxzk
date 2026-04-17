@@ -1,43 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../LanguageContext";
-import {
-  buildProviders,
-  VaxZkAPI,
-} from "../../contract-api/index";
-import { networkId, getContractId } from "../ConfigNetwork";
-import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
-import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
+import { VaxZkAPI } from "../../contract-api/index";
 
 interface VaccinesAdminProps {
-  connectedApi: ConnectedAPI;
+  vaxApi: VaxZkAPI;
 }
 
-const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
+const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
   const [vaccines, setVaccines] = useState<string[]>([]);
   const [newVaccineName, setNewVaccineName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
 
   useEffect(() => {
     let subscription: { unsubscribe: () => void } | undefined;
 
     async function init() {
-      const contractId = getContractId();
-      if (!connectedApi || !contractId) return;
       try {
-        const providers = await buildProviders(connectedApi, networkId);
-        // Using placeholder secret key as in Dashboard.tsx
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          contractId as unknown as ContractAddress,
-          secretKey,
-        );
-        setVaxApi(api);
-
-        subscription = api.state$.subscribe((state) => {
+        subscription = vaxApi.state$.subscribe((state) => {
           setVaccines(state.vaccines);
         });
       } catch (err) {
@@ -51,7 +32,7 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ connectedApi }) => {
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, [connectedApi]);
+  }, []);
 
   const handleAddVaccine = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();

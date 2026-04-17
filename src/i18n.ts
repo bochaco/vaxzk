@@ -84,6 +84,7 @@ export const translations = {
       infant: 'Infant Category',
       booster: '10-year Booster',
     },
+
     // Add Vaccine View
     registerVaccine: 'Register Vaccine',
     addVaccineSubtitle: 'Add a new dose to your medical history to keep your protection always up to date and secure.',
@@ -102,17 +103,6 @@ export const translations = {
     forgotDateDesc: 'You can check your physical Vaccination Card to find the exact dates and batch number.',
     boosterReminder: 'Booster Reminder',
     boosterReminderDesc: 'Upon saving, Clinical Sanctuary will automatically calculate the date for your next booster dose, if applicable.',
-    // Calendar View
-    protectionSchedule: 'Protection Schedule',
-    calendarSubtitle: 'Manage your upcoming immunizations and keep your history updated. Clinical precision in harmony with your routine.',
-    october2023: 'October 2023',
-    dosesScheduledMonth: '3 doses scheduled this month',
-    upcomingDoses: 'Upcoming Doses',
-    pendingStatus: 'Pending',
-    mandatoryStatus: 'Mandatory',
-    recommendedStatus: 'Recommended',
-    confirmedStatus: 'Confirmed',
-    scheduleNewDose: 'Schedule New Dose',
     
     // Publish Contract View
     publishContract: 'Publish Contract',
@@ -146,7 +136,23 @@ export const translations = {
     accessAdminSubtitle: 'Manage user permissions',
     accessAddAdminTitle: 'Add a new Admin',
     accessAddAdminLink: 'Create invitation link',
-    accessAddAdminDesc: 'Create an invitation link and send it to the user to become an admin.'
+    accessAddAdminDesc: 'Create an invitation link and send it to the user to become an admin.',
+    accessAddClinicTitle: 'Add a new Clinic',
+    accessAddClinicDesc: 'Create invitation link',
+    accessAddAClinicLink: 'Create an invitation link and send it to the user to become an clinic.',
+
+    // List Clinics View
+    listClinicsTitle: 'List of Clinics',
+    listClinicsSubtitle: 'Find authorized vaccination centers near you',
+    registeredClinics: 'Registered Clinics',
+    searchClinics: 'Search clinics...',
+    authorizedCenter: 'Authorized Vaccination Center',
+    verifiedProvider: 'Verified Provider',
+    noClinicsFound: 'No clinics found',
+    tryDifferentSearch: 'Try a different search term',
+    noClinicsRegistered: 'No clinics have been registered yet',
+    needHelpFinding: 'Need help finding a clinic?',
+    contactLocalHealth: 'Contact your local health authority for the most up-to-date information about vaccination centers.'
   },
   pt: {
     // Login
@@ -206,6 +212,7 @@ export const translations = {
     familyGroup: 'Grupo Familiar',
     familyGroupDesc: 'Seus dependentes (2) estão com o calendário em dia. Ótimo trabalho!',
     manageFamily: 'Gerenciar família',
+
     // Wallet view
     vaccinationWallet: 'Carteira de Vacinação',
     walletSubtitle: 'Acompanhe seu histórico de imunização com precisão clínica e total segurança.',
@@ -249,17 +256,6 @@ export const translations = {
     forgotDateDesc: 'Você pode consultar sua Carteira de Vacinação física para encontrar as datas exatas e o número do lote.',
     boosterReminder: 'Lembrete de Reforço',
     boosterReminderDesc: 'Ao salvar, o Clinical Sanctuary calculará automaticamente a data da sua próxima dose de reforço, se aplicável.',
-    // Calendar View
-    protectionSchedule: 'Cronograma de Proteção',
-    calendarSubtitle: 'Gerencie suas próximas imunizações e mantenha seu histórico atualizado. A precisão clínica em harmonia com sua rotina.',
-    october2023: 'Outubro 2023',
-    dosesScheduledMonth: '3 doses agendadas este mês',
-    upcomingDoses: 'Próximas Doses',
-    pendingStatus: 'Pendente',
-    mandatoryStatus: 'Obrigatória',
-    recommendedStatus: 'Recomendada',
-    confirmedStatus: 'Confirmada',
-    scheduleNewDose: 'Agendar Nova Dose',
     
     // Publish Contract View
     publishContract: 'Publicar Contrato',
@@ -293,7 +289,23 @@ export const translations = {
     accessAdminSubtitle: 'Gerencie as permissoes dos usuarios',
     accessAddAdminTitle: 'Adicionar um novo Admin',
     accessAddAdminLink: 'Criar link de convite',
-    accessAddAdminDesc: 'Crie um link de convite e envie para o usuario se tornar admin.'
+    accessAddAdminDesc: 'Crie um link de convite e envie para o usuario se tornar admin.',
+    accessAddClinicTitle: 'Add a new Clinic',
+    accessAddClinicDesc: 'Create invitation link',
+    accessAddAClinicLink: 'Create an invitation link and send it to the user to become an clinic.',
+
+    // List Clinics View
+    listClinicsTitle: 'Lista de Clínicas',
+    listClinicsSubtitle: 'Encontre centros de vacinacao autorizados perto de voce',
+    registeredClinics: 'Clinicas Cadastradas',
+    searchClinics: 'Buscar clinicas...',
+    authorizedCenter: 'Centro de Vacinacao Autorizado',
+    verifiedProvider: 'Prestador Verificado',
+    noClinicsFound: 'Nenhuma clinica encontrada',
+    tryDifferentSearch: 'Tente um termo de busca diferente',
+    noClinicsRegistered: 'Nenhuma clinica foi cadastrada ainda',
+    needHelpFinding: 'Precisa de ajuda para encontrar uma clinica?',
+    contactLocalHealth: 'Entre em contato com a autoridade de saude local para informacoes atualizadas sobre centros de vacinacao.'
   },
   es: {
     // Login
@@ -353,6 +365,7 @@ export const translations = {
     familyGroup: 'Grupo Familiar',
     familyGroupDesc: 'Tus dependientes (2) están al día con su calendario. ¡Buen trabajo!',
     manageFamily: 'Gestionar familia',
+
     // Wallet view
     vaccinationWallet: 'Cartera de Vacunación',
     walletSubtitle: 'Siga su historial de inmunización con precisión clínica e total seguridad.',
@@ -396,17 +409,6 @@ export const translations = {
     forgotDateDesc: 'Puede consultar su Carnet de Vacunación físico para encontrar las fechas exactas y el número de lote.',
     boosterReminder: 'Recordatorio de Refuerzo',
     boosterReminderDesc: 'Al guardar, Clinical Sanctuary calculará automáticamente la fecha de su próxima dosis de refuerzo, si corresponde.',
-    // Calendar View
-    protectionSchedule: 'Calendario de Protección',
-    calendarSubtitle: 'Gestione sus próximas inmunizaciones y mantenga su historial actualizado. Precisión clínica en armonía con su rutina.',
-    october2023: 'Octubre 2023',
-    dosesScheduledMonth: '3 dosis programadas este mes',
-    upcomingDoses: 'Próximas Dosis',
-    pendingStatus: 'Pendiente',
-    mandatoryStatus: 'Obligatoria',
-    recommendedStatus: 'Recomendada',
-    confirmedStatus: 'Confirmada',
-    scheduleNewDose: 'Programar Nueva Dosis',
     
     // Publish Contract View
     publishContract: 'Publicar Contrato',
@@ -440,7 +442,23 @@ export const translations = {
     accessAdminSubtitle: 'Gerencie as permissoes dos usuarios',
     accessAddAdminTitle: 'Adicionar um novo Admin',
     accessAddAdminLink: 'Crear enlace de invitación',
-    accessAddAdminDesc: 'Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.'
+    accessAddAdminDesc: 'Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.',
+    accessAddClinicTitle: 'Add a new Clinic',
+    accessAddClinicDesc: 'Create invitation link',
+    accessAddAClinicLink: 'Create an invitation link and send it to the user to become an clinic.',
+
+    // List Clinics View
+    listClinicsTitle: 'Lista de Clínicas',
+    listClinicsSubtitle: 'Encuentra centros de vacunacion autorizados cerca de ti',
+    registeredClinics: 'Clínicas Registradas',
+    searchClinics: 'Buscar clínicas...',
+    authorizedCenter: 'Centro de Vacunación Autorizado',
+    verifiedProvider: 'Proveedor Verificado',
+    noClinicsFound: 'No se encontraron clínicas',
+    tryDifferentSearch: 'Intenta con otro término de búsqueda',
+    noClinicsRegistered: 'Aún no hay clínicas registradas',
+    needHelpFinding: '¿Necesitas ayuda para encontrar una clínica?',
+    contactLocalHealth: 'Contacta a tu autoridad de salud local para obtener información actualizada sobre los centros de vacunación.'
   },
 };
 

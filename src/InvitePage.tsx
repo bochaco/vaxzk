@@ -1,61 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
-import { buildProviders, VaxZkAPI } from "./contract-api/index";
-import { networkId, getContractId } from "./components/ConfigNetwork";
-import type { ContractAddress } from "@midnight-ntwrk/compact-runtime";
+import React, { useState } from 'react';
+import { useLocation } from "react-router-dom";
+import { VaxZkAPI } from "./contract-api/index";
 
 interface InvitePageProps {
-  connectedApi: ConnectedAPI;
+  vaxApi: VaxZkAPI;
 }
 
-const InvitePage: React.FC<InvitePageProps> = ({ connectedApi }) => {
-  const code = new URLSearchParams(window.location.search).get("code");
+const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+  const code = params.get("code");
   if (!code) {
     return "code is necessary"
   }
-  const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
-
-  useEffect(() => {
-    let subscription: { unsubscribe: () => void } | undefined;
-    
-    async function init() {
-      const contractId = getContractId();
-      if (!connectedApi || !contractId) return;
-      try {
-        const providers = await buildProviders(connectedApi, networkId);
-        // Using placeholder secret key as in Dashboard.tsx
-        const secretKey = new Uint8Array(32);
-        const api = await VaxZkAPI.join(
-          providers,
-          contractId as unknown as ContractAddress,
-          secretKey,
-        );
-        setVaxApi(api);
-      } catch (err) {
-        console.error("Failed to join contract:", err);
-      }
-    }
-    
-    init();
-
-    return () => {
-      if (subscription) subscription.unsubscribe();
-    };
-  }, [connectedApi]);
 
   const handleAceptInvite = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('a');
-    console.log(code);
 
     if (!vaxApi) return;
 
     try {
       await vaxApi.acceptInviteAdmin(code.trim());
     } catch (err) {
-      console.error("Failed to add vaccine:", err);
-//    } finally {
-//      setLoading(false);
+      console.error("Contract failed:", err);
+      if (err instanceof Error) {
+        setError("Erro ao usar o convite: " + err.message);
+      } else {
+        setError("Erro ao usar o convite: " + String(err));
+      }
     }
   };
 
@@ -91,6 +66,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ connectedApi }) => {
               </p>
             </div>
           </div>
+          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
           <div className="pt-6">
             <button
               className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"

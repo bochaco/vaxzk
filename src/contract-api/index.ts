@@ -58,7 +58,7 @@ export interface DeployedVaxZkAPI {
   getProfile: () => Promise<UserProfile>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
-  revokeAdmin: (id: Uint8Array) => Promise<void>;
+  revokeAdmin: () => Promise<void>;
   submitVaccineProof: (
     proofReqId: Uint8Array,
     issuerId: Uint8Array,
@@ -101,7 +101,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: invites: ${ledgerState.totalInviteAdmin} admins; ${ledgerState.totalAdmin} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -128,7 +128,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             isOnline: profile.isOnline,
           });
         }
-
         const vaccines = new Array<string>();
         for (const vaccineBytes of ledgerState.vaccines) {
           vaccines.push(
@@ -152,7 +151,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           });
         }
 
-        return { clinics, vaccines, issuers, vaccineProofReqs };
+        const totalAdmin = ledgerState.totalAdmin;
+        const totalInvites = ledgerState.totalInviteAdmin;
+        const totalClinics = clinics.length;
+        const totalVaccines = vaccines.length;
+
+        return { clinics, vaccines, issuers, vaccineProofReqs, totalAdmin, totalInvites, totalVaccines, totalClinics };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
@@ -227,12 +231,9 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     return txData.private.result as UserProfile;
   }
 
-  async revokeAdmin(id: Uint8Array): Promise<void> {
-    console.log(`revoking Admin with ID ${toHex(id)}`);
-    if (id.length !== 32) {
-      throw new Error(`Admin ID shall be 32 bytes long but it is ${id.length}`);
-    }
-    const txData = await this.deployedContract.callTx.revokeAdmin(id);
+  async revokeAdmin(): Promise<void> {
+    console.log(`self revoking Admin permissions`);
+    const txData = await this.deployedContract.callTx.revokeAdmin();
     console.log({
       transactionAdded: {
         circuit: "revokeAdmin",

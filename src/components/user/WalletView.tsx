@@ -11,26 +11,10 @@ const WalletView: React.FC = () => {
         <h2 className="text-4xl font-extrabold tracking-tighter text-on-surface mb-2 font-headline">
           {t.vaccinationWallet}
         </h2>
-        <p className="text-on-surface-variant text-lg max-w-xl">
+        <p className="text-on-surface-variant text-lg">
           {t.walletSubtitle}
         </p>
       </section>
-
-      {/* Category Filters */}
-      <div className="flex gap-3 mb-12 overflow-x-auto pb-2 scrollbar-hide">
-        <button className="px-6 py-2.5 rounded-full bg-primary font-semibold shadow-md active:scale-95 duration-200 whitespace-nowrap">
-          {t.filterAll}
-        </button>
-        <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 whitespace-nowrap">
-          {t.filterInfant}
-        </button>
-        <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 whitespace-nowrap">
-          {t.filterAdult}
-        </button>
-        <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 whitespace-nowrap">
-          {t.filterTravel}
-        </button>
-      </div>
 
       {/* Vaccine Bento Grid / Asymmetric List */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
