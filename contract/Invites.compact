@@ -1,9 +1,13 @@
 import CompactStandardLibrary;
 
 ledger admins: Set<Bytes<32>>;
-ledger inviteAdminHash: Set<Bytes<32>>;
 export ledger totalAdmin: Uint<64>;
+
+ledger inviteAdminHash: Set<Bytes<32>>;
 export ledger totalInviteAdmin: Uint<64>;
+
+export ledger ownerClinics: Set<Bytes<32>>;
+export ledger totalInviteClinic: Uint<64>;
 
 witness inviteNonce(): Bytes<32>;
 
@@ -12,6 +16,13 @@ circuit isAdmin(): [] {
   const own = ownPublicKey();
   const adminId = getShieldedId(own.bytes);
   assert(admins.member(disclose(adminId)), "You are not an admin");
+}
+
+// Guards: aborts the calling circuit if the caller is not a registered clinic.
+circuit isClinic(): [] {
+  const own = ownPublicKey();
+  const ownerId = getShieldedId(own.bytes);
+  assert(ownerClinics.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
 export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {

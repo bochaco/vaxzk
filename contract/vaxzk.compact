@@ -4,13 +4,12 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { ClinicProfile, UserProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
+export { ClinicProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
 
 include 'Invites';
 
 // Public ledger of shielded clinic IDs.
 export ledger clinics: Map<Bytes<32>, ClinicProfile>;
-export ledger ownerClinicIndex: Map<Bytes<32>, Boolean>;
 
 // Public ledger of vaccines list.
 export ledger vaccines: Set<Bytes<20>>;
@@ -52,8 +51,8 @@ constructor() {
 
   // Init clinics
   clinics.insert(disclose(pad(32, "clinic1")), disclose(ClinicProfile { name: pad(32, "Clinic 1"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic1.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
-  ownerClinicIndex.insert(disclose(adminId), disclose(true));
   clinics.insert(disclose(pad(32, "clinic22")), disclose(ClinicProfile { name: pad(32, "Clinic Local 22"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic22.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
+  ownerClinics.insert(disclose(adminId));
 
   // Summarize
   totalAdmin = admins.size();
@@ -80,19 +79,12 @@ circuit getProofReqId(): Bytes<32> {
   return newProofReqId;
 }
 
-// Guards: aborts the calling circuit if the caller is not a registered clinic.
-circuit isClinic(): [] {
-  const own = ownPublicKey();
-  const ownerId = getShieldedId(own.bytes);
-  assert(ownerClinicIndex.member(disclose(ownerId)), "You are not a registered clinic");
-}
-
 // Registers a clinic by their shielded ID and profile info. Caller must be an admin.
 export circuit addClinic(clinicId: Bytes<32>, clinicProfile: ClinicProfile): [] {
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
   clinics.insert(disclose(clinicId), disclose(clinicProfile));
-  ownerClinicIndex.insert(disclose(clinicProfile.ownerId), disclose(true));
+  ownerClinics.insert(disclose(clinicProfile.ownerId));
 }
 
 // Removes a clinic by their shielded ID. Caller must be an admin.
@@ -109,15 +101,6 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
   assert(!issuers.member(disclose(newIssuerId)), "The ID is already in the issuers list");
   issuers.insert(disclose(newIssuerId), disclose(issuerInfo));
   return newIssuerId;
-}
-
-export circuit getProfile(): UserProfile {
-  const own = ownPublicKey();
-  const adminId = getShieldedId(own.bytes);
-  const validAdmin = admins.member(disclose(adminId));
-  const validClinic = ownerClinicIndex.member(disclose(adminId));
-
-  return UserProfile { isAdmin: validAdmin, isClinic: validClinic };
 }
 
 // Vaccines
