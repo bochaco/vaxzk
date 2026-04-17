@@ -19,7 +19,7 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
-import type { UserProfile, ClinicProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
+import type { ClinicProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
 import { signVaxZkCertificate } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
@@ -55,7 +55,6 @@ export interface DeployedVaxZkAPI {
   delVaccine: (name: string) => Promise<void>;
   registerInviteAdmin: (key: string) => Promise<void>;
   acceptInviteAdmin: (key: string) => Promise<void>;
-  getProfile: () => Promise<UserProfile>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
   revokeAdmin: () => Promise<void>;
@@ -152,11 +151,13 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         }
 
         const totalAdmin = ledgerState.totalAdmin;
-        const totalInvites = ledgerState.totalInviteAdmin;
+        const totalInviteAdmin = ledgerState.totalInviteAdmin;
+        const totalInviteClinic = ledgerState.totalInviteClinic;
         const totalClinics = clinics.length;
         const totalVaccines = vaccines.length;
+        const totalActiveClinicOwners = ledgerState.ownerClinics.size();
 
-        return { clinics, vaccines, issuers, vaccineProofReqs, totalAdmin, totalInvites, totalVaccines, totalClinics };
+        return { clinics, vaccines, issuers, vaccineProofReqs, totalAdmin, totalInviteAdmin, totalInviteClinic, totalVaccines, totalClinics, totalActiveClinicOwners };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
@@ -217,18 +218,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     const existingPrivateState =
       await providers.privateStateProvider.get(vaxZkPrivateStateKey);
     return existingPrivateState ?? createVaxZkPrivateState(secretKey);
-  }
-
-  async getProfile(): Promise<UserProfile> {
-    const txData = await this.deployedContract.callTx.getProfile();
-    console.log({
-      transactionAdded: {
-        circuit: "getProfile",
-        txHash: txData.public.txHash,
-        blockHeight: txData.public.blockHeight,
-      },
-    });
-    return txData.private.result as UserProfile;
   }
 
   async revokeAdmin(): Promise<void> {
