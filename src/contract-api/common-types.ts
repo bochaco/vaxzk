@@ -77,11 +77,27 @@ export type VaxZkProviders = MidnightProviders<
 export type DeployedVaxZkContract = FoundContract<VaxZkContract>;
 
 /**
+ * A clinic entry derived from the ledger's clinics map.
+ */
+export type DerivedClinic = {
+  readonly id: Uint8Array;
+  readonly ownerId: Uint8Array;
+  readonly name: string;
+  readonly urlImage: string;
+  readonly address: string;
+  readonly latitud: string;
+  readonly longitud: string;
+  readonly isOnline: boolean;
+};
+
+/**
  * A certificate issuer entry derived from the ledger's issuers map.
  */
 export type DerivedIssuer = {
   readonly id: Uint8Array;
   readonly name: string;
+  readonly uri: string;
+  readonly verificationEndpoint: string;
 };
 
 /**
