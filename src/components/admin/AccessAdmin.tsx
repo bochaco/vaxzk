@@ -11,7 +11,8 @@ interface AccessAdminProps {
 const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorAdmin, setErrorAdmin] = useState<string | null>(null);
+  const [errorClinic, setErrorClinic] = useState<string | null>(null);
   const [linkAdminAddress, setLinkAdminAddress] = useState<string | null>(null);
   const [linkClinicAddress, setLinkClinicAddress] = useState<string | null>(null);
 
@@ -21,7 +22,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     if (!vaxApi) return;
 
     setLoading(true);
-    setError(null);
+    setErrorAdmin(null);
     setLinkAdminAddress("");
     try {
       const uuid = uuidv4();
@@ -31,9 +32,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
-        setError("Erro ao criar um novo convite: " + err.message);
+        setErrorAdmin("Erro ao criar um novo convite: " + err.message);
       } else {
-        setError("Erro ao criar um novo convite: " + String(err));
+        setErrorAdmin("Erro ao criar um novo convite: " + String(err));
       }
     } finally {
       setLoading(false);
@@ -46,7 +47,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     if (!vaxApi) return;
 
     setLoading(true);
-    setError(null);
+    setErrorClinic(null);
     setLinkClinicAddress("");
     try {
       const uuid = uuidv4();
@@ -56,9 +57,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
-        setError("Erro ao criar um novo convite: " + err.message);
+        setErrorClinic("Erro ao criar um novo convite: " + err.message);
       } else {
-        setError("Erro ao criar um novo convite: " + String(err));
+        setErrorClinic("Erro ao criar um novo convite: " + String(err));
       }
     } finally {
       setLoading(false);
@@ -96,7 +97,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                   </>
                 )}
             </button>
-          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+          {errorAdmin && <p className="text-error text-sm mt-3 px-1">{errorAdmin}</p>}
           {linkAdminAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
@@ -148,7 +149,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                   </>
                 )}
             </button>
-          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
+          {errorClinic && <p className="text-error text-sm mt-3 px-1">{errorClinic}</p>}
           {linkClinicAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
@@ -168,8 +169,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                     type="button"
                     title="Copy address"
                     className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
-                    onClick={() => navigator.clipboard.writeText(linkClinicAddress)}
-                  >
+                    onClick={() => navigator.clipboard.writeText(linkClinicAddress)}>
                     <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
                   </button>
                 </div>
