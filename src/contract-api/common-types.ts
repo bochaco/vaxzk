@@ -122,4 +122,5 @@ export type VaxZkDerivedState = {
   readonly totalInviteClinic: bigint;
   readonly totalVaccines: number;
   readonly totalClinics: number;
+  readonly totalActiveClinicOwners: bigint;
 };
