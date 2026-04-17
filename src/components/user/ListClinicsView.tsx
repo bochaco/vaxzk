@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
-import { VaxZkAPI } from "../../contract-api/index";
-import type { ClinicProfile } from "../../../contract/managed/contract/index.js";
+import { VaxZkAPI, type DerivedClinic } from "../../contract-api/index";
 import ClinicMap from './ClinicMap';
 
 interface ListClinicsViewProps {
@@ -10,7 +9,7 @@ interface ListClinicsViewProps {
 
 const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
-  const [clinics, setClinics] = useState<ClinicProfile[]>([]);
+  const [clinics, setClinics] = useState<DerivedClinic[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
    useEffect(() => {
@@ -35,18 +34,14 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
     };
   }, []);
 
-  const decodeField = (bytes: Uint8Array): string => {
-    return new TextDecoder().decode(bytes).replace(/\0/g, '').trim();
-  };
-
-  const hasValidCoords = (latitud: Uint8Array, longitud: Uint8Array): boolean => {
-    const lat = parseFloat(decodeField(latitud));
-    const lng = parseFloat(decodeField(longitud));
+  const hasValidCoords = (latitud: string, longitud: string): boolean => {
+    const lat = parseFloat(latitud);
+    const lng = parseFloat(longitud);
     return !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
   };
 
   const filteredClinics = clinics.filter(clinic =>
-    decodeField(clinic.name).toLowerCase().includes(searchQuery.toLowerCase())
+    clinic.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -101,14 +96,14 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>medical_services</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-on-surface truncate">{decodeField(clinic.name)}</h3>
+                  <h3 className="font-bold text-on-surface truncate">{clinic.name}</h3>
                   <p className="text-sm text-on-surface-variant mt-1">
-                    {decodeField(clinic.address)}
+                    {clinic.address}
                   </p>
                   {hasValidCoords(clinic.latitud, clinic.longitud) && (
                     <ClinicMap
-                      latitud={decodeField(clinic.latitud)}
-                      longitud={decodeField(clinic.longitud)}
+                      latitud={clinic.latitud}
+                      longitud={clinic.longitud}
                     />
                   )}
                 </div>

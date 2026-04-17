@@ -16,6 +16,10 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   if (!code) {
     return "code is necessary"
   }
+  const role = params.get("role");
+  if (!role) {
+    return "role is necessary"
+  }
 
   const handleAceptInvite = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();

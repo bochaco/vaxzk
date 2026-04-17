@@ -7,7 +7,8 @@ interface MetricsAdminProps {
 
 const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
     const [totalAdmin, setTotalAdmin] = useState<bigint>(0n);
-    const [totalInvites, setTotalInvites] = useState<bigint>(0n);
+    const [totalInvitesAdmin, setTotalAdminInvites] = useState<bigint>(0n);
+    const [totalInvitesClinic, setTotalClinicInvites] = useState<bigint>(0n);
     const [totalClinics, setTotalClinics] = useState<number>(0);
     const [totalVaccines, setTotalVaccines] = useState<number>(0);
 
@@ -18,7 +19,8 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
       try {
         subscription = vaxApi.state$.subscribe((state) => {
           setTotalAdmin(state.totalAdmin);
-          setTotalInvites(state.totalInvites);
+          setTotalAdminInvites(state.totalInvites);
+          setTotalClinicInvites(state.totalInvites);
           setTotalClinics(state.totalClinics);
           setTotalVaccines(state.totalVaccines);
         });
@@ -70,14 +72,14 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
 <div className="md:col-span-2 bg-surface-container-highest rounded-xl p-8 flex items-center justify-between shadow-sm">
   <div className="space-y-1">
     <p className="text-on-surface-variant font-medium">Pending Admin Invites</p>
-    <h2 className="text-5xl font-extrabold tracking-tight">{totalInvites}</h2>
+    <h2 className="text-5xl font-extrabold tracking-tight">{totalInvitesAdmin}</h2>
   </div>
 </div>
 
 <div className="md:col-span-2 bg-surface-container-highest rounded-xl p-8 flex items-center justify-between shadow-sm">
   <div className="space-y-1">
     <p className="text-on-surface-variant font-medium">Pending Clinic Invites</p>
-    <h2 className="text-5xl font-extrabold tracking-tight">{totalInvites}</h2>
+    <h2 className="text-5xl font-extrabold tracking-tight">{totalInvitesClinic}</h2>
   </div>
 </div>
 
