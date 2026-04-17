@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
-import { VaxZkAPI } from "../../contract-api/index";
-import type { DerivedClinic } from "../../../contract/managed/contract/index.js";
+import { VaxZkAPI, type DerivedClinic } from "../../contract-api/index";
 import ClinicMap from './ClinicMap';
 
 interface ListClinicsViewProps {

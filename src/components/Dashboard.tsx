@@ -60,7 +60,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "access": // ADMIN
         return <AccessAdmin vaxApi={vaxApi!} />;
       case "adminvaccine": // ADMIN
-        return <VaccinesAdmin connectedApi={connectedApi!} />;
+        return <VaccinesAdmin vaxApi={vaxApi!} />;
       case "adminclinic": // ADMIN
         return <ClinicsAdmin connectedApi={connectedApi!} />;
       default:
