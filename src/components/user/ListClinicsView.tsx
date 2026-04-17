@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
 import { VaxZkAPI } from "../../contract-api/index";
-import type { ClinicProfile } from "../../../contract/managed/contract/index.js";
+import type { DerivedClinic } from "../../../contract/managed/contract/index.js";
 import ClinicMap from './ClinicMap';
 
 interface ListClinicsViewProps {
@@ -10,7 +10,7 @@ interface ListClinicsViewProps {
 
 const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
-  const [clinics, setClinics] = useState<ClinicProfile[]>([]);
+  const [clinics, setClinics] = useState<DerivedClinic[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
    useEffect(() => {
