@@ -154,9 +154,9 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         const totalAdmin = ledgerState.totalAdmin;
         const totalInviteAdmin = ledgerState.totalInviteAdmin;
         const totalInviteClinic = ledgerState.totalInviteClinic;
+        const totalActiveClinicOwners = ledgerState.totalOwnerClinics;
         const totalClinics = clinics.length;
         const totalVaccines = vaccines.length;
-        const totalActiveClinicOwners = ledgerState.ownerClinics.size();
 
         return { clinics, vaccines, issuers, vaccineProofReqs, totalAdmin, totalInviteAdmin, totalInviteClinic, totalVaccines, totalClinics, totalActiveClinicOwners };
       },
