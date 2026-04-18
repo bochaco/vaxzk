@@ -9,6 +9,8 @@ export ledger totalInviteAdmin: Uint<64>;
 export ledger ownerClinics: Set<Bytes<32>>;
 export ledger totalInviteClinic: Uint<64>;
 
+ledger inviteClinicHash: Set<Bytes<32>>;
+
 witness inviteNonce(): Bytes<32>;
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
@@ -42,6 +44,24 @@ export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
 
   inviteAdminHash.remove(disclose(inviteCode));
   totalInviteAdmin = inviteAdminHash.size();
+}
+
+export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
+  isAdmin();
+  inviteClinicHash.insert(disclose(inviteCode));
+}
+
+export circuit acceptInviteClinic(inviteCode: Bytes<32>): [] {
+  assert(inviteClinicHash.member(disclose(inviteCode)), "Invalid invite code");
+
+  const own = ownPublicKey();
+  const ownerId = getShieldedId(own.bytes);
+
+  assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
+  ownerClinics.insert(disclose(ownerId));
+  totalInviteClinic = ownerClinics.size();
+
+  inviteClinicHash.remove(disclose(inviteCode));
 }
 
 export circuit revokeAdmin(): [] {
