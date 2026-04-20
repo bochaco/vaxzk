@@ -2,7 +2,7 @@ name: Preprod
 
 on:
   push:
-    branches: [ main ]
+    branches-ignore: [ main ]
 
 jobs:
 
@@ -21,7 +21,7 @@ jobs:
            cd /home/runner
            mkdir vaxzk
            cd vaxzk
-           git clone --depth 1 https://.:${{ secrets.API_TOKEN_GITHUB }}@github.com/sociapbr/vaxzk-preprod.git .
+           git clone --depth 1 https://.:${{ secrets.API_TOKEN_GITHUB }}@github.com/beerhouse-io/vaxzk.git .
 
       - name: INSTALL
         run: |
