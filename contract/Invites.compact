@@ -7,6 +7,9 @@ ledger inviteAdminHash: Set<Bytes<32>>;
 export ledger totalInviteAdmin: Uint<64>;
 
 export ledger ownerClinics: Set<Bytes<32>>;
+export ledger totalOwnerClinics: Uint<64>;
+
+ledger inviteClinicHash: Set<Bytes<32>>;
 export ledger totalInviteClinic: Uint<64>;
 
 witness inviteNonce(): Bytes<32>;
@@ -28,7 +31,24 @@ circuit isClinic(): [] {
 export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {
   isAdmin();
   inviteAdminHash.insert(disclose(inviteCode));
+  totalInviteAdmin = inviteAdminHash.size();
 }
+
+/*
+export circuit acceptInviteClinic(inviteCode: Bytes<32>): [] {
+  assert(inviteClinicHash.member(disclose(inviteCode)), "Invalid invite code");
+
+  const own = ownPublicKey();
+  const ownerId = getShieldedId(own.bytes);
+
+  assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
+  ownerClinics.insert(disclose(ownerId));
+  totalOwnerClinics = ownerClinics.size();
+
+  inviteClinicHash.remove(disclose(inviteCode));
+  totalInviteClinic = inviteClinicHash.size();
+}
+*/
 
 export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
   assert(inviteAdminHash.member(disclose(inviteCode)), "Invalid invite code");
@@ -52,6 +72,12 @@ export circuit revokeAdmin(): [] {
 
   admins.remove(disclose(adminId));
   totalAdmin = admins.size();
+}
+
+export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
+  isClinic();
+  inviteClinicHash.insert(disclose(inviteCode));
+  totalInviteClinic = inviteClinicHash.size();
 }
 
 /*
