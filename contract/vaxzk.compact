@@ -57,6 +57,7 @@ constructor() {
   // Summarize
   totalAdmin = admins.size();
   totalOwnerClinics = ownerClinics.size();
+  totalInviteAdmin = inviteAdminHash.size();
 }
 
 // Derives a deterministic shielded ID using a persistent hash.
