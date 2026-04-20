@@ -8,7 +8,7 @@ const ProfileOptions = [
 ]
 
 export type Profile = 'admin' | 'clinic' | 'user';
-export type Tab = "home" | "wallet" | "listclinics" | "addvaccine" | "clinicprofile" | "metricsDerivedClinic" | "adminvaccine" | "metrics" | "access" | "adminclinic";
+export type Tab = "home" | "wallet" | "listclinics" | "myproofs" | "addvaccine" | "clinicprofile" | "metricsDerivedClinic" | "adminvaccine" | "metrics" | "access" | "adminclinic";
 
 interface ProfileContextValue {
   profile: Profile;

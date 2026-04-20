@@ -95,6 +95,7 @@ export type DerivedIssuer = {
   readonly name: string;
   readonly uri: string;
   readonly verificationEndpoint: string;
+  readonly verifyingKeyHex: string;
 };
 
 /**

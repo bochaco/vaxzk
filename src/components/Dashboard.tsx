@@ -6,6 +6,7 @@ import type { Tab } from "../Profile";
 import HomeView from "./user/HomeView";
 import WalletView from "./user/WalletView";
 import ListClinicsView from "./user/ListClinicsView";
+import UserProofRequestsView from "./user/UserProofRequestsView";
 import AddVaccineView from "./clinic/AddVaccineView";
 import AccessAdmin from "./admin/AccessAdmin";
 import MetricsAdmin from "./admin/MetricsAdmin";
@@ -32,8 +33,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const { t } = useLanguage();
   const { profile, activeTab, setActiveTab } = useProfile();
-
-  // React.useEffect(() => {}, [walletAddress, connectedApi]);
+  const [clinicModalTrigger, setClinicModalTrigger] = React.useState<'issuer' | 'proofReq' | null>(null);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -51,8 +51,16 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <WalletView />;
       case "listclinics": // USER
         return <ListClinicsView vaxApi={vaxApi!} />;
+      case "myproofs": // USER
+        return <UserProofRequestsView connectedApi={connectedApi!} />;
       case "addvaccine": // CLINIC
-        return <AddVaccineView connectedApi={connectedApi!} />;
+        return (
+          <AddVaccineView
+            connectedApi={connectedApi!}
+            triggerModal={clinicModalTrigger}
+            onModalTriggered={() => setClinicModalTrigger(null)}
+          />
+        );
       case "clinicprofile": // CLINIC
         return <UnderConstruction />;
       case "metrics": // ADMIN
@@ -68,7 +76,13 @@ const Dashboard: React.FC<DashboardProps> = ({
           case "admin":
             return <MetricsAdmin vaxApi={vaxApi!} />;
           case "clinic":
-            return <AddVaccineView connectedApi={connectedApi!} />;
+            return (
+              <AddVaccineView
+                connectedApi={connectedApi!}
+                triggerModal={clinicModalTrigger}
+                onModalTriggered={() => setClinicModalTrigger(null)}
+              />
+            );
           default:
             return <HomeView walletAddress={walletAddress} />;
         }
@@ -197,26 +211,50 @@ const Dashboard: React.FC<DashboardProps> = ({
         </button>
         )}
 
+        {profile == "user" && (
+        <button
+          onClick={() => handleTabChange("myproofs")}
+          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+            activeTab === "myproofs"
+              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+              : "text-slate-400 hover:text-blue-600"
+          }`}
+        >
+          <span
+            className="material-symbols-outlined"
+            style={{
+              fontVariationSettings:
+                activeTab === "myproofs" ? "'FILL' 1" : undefined,
+            }}
+          >
+            vaccines
+          </span>
+          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+            My Proofs
+          </span>
+        </button>
+        )}
+
         {profile == "clinic" && (
           <button
-            onClick={() => handleTabChange("addvaccine")}
-            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "addvaccine"
-                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-                : "text-slate-400 hover:text-blue-600"
-            }`}
+            onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('issuer'); }}
+            className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"
           >
-            <span
-              className="material-symbols-outlined"
-              style={{
-                fontVariationSettings:
-                  activeTab === "addvaccine" ? "'FILL' 1" : undefined,
-              }}
-            >
-              add_circle
-            </span>
+            <span className="material-symbols-outlined">verified_user</span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Add
+              Add Issuer
+            </span>
+          </button>
+        )}
+
+        {profile == "clinic" && (
+          <button
+            onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('proofReq'); }}
+            className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"
+          >
+            <span className="material-symbols-outlined">assignment_add</span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Proof Req
             </span>
           </button>
         )}
