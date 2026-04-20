@@ -1,6 +1,6 @@
 import * as VaxZk from "../../contract/managed/contract/index.js";
 
-import { setNetworkId } from "@midnight-ntwrk/midnight-js-network-id";
+import { setNetworkId, getNetworkId } from "@midnight-ntwrk/midnight-js-network-id";
 import { FetchZkConfigProvider } from "@midnight-ntwrk/midnight-js-fetch-zk-config-provider";
 import { indexerPublicDataProvider } from "@midnight-ntwrk/midnight-js-indexer-public-data-provider";
 import { httpClientProofProvider } from "@midnight-ntwrk/midnight-js-http-client-proof-provider";
@@ -8,7 +8,7 @@ import {
   Transaction,
   type FinalizedTransaction,
 } from "@midnight-ntwrk/ledger-v8";
-import { fromHex, toHex } from "@midnight-ntwrk/midnight-js-utils";
+import { fromHex, toHex, parseCoinPublicKeyToHex } from "@midnight-ntwrk/midnight-js-utils";
 import type { UnboundTransaction } from "@midnight-ntwrk/midnight-js-types";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import { type ContractAddress } from "@midnight-ntwrk/compact-runtime";
@@ -136,7 +136,9 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
 
         const issuers = [];
         for (const [id, info] of ledgerState.issuers) {
-          issuers.push({ id, name: info.name, uri: info.uri, verificationEndpoint: info.verificationEndpoint });
+          const toHex32 = (n: bigint) => n.toString(16).padStart(64, '0');
+          const verifyingKeyHex = toHex32(info.key.x) + toHex32(info.key.y);
+          issuers.push({ id, name: info.name, uri: info.uri, verificationEndpoint: info.verificationEndpoint, verifyingKeyHex });
         }
 
         const vaccineProofReqs = [];
@@ -489,7 +491,7 @@ export async function buildProviders(
 
     walletProvider: {
       getCoinPublicKey(): string {
-        return shieldedAddresses.shieldedCoinPublicKey;
+        return parseCoinPublicKeyToHex(shieldedAddresses.shieldedCoinPublicKey, getNetworkId());
       },
       getEncryptionPublicKey(): string {
         return shieldedAddresses.shieldedEncryptionPublicKey;
