@@ -156,7 +156,7 @@ export const translations = {
     manage: "Manage",
     vaccinesAdminTitleEnd: "Vaccines",
     vaccinesAdminSubtitle:
-      "List and Add new vaccine certificate issuers, and proof requests, to the system.",
+      "List and Add new vaccination proof requests to the system.",
     vaccinesList: "Registered Vaccines",
     add: "Add",
     loading: "Processing...",
