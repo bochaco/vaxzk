@@ -1,6 +1,9 @@
 import * as VaxZk from "../../contract/managed/contract/index.js";
 
-import { setNetworkId, getNetworkId } from "@midnight-ntwrk/midnight-js-network-id";
+import {
+  setNetworkId,
+  getNetworkId,
+} from "@midnight-ntwrk/midnight-js-network-id";
 import { FetchZkConfigProvider } from "@midnight-ntwrk/midnight-js-fetch-zk-config-provider";
 import { indexerPublicDataProvider } from "@midnight-ntwrk/midnight-js-indexer-public-data-provider";
 import { httpClientProofProvider } from "@midnight-ntwrk/midnight-js-http-client-proof-provider";
@@ -8,7 +11,11 @@ import {
   Transaction,
   type FinalizedTransaction,
 } from "@midnight-ntwrk/ledger-v8";
-import { fromHex, toHex, parseCoinPublicKeyToHex } from "@midnight-ntwrk/midnight-js-utils";
+import {
+  fromHex,
+  toHex,
+  parseCoinPublicKeyToHex,
+} from "@midnight-ntwrk/midnight-js-utils";
 import type { UnboundTransaction } from "@midnight-ntwrk/midnight-js-types";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import { type ContractAddress } from "@midnight-ntwrk/compact-runtime";
@@ -19,7 +26,11 @@ import type {
   DeployedVaxZkContract,
   VaxZkCircuitKeys,
 } from "./common-types.js";
-import type { ClinicProfile, CertIssuerInfo, VaccineProofRequest } from "../../contract/managed/contract/index.js";
+import type {
+  ClinicProfile,
+  CertIssuerInfo,
+  VaccineProofRequest,
+} from "../../contract/managed/contract/index.js";
 import { vaxZkPrivateStateKey } from "./common-types.js";
 import { signVaxZkCertificate } from "./signing.js";
 import type { VaxZkPrivateState } from "../../contract/src/index";
@@ -100,7 +111,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: invites: ${ledgerState.totalInviteAdmin} admins; ${ledgerState.totalAdmin} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: invites: ${ledgerState.inviteAdminHash.size()} admins; ${ledgerState.admins.size()} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -112,7 +123,8 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       ],
       (ledgerState, _) => {
         const dec = new TextDecoder();
-        const decodeBytes = (b: Uint8Array) => dec.decode(b).replace(/\0/g, "").trim();
+        const decodeBytes = (b: Uint8Array) =>
+          dec.decode(b).replace(/\0/g, "").trim();
 
         const clinics = [];
         for (const [id, profile] of ledgerState.clinics) {
@@ -136,9 +148,15 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
 
         const issuers = [];
         for (const [id, info] of ledgerState.issuers) {
-          const toHex32 = (n: bigint) => n.toString(16).padStart(64, '0');
+          const toHex32 = (n: bigint) => n.toString(16).padStart(64, "0");
           const verifyingKeyHex = toHex32(info.key.x) + toHex32(info.key.y);
-          issuers.push({ id, name: info.name, uri: info.uri, verificationEndpoint: info.verificationEndpoint, verifyingKeyHex });
+          issuers.push({
+            id,
+            name: info.name,
+            uri: info.uri,
+            verificationEndpoint: info.verificationEndpoint,
+            verifyingKeyHex,
+          });
         }
 
         const vaccineProofReqs = [];
@@ -152,14 +170,25 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           });
         }
 
-        const totalAdmin = ledgerState.totalAdmin;
-        const totalInviteAdmin = ledgerState.totalInviteAdmin;
-        const totalInviteClinic = ledgerState.totalInviteClinic;
+        const totalAdmin = ledgerState.admins.size();
+        const totalInviteAdmin = ledgerState.inviteAdminHash.size();
+        const totalInviteClinic = ledgerState.inviteClinicHash.size();
         const totalClinics = clinics.length;
         const totalVaccines = vaccines.length;
         const totalActiveClinicOwners = ledgerState.ownerClinics.size();
 
-        return { clinics, vaccines, issuers, vaccineProofReqs, totalAdmin, totalInviteAdmin, totalInviteClinic, totalVaccines, totalClinics, totalActiveClinicOwners };
+        return {
+          clinics,
+          vaccines,
+          issuers,
+          vaccineProofReqs,
+          totalAdmin,
+          totalInviteAdmin,
+          totalInviteClinic,
+          totalVaccines,
+          totalClinics,
+          totalActiveClinicOwners,
+        };
       },
     ).pipe(shareReplay({ bufferSize: 1, refCount: false }));
   }
@@ -305,7 +334,8 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(inviteCode);
     padded.set(uuidBytes.slice(0, 32));
-    const txData = await this.deployedContract.callTx.registerInviteAdmin(padded);
+    const txData =
+      await this.deployedContract.callTx.registerInviteAdmin(padded);
     console.log({
       transactionAdded: {
         circuit: "registerInviteAdmin",
@@ -320,8 +350,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(uuid);
     padded.set(uuidBytes.slice(0, 32));
-    const txData =
-      await this.deployedContract.callTx.acceptInviteAdmin(padded);
+    const txData = await this.deployedContract.callTx.acceptInviteAdmin(padded);
     console.log({
       transactionAdded: {
         circuit: "acceptInviteAdmin",
@@ -345,12 +374,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     return txData.private.result as Uint8Array;
   }
 
-//  async addSelfAsClinic(): Promise<void> {
-//    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
-//    if (!privateState) throw new Error("Private state not found");
-//    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
-//    await this.addClinic(clinicId);
-//  }
+  //  async addSelfAsClinic(): Promise<void> {
+  //    const privateState = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
+  //    if (!privateState) throw new Error("Private state not found");
+  //    const clinicId = VaxZk.pureCircuits.getShieldedId(privateState.secretKey);
+  //    await this.addClinic(clinicId);
+  //  }
 
   async requestVaccineProof(req: VaccineProofRequest): Promise<Uint8Array> {
     console.log(`requesting vaccine proof for vaccine ${toHex(req.vaccine)}`);
@@ -388,7 +417,8 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
       userCoinPkBytes,
     );
 
-    const existing = await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
+    const existing =
+      await this.providers.privateStateProvider.get(vaxZkPrivateStateKey);
     const currentState = existing ?? createVaxZkPrivateState();
     await this.providers.privateStateProvider.set(vaxZkPrivateStateKey, {
       ...currentState,
@@ -396,7 +426,8 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
 
     console.log(`submitting vaccine proof for request ${toHex(proofReqId)}`);
-    const txData = await this.deployedContract.callTx.submitVaccineProof(proofReqId);
+    const txData =
+      await this.deployedContract.callTx.submitVaccineProof(proofReqId);
     console.log({
       transactionAdded: {
         circuit: "submitVaccineProof",
@@ -491,7 +522,10 @@ export async function buildProviders(
 
     walletProvider: {
       getCoinPublicKey(): string {
-        return parseCoinPublicKeyToHex(shieldedAddresses.shieldedCoinPublicKey, getNetworkId());
+        return parseCoinPublicKeyToHex(
+          shieldedAddresses.shieldedCoinPublicKey,
+          getNetworkId(),
+        );
       },
       getEncryptionPublicKey(): string {
         return shieldedAddresses.shieldedEncryptionPublicKey;
