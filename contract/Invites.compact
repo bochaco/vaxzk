@@ -1,15 +1,19 @@
 import CompactStandardLibrary;
 
 ledger admins: Set<Bytes<32>>;
+
 export ledger totalAdmin: Uint<64>;
 
 ledger inviteAdminHash: Set<Bytes<32>>;
+
 export ledger totalInviteAdmin: Uint<64>;
 
 export ledger ownerClinics: Set<Bytes<32>>;
+
 export ledger totalOwnerClinics: Uint<64>;
 
 ledger inviteClinicHash: Set<Bytes<32>>;
+
 export ledger totalInviteClinic: Uint<64>;
 
 witness inviteNonce(): Bytes<32>;
