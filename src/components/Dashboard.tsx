@@ -12,6 +12,7 @@ import AccessAdmin from "./admin/AccessAdmin";
 import MetricsAdmin from "./admin/MetricsAdmin";
 import VaccinesAdmin from "./admin/VaccinesAdmin";
 import ClinicsAdmin from "./admin/ClinicsAdmin";
+import IssuersAdmin from "./admin/IssuersAdmin";
 import type { ConnectedAPI } from "@midnight-ntwrk/dapp-connector-api";
 import UnderConstruction from "./UnderConstruction";
 import { networkId, getContractId } from "./ConfigNetwork";
@@ -33,7 +34,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const { t } = useLanguage();
   const { profile, activeTab, setActiveTab } = useProfile();
-  const [clinicModalTrigger, setClinicModalTrigger] = React.useState<'issuer' | 'proofReq' | null>(null);
+  const [clinicModalTrigger, setClinicModalTrigger] = React.useState<'proofReq' | null>(null);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -71,6 +72,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         return <VaccinesAdmin vaxApi={vaxApi!} />;
       case "adminclinic": // ADMIN
         return <ClinicsAdmin connectedApi={connectedApi!} />;
+      case "adminissuers": // ADMIN
+        return <IssuersAdmin vaxApi={vaxApi!} />;
       default:
         switch (profile) {
           case "admin":
@@ -237,18 +240,6 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         {profile == "clinic" && (
           <button
-            onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('issuer'); }}
-            className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"
-          >
-            <span className="material-symbols-outlined">verified_user</span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Add Issuer
-            </span>
-          </button>
-        )}
-
-        {profile == "clinic" && (
-          <button
             onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('proofReq'); }}
             className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"
           >
@@ -375,6 +366,30 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Clinics
+            </span>
+          </button>
+        )}
+
+        {profile == "admin" && (
+          <button
+            onClick={() => handleTabChange("adminissuers")}
+            className={`flex flex-col items-center justify-center px-3 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "adminissuers"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "adminissuers" ? "'FILL' 1" : undefined,
+              }}
+            >
+              verified_user
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Issuers
             </span>
           </button>
         )}
