@@ -1,20 +1,12 @@
 import CompactStandardLibrary;
 
-ledger admins: Set<Bytes<32>>;
+export ledger admins: Set<Bytes<32>>;
 
-export ledger totalAdmin: Uint<64>;
-
-ledger inviteAdminHash: Set<Bytes<32>>;
-
-export ledger totalInviteAdmin: Uint<64>;
+export ledger inviteAdminHash: Set<Bytes<32>>;
 
 export ledger ownerClinics: Set<Bytes<32>>;
 
-export ledger totalOwnerClinics: Uint<64>;
-
-ledger inviteClinicHash: Set<Bytes<32>>;
-
-export ledger totalInviteClinic: Uint<64>;
+export ledger inviteClinicHash: Set<Bytes<32>>;
 
 witness inviteNonce(): Bytes<32>;
 
@@ -35,7 +27,6 @@ circuit isClinic(): [] {
 export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {
   isAdmin();
   inviteAdminHash.insert(disclose(inviteCode));
-  totalInviteAdmin = inviteAdminHash.size();
 }
 
 /*
@@ -47,10 +38,8 @@ export circuit acceptInviteClinic(inviteCode: Bytes<32>): [] {
 
   assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
   ownerClinics.insert(disclose(ownerId));
-  totalOwnerClinics = ownerClinics.size();
 
   inviteClinicHash.remove(disclose(inviteCode));
-  totalInviteClinic = inviteClinicHash.size();
 }
 */
 
@@ -62,10 +51,8 @@ export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
 
   assert(!admins.member(disclose(adminId)), "user is already an admin");
   admins.insert(disclose(adminId));
-  totalAdmin = admins.size();
 
   inviteAdminHash.remove(disclose(inviteCode));
-  totalInviteAdmin = inviteAdminHash.size();
 }
 
 export circuit revokeAdmin(): [] {
@@ -75,19 +62,16 @@ export circuit revokeAdmin(): [] {
   const adminId = getShieldedId(own.bytes);
 
   admins.remove(disclose(adminId));
-  totalAdmin = admins.size();
 }
 
 export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
   isClinic();
   inviteClinicHash.insert(disclose(inviteCode));
-  totalInviteClinic = inviteClinicHash.size();
 }
 
 /*
 export circuit revokeAllInviteAdmin(): [] {
   isAdmin();
   inviteAdminHash.resetToDefault();
-  totalInviteAdmin = inviteAdminHash.size();
 }
 */

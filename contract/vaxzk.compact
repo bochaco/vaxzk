@@ -76,11 +76,6 @@ constructor() {
                              isOnline: disclose(true) })
     );
   ownerClinics.insert(disclose(adminId));
-
-  // Summarize
-  totalAdmin = admins.size();
-  totalOwnerClinics = ownerClinics.size();
-  totalInviteAdmin = inviteAdminHash.size();
 }
 
 // Derives a deterministic shielded ID using a persistent hash.
