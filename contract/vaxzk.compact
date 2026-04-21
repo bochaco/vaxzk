@@ -4,7 +4,12 @@ import CompactStandardLibrary;
 
 import "./Types";
 
-export { ClinicProfile, CertIssuerInfo, VaccineProofRequest, VaxZkProof, SchnorrSignature, schnorrChallengeVaxZk };
+export { ClinicProfile,
+         CertIssuerInfo,
+         VaccineProofRequest,
+         VaxZkProof,
+         SchnorrSignature,
+         schnorrChallengeVaxZk };
 
 include 'Invites';
 
@@ -50,8 +55,26 @@ constructor() {
   vaccines.insert(disclose(pad(20, "Tdap")));
 
   // Init clinics
-  clinics.insert(disclose(pad(32, "clinic1")), disclose(ClinicProfile { name: pad(32, "Clinic 1"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic1.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
-  clinics.insert(disclose(pad(32, "clinic22")), disclose(ClinicProfile { name: pad(32, "Clinic Local 22"), address: pad(64, "123 Main St"), ownerId: disclose(adminId), urlImage: disclose(pad(64, "https://example.com/clinic22.png")), latitud: disclose(pad(20, "-23.5990263")), longitud: disclose(pad(20, "-46.6419712")), isOnline: disclose(true) }));
+  clinics.insert(
+    disclose(pad(32, "clinic1")),
+    disclose(ClinicProfile { name: pad(32, "Clinic 1"),
+                             address: pad(64, "123 Main St"),
+                             ownerId: disclose(adminId),
+                             urlImage: disclose(pad(64, "https://example.com/clinic1.png")),
+                             latitud: disclose(pad(20, "-23.5990263")),
+                             longitud: disclose(pad(20, "-46.6419712")),
+                             isOnline: disclose(true) })
+    );
+  clinics.insert(
+    disclose(pad(32, "clinic22")),
+    disclose(ClinicProfile { name: pad(32, "Clinic Local 22"),
+                             address: pad(64, "123 Main St"),
+                             ownerId: disclose(adminId),
+                             urlImage: disclose(pad(64, "https://example.com/clinic22.png")),
+                             latitud: disclose(pad(20, "-23.5990263")),
+                             longitud: disclose(pad(20, "-46.6419712")),
+                             isOnline: disclose(true) })
+    );
   ownerClinics.insert(disclose(adminId));
 
   // Summarize
@@ -91,7 +114,7 @@ export circuit addClinic(clinicId: Bytes<32>, clinicProfile: ClinicProfile): [] 
 // Removes a clinic by their shielded ID. Caller must be an admin.
 export circuit revokeClinic(clinicId: Bytes<32>): [] {
   isAdmin();
-  assert(!clinics.member(disclose(clinicId)), "Clinic ID is not in the clinics list");
+  assert(clinics.member(disclose(clinicId)), "Clinic ID is not in the clinics list");
   clinics.remove(disclose(clinicId));
 }
 
