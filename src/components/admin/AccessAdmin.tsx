@@ -26,7 +26,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     setLinkAdminAddress("");
     try {
       const uuid = uuidv4();
-      const txData = await vaxApi.registerInviteAdmin(uuid);
+      const txData = await vaxApi.registerInvite('admin', uuid);
       console.log("txData", txData);
       setLinkAdminAddress(urlApp + "/#/invite?role=admin&code=" + uuid);
     } catch (err) {
@@ -51,7 +51,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     setLinkClinicAddress("");
     try {
       const uuid = uuidv4();
-      const txData = await vaxApi.registerInviteClinic(uuid);
+      const txData = await vaxApi.registerInvite('clinic', uuid);
       console.log("txData", txData);
       setLinkClinicAddress(urlApp + "/#/invite?role=clinic&code=" + uuid);
     } catch (err) {

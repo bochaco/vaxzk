@@ -14,6 +14,8 @@ export ledger totalInviteClinic: Uint<128>;
 
 witness inviteNonce(): Bytes<32>;
 
+export enum Role { admin, clinic }
+
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): [] {
   const own = ownPublicKey();
@@ -28,19 +30,18 @@ circuit isClinic(): [] {
   assert(ownerClinics.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
-export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {
+export circuit registerInvite(role: Role, inviteCode: Bytes<32>): [] {
   isAdmin();
-  inviteAdminHash.insert(disclose(inviteCode));
-  totalInviteAdmin = inviteAdminHash.size();
-}
 
-export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
-  isAdmin();
-  inviteClinicHash.insert(disclose(inviteCode));
-  totalInviteClinic = inviteClinicHash.size();
+  const d_role = disclose(role);
+  if (d_role == Role.clinic) {
+    inviteClinicHash.insert(disclose(inviteCode));
+    totalInviteClinic = inviteClinicHash.size();
+  } else if (d_role == Role.admin) {
+    inviteAdminHash.insert(disclose(inviteCode));
+    totalInviteAdmin = inviteAdminHash.size();
+  }
 }
-
-export enum Role { admin, clinic }
 
 export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
   const d_role = disclose(role);
@@ -57,7 +58,7 @@ export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
     inviteClinicHash.remove(d_inviteCode);
     totalOwnerClinics = ownerClinics.size();
     totalInviteClinic = inviteClinicHash.size();
-  } else {
+  } else if (d_role == Role.admin) {
     assert(inviteAdminHash.member(d_inviteCode), "Invalid admin invite code");
 
     const adminId = getShieldedId(own.bytes);

@@ -96,8 +96,8 @@ export class VaxZkSimulator {
     return res.result;
   }
 
-  public registerInviteAdmin(inviteCode: Uint8Array): [] {
-    const res = this.contract.impureCircuits.registerInviteAdmin(this.circuitContext, inviteCode);
+  public registerInvite(role: Role, inviteCode: Uint8Array): [] {
+    const res = this.contract.impureCircuits.registerInvite(this.circuitContext, role, inviteCode);
     this.circuitContext = res.context;
     return res.result;
   }
@@ -108,11 +108,7 @@ export class VaxZkSimulator {
     return res.result;
   }
 
-  public registerInviteClinic(inviteCode: Uint8Array): [] {
-    const res = this.contract.impureCircuits.registerInviteClinic(this.circuitContext, inviteCode);
-    this.circuitContext = res.context;
-    return res.result;
-  }
+
 
   public addClinic(clinicId: Uint8Array, clinicProfile: ClinicProfile): [] {
     const res = this.contract.impureCircuits.addClinic(this.circuitContext, clinicId, clinicProfile);

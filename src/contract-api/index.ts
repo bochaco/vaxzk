@@ -64,8 +64,7 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-  registerInviteAdmin: (key: string) => Promise<void>;
-  registerInviteClinic: (key: string) => Promise<void>;
+  registerInvite: (role: 'admin' | 'clinic', key: string) => Promise<void>;
   acceptInvite: (role: 'admin' | 'clinic', key: string) => Promise<void>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
@@ -329,32 +328,19 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async registerInviteAdmin(inviteCode: string): Promise<void> {
-    console.log(`registerInviteAdmin`);
+  async registerInvite(role: 'admin' | 'clinic', inviteCode: string): Promise<void> {
+    console.log(`registerInvite ${role}`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(inviteCode);
     padded.set(uuidBytes.slice(0, 32));
+    
+    const roleCode = role === 'clinic' ? VaxZk.Role.clinic : VaxZk.Role.admin;
+    
     const txData =
-      await this.deployedContract.callTx.registerInviteAdmin(padded);
+      await this.deployedContract.callTx.registerInvite(roleCode, padded);
     console.log({
       transactionAdded: {
-        circuit: "registerInviteAdmin",
-        txHash: txData.public.txHash,
-        blockHeight: txData.public.blockHeight,
-      },
-    });
-  }
-
-  async registerInviteClinic(inviteCode: string): Promise<void> {
-    console.log(`registerInviteClinic`);
-    const padded = new Uint8Array(32);
-    const uuidBytes = new TextEncoder().encode(inviteCode);
-    padded.set(uuidBytes.slice(0, 32));
-    const txData =
-      await this.deployedContract.callTx.registerInviteClinic(padded);
-    console.log({
-      transactionAdded: {
-        circuit: "registerInviteClinic",
+        circuit: "registerInvite",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },
