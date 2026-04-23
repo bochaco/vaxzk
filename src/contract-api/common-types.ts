@@ -80,7 +80,6 @@ export type DerivedClinic = {
   readonly id: Uint8Array;
   readonly ownerId: Uint8Array;
   readonly name: string;
-  readonly urlImage: string;
   readonly address: string;
   readonly latitud: string;
   readonly longitud: string;

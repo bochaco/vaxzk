@@ -44,7 +44,6 @@ module Types {
   export struct ClinicProfile {
     ownerId: Bytes<32>,
     name: Bytes<32>,
-    urlImage: Bytes<64>,
     address: Bytes<64>,
     latitud: Bytes<20>,
     longitud: Bytes<20>,

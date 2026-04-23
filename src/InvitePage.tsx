@@ -37,15 +37,8 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     setSuccess(null);
 
     try {
-      if (isAdmin) {
-        await vaxApi.acceptInviteAdmin(code.trim());
-        setSuccess("Você agora é um admin!");
-        setTimeout(() => navigate("/"), 2000);
-      } else if (isClinic) {
-        await vaxApi.acceptInviteClinic(code.trim());
-        setSuccess("Você agora é uma clínica!");
-        setTimeout(() => navigate("/"), 2000);
-      }
+      const inviteRole = role === "clinic" ? "clinic" : "admin";
+      await vaxApi.acceptInvite(inviteRole, code.trim());
     } catch (err) {
       console.error("Contract failed:", err);
       if (err instanceof Error) {
@@ -59,36 +52,26 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   };
 
   return (
-    <main className="pt-12 px-6 max-w-screen-md mx-auto">
-      <section className="mb-7">
-        <h2
-          className="text-4xl font-extrabold tracking-tight text-on-surface mb-2"
-        >
-          {isAdmin ? "Adicionar como Admin" : "Adicionar como Clínica"}
-        </h2>
-      </section>
-      <div className="space-y-16">
-        <div className="bg-surface-container-low p-8 rounded-xl shadow-sm border-none relative overflow-hidden">
-          <form
-            onSubmit={handleAcceptInvite}
-            className="space-y-8 relative z-10"
-          >
-            <div className="bg-secondary-container/20 p-5 rounded-lg border-none flex items-start gap-4 mt-12"
-              style={{ background: "rgb(161 190 253 / 0.2)" }}>
-              <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-on-secondary-container">
-                  verified_user
-                </span>
-              </div>
-              <div>
-                <h4 className="font-bold text-on-secondary-container text-sm">
-                  Registro Seguro
-                </h4>
-                <p className="text-xs text-on-secondary-container/80 leading-relaxed">
-                  Suas informações de saúde são criptografadas e utilizadas apenas
-                  para o seu controle pessoal de imunização.
-                </p>
-              </div>
+  <main className="pt-12 px-6 max-w-screen-md mx-auto">
+    <section className="mb-7">
+      <h2
+        className="text-4xl font-extrabold tracking-tight text-on-surface mb-2"
+        style={{}}
+      >
+        Adicionar como {role === "clinic" ? "Clínica" : "Admin"}
+      </h2>
+    </section>
+    <div className="space-y-16">
+      <div className="bg-surface-container-low p-8 rounded-xl shadow-sm border-none relative overflow-hidden">
+        <form 
+        onSubmit={handleAceptInvite}
+        className="space-y-8 relative z-10">
+          <div className="bg-secondary-container/20 p-5 rounded-lg border-none flex items-start gap-4 mt-12"
+          style={{"background": "rgb(161 190 253 / 0.2)"}}>
+            <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-on-secondary-container">
+                verified_user
+              </span>
             </div>
             {error && (
               <p className="text-error text-sm mt-3 px-1">{error}</p>

@@ -1,17 +1,20 @@
 import CompactStandardLibrary;
 
-export ledger admins: Set<Bytes<32>>;
-
-ledger ownerClinics: Set<Bytes<32>>;
-export ledger totalOwnerClinics: Uint<64>;
+ledger admins: Set<Bytes<32>>;
+export ledger totalAdmin: Uint<128>;
 
 ledger inviteAdminHash: Set<Bytes<32>>;
-export ledger totalInviteAdmin: Uint<64>;
+export ledger totalInviteAdmin: Uint<128>;
+
+ledger ownerClinics: Set<Bytes<32>>;
+export ledger totalOwnerClinics: Uint<128>;
 
 ledger inviteClinicHash: Set<Bytes<32>>;
-export ledger totalInviteClinic: Uint<64>;
+export ledger totalInviteClinic: Uint<128>;
 
 witness inviteNonce(): Bytes<32>;
+
+export enum Role { admin, clinic }
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): [] {
@@ -27,42 +30,47 @@ circuit isClinic(): [] {
   assert(ownerClinics.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
-export circuit registerInviteAdmin(inviteCode: Bytes<32>): [] {
+export circuit registerInvite(role: Role, inviteCode: Bytes<32>): [] {
   isAdmin();
-  inviteAdminHash.insert(disclose(inviteCode));
+
+  const d_role = disclose(role);
+  if (d_role == Role.clinic) {
+    inviteClinicHash.insert(disclose(inviteCode));
+    totalInviteClinic = inviteClinicHash.size();
+  } else if (d_role == Role.admin) {
+    inviteAdminHash.insert(disclose(inviteCode));
+    totalInviteAdmin = inviteAdminHash.size();
+  }
 }
 
-export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
-  assert(inviteAdminHash.member(disclose(inviteCode)), "Invalid invite code");
-
+export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
+  const d_role = disclose(role);
+  const d_inviteCode = disclose(inviteCode);
   const own = ownPublicKey();
-  const adminId = getShieldedId(own.bytes);
 
-  assert(!admins.member(disclose(adminId)), "user is already an admin");
-  admins.insert(disclose(adminId));
+  if (d_role == Role.clinic) {
+    assert(inviteClinicHash.member(d_inviteCode), "Invalid clinic invite code");
 
-  inviteAdminHash.remove(disclose(inviteCode));
+    const ownerId = getShieldedId(own.bytes);
+    assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
+    ownerClinics.insert(disclose(ownerId));
+
+    inviteClinicHash.remove(d_inviteCode);
+    totalOwnerClinics = ownerClinics.size();
+    totalInviteClinic = inviteClinicHash.size();
+  } else if (d_role == Role.admin) {
+    assert(inviteAdminHash.member(d_inviteCode), "Invalid admin invite code");
+
+    const adminId = getShieldedId(own.bytes);
+    assert(!admins.member(disclose(adminId)), "user is already an admin");
+    admins.insert(disclose(adminId));
+
+    inviteAdminHash.remove(d_inviteCode);
+    totalAdmin = admins.size();
+    totalInviteAdmin = inviteAdminHash.size();
+  }
 }
 
-export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
-  isAdmin();
-  inviteClinicHash.insert(disclose(inviteCode));
-  totalInviteClinic = inviteClinicHash.size();
-}
-
-export circuit acceptInviteClinic(inviteCode: Bytes<32>): [] {
-  assert(inviteClinicHash.member(disclose(inviteCode)), "Invalid invite code");
-
-  const own = ownPublicKey();
-  const ownerId = getShieldedId(own.bytes);
-
-  assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
-  ownerClinics.insert(disclose(ownerId));
-  totalInviteClinic = ownerClinics.size();
-
-  inviteClinicHash.remove(disclose(inviteCode));
-  totalInviteClinic = inviteClinicHash.size();
-}
 
 export circuit revokeAdmin(): [] {
   isAdmin();
@@ -71,11 +79,6 @@ export circuit revokeAdmin(): [] {
   const adminId = getShieldedId(own.bytes);
 
   admins.remove(disclose(adminId));
-}
-
-export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
-  isClinic();
-  inviteClinicHash.insert(disclose(inviteCode));
 }
 
 /*

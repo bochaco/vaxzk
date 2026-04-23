@@ -64,9 +64,8 @@ export interface DeployedVaxZkAPI {
   addClinic: (id: Uint8Array, clinic: ClinicProfile) => Promise<void>;
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
-  registerInviteAdmin: (key: string) => Promise<void>;
-  acceptInviteAdmin: (key: string) => Promise<void>;
-  acceptInviteClinic: (key: string) => Promise<void>;
+  registerInvite: (role: 'admin' | 'clinic', key: string) => Promise<void>;
+  acceptInvite: (role: 'admin' | 'clinic', key: string) => Promise<void>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
   revokeAdmin: () => Promise<void>;
@@ -133,7 +132,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             id,
             ownerId: profile.ownerId,
             name: decodeBytes(profile.name),
-            urlImage: decodeBytes(profile.urlImage),
             address: decodeBytes(profile.address),
             latitud: decodeBytes(profile.latitud),
             longitud: decodeBytes(profile.longitud),
@@ -330,31 +328,38 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async registerInviteAdmin(inviteCode: string): Promise<void> {
-    console.log(`registerInviteAdmin`);
+  async registerInvite(role: 'admin' | 'clinic', inviteCode: string): Promise<void> {
+    console.log(`registerInvite ${role}`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(inviteCode);
     padded.set(uuidBytes.slice(0, 32));
+    
+    const roleCode = role === 'clinic' ? VaxZk.Role.clinic : VaxZk.Role.admin;
+    
     const txData =
-      await this.deployedContract.callTx.registerInviteAdmin(padded);
+      await this.deployedContract.callTx.registerInvite(roleCode, padded);
     console.log({
       transactionAdded: {
-        circuit: "registerInviteAdmin",
+        circuit: "registerInvite",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },
     });
   }
 
-  async acceptInviteAdmin(uuid: string): Promise<void> {
-    console.log(`acceptInviteAdmin`);
+  async acceptInvite(role: 'admin' | 'clinic', uuid: string): Promise<void> {
+    console.log(`acceptInvite ${role}`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(uuid);
     padded.set(uuidBytes.slice(0, 32));
-    const txData = await this.deployedContract.callTx.acceptInviteAdmin(padded);
+    
+    // Mapping string role to enum index (admin=0, clinic=1)
+    const roleCode = role === 'clinic' ? VaxZk.Role.clinic : VaxZk.Role.admin;
+    
+    const txData = await this.deployedContract.callTx.acceptInvite(roleCode, padded);
     console.log({
       transactionAdded: {
-        circuit: "acceptInviteAdmin",
+        circuit: "acceptInvite",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },

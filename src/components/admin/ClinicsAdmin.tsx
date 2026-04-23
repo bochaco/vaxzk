@@ -28,7 +28,6 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
 
   // Form fields
   const [name, setName] = useState("");
-  const [urlImage, setUrlImage] = useState("");
   const [address, setAddress] = useState("");
   const [latitud, setLatitud] = useState("");
   const [longitud, setLongitud] = useState("");
@@ -80,7 +79,6 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
       const profile = {
         ownerId: new Uint8Array(32), // placeholder — identity mechanism TBD
         name: encodeBytes(name.trim(), 32),
-        urlImage: encodeBytes(urlImage.trim(), 64),
         address: encodeBytes(address.trim(), 64),
         latitud: encodeBytes(latitud.trim(), 20),
         longitud: encodeBytes(longitud.trim(), 20),
@@ -89,7 +87,6 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
       await vaxApi.addClinic(id, profile);
       // Reset form on success
       setName("");
-      setUrlImage("");
       setAddress("");
       setLatitud("");
       setLongitud("");
@@ -132,21 +129,6 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
               onChange={(e) => setName(e.target.value.slice(0, 32))}
               placeholder="e.g. City Health Clinic"
               maxLength={32}
-              className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-
-          {/* URL Image */}
-          <div>
-            <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-              Image URL
-            </label>
-            <input
-              type="text"
-              value={urlImage}
-              onChange={(e) => setUrlImage(e.target.value.slice(0, 255))}
-              placeholder="e.g. https://example.com/clinic.png"
-              maxLength={255}
               className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -308,16 +290,6 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
                         </span>
                         <span className="text-on-surface-variant">
                           {clinic.address}
-                        </span>
-                      </div>
-                    )}
-                    {clinic.urlImage && (
-                      <div>
-                        <span className="font-semibold text-on-surface-variant uppercase tracking-wide">
-                          Image URL:{" "}
-                        </span>
-                        <span className="text-on-surface-variant break-all">
-                          {clinic.urlImage}
                         </span>
                       </div>
                     )}

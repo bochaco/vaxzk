@@ -5,7 +5,7 @@ import {
 } from "@midnight-ntwrk/midnight-js-network-id";
 import { fromHex } from "@midnight-ntwrk/midnight-js-utils";
 import { CompactTypeJubjubPoint, type JubjubPoint } from "@midnight-ntwrk/compact-runtime";
-import { pureCircuits } from "../../managed/contract/index.js";
+import { pureCircuits, Role } from "../../managed/contract/index.js";
 import { generateKeyPair, signVaxZkCertificate } from "../../../src/contract-api/signing.js";
 import { VaxZkSimulator, type TestUser } from "./vaxzk-simulator.js";
 import {
@@ -51,7 +51,6 @@ const clinicId = (user: TestUser): Uint8Array =>
 const mockProfile = (user?: TestUser) => ({
   ownerId: user ? adminId(user) : randomBytes(32),
   name: randomBytes(32),
-  urlImage: randomBytes(64),
   address: randomBytes(64),
   latitud: randomBytes(20),
   longitud: randomBytes(20),
@@ -476,26 +475,32 @@ describe("VaxZk contract", () => {
   describe("registerInviteAdmin", () => {
     it("admin can register an invite code and totalInviteAdmin increments", () => {
       const before = simulator.getLedger().totalInviteAdmin;
-      simulator.registerInviteAdmin(randomBytes(32));
+      simulator.registerInvite(Role.admin, randomBytes(32));
       expect(simulator.getLedger().totalInviteAdmin).toBe(before + 1n);
     });
 
     it("non-admin cannot register an invite", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.registerInviteAdmin(randomBytes(32))).toThrow("You are not an admin");
+      expect(() => simulator.registerInvite(Role.admin, randomBytes(32))).toThrow("You are not an admin");
     });
   });
 
   describe("acceptInviteAdmin", () => {
     it("user with a valid invite code becomes admin and invite is consumed", () => {
       const inviteCode = randomBytes(32);
-      simulator.registerInviteAdmin(inviteCode);
+      simulator.registerInvite(Role.admin, inviteCode);
       const adminsBefore = simulator.getLedger().totalAdmin;
       const invitesBefore = simulator.getLedger().totalInviteAdmin;
 
+      console.log('adminsBefore', adminsBefore);
+      console.log('invitesBefore', invitesBefore);
+
       const newAdmin = randomUser();
       simulator.switchUser(newAdmin);
-      simulator.acceptInviteAdmin(inviteCode);
+      simulator.acceptInvite(Role.admin, inviteCode); // Role.admin
+
+      console.log('adminsBefore', simulator.getLedger().totalAdmin);
+      console.log('invitesBefore', simulator.getLedger().totalInviteAdmin);
 
       expect(simulator.getLedger().totalAdmin).toBe(adminsBefore + 1n);
       expect(simulator.getLedger().totalInviteAdmin).toBe(invitesBefore - 1n);
@@ -503,13 +508,50 @@ describe("VaxZk contract", () => {
 
     it("rejects an invalid invite code", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.acceptInviteAdmin(randomBytes(32))).toThrow("Invalid invite code");
+      expect(() => simulator.acceptInvite(Role.admin, randomBytes(32))).toThrow("Invalid admin invite code");
     });
 
     it("rejects if the user is already an admin", () => {
       const inviteCode = randomBytes(32);
-      simulator.registerInviteAdmin(inviteCode);
-      expect(() => simulator.acceptInviteAdmin(inviteCode)).toThrow("user is already an admin");
+      simulator.registerInvite(Role.admin, inviteCode);
+      expect(() => simulator.acceptInvite(Role.admin, inviteCode)).toThrow("user is already an admin");
+    });
+  });
+
+  describe("acceptInviteClinic", () => {
+    it("user with a valid clinic invite code becomes clinic owner and invite is consumed", () => {
+      const inviteCode = randomBytes(32);
+      simulator.registerInvite(Role.clinic, inviteCode);
+      const clinicsBefore = simulator.getLedger().totalOwnerClinics;
+      const invitesBefore = simulator.getLedger().totalInviteClinic;
+
+      const newClinicOwner = randomUser();
+      simulator.switchUser(newClinicOwner);
+      simulator.acceptInvite(Role.clinic, inviteCode); // Role.clinic
+
+      expect(simulator.getLedger().totalOwnerClinics).toBe(clinicsBefore + 1n);
+      expect(simulator.getLedger().totalInviteClinic).toBe(invitesBefore - 1n);
+    });
+
+    it("rejects an invalid clinic invite code", () => {
+      simulator.switchUser(randomUser());
+      expect(() => simulator.acceptInvite(Role.clinic, randomBytes(32))).toThrow("Invalid clinic invite code");
+    });
+
+    it("rejects if the user is already a clinic owner", () => {
+      const inviteCode = randomBytes(32);
+      simulator.registerInvite(Role.clinic, inviteCode);
+      
+      const user = randomUser();
+      simulator.switchUser(user);
+      simulator.acceptInvite(Role.clinic, inviteCode); // success
+      
+      const anotherInvite = randomBytes(32);
+      simulator.switchUser(admin);
+      simulator.registerInvite(Role.clinic, anotherInvite);
+      
+      simulator.switchUser(user);
+      expect(() => simulator.acceptInvite(Role.clinic, anotherInvite)).toThrow("user is already a clinic");
     });
   });
 
@@ -530,17 +572,14 @@ describe("VaxZk contract", () => {
 
   describe("registerInviteClinic", () => {
     it("registered clinic can register an invite code and totalInviteClinic increments", () => {
-      const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
-      simulator.switchUser(clinic);
       const before = simulator.getLedger().totalInviteClinic;
-      simulator.registerInviteClinic(randomBytes(32));
+      simulator.registerInvite(Role.clinic, randomBytes(32));
       expect(simulator.getLedger().totalInviteClinic).toBe(before + 1n);
     });
 
     it("non-clinic cannot register a clinic invite", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.registerInviteClinic(randomBytes(32))).toThrow("You are not a registered clinic");
+      expect(() => simulator.registerInvite(Role.clinic, randomBytes(32))).toThrow("You are not an admin");
     });
   });
 });
