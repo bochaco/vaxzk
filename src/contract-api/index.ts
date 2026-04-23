@@ -111,7 +111,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: invites: ${ledgerState.inviteAdminHash.size()} admins; ${ledgerState.admins.size()} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: invites: ${ledgerState.totalInviteAdmin} admins; ${ledgerState.totalAdmin} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -132,7 +132,6 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             id,
             ownerId: profile.ownerId,
             name: decodeBytes(profile.name),
-            urlImage: decodeBytes(profile.urlImage),
             address: decodeBytes(profile.address),
             latitud: decodeBytes(profile.latitud),
             longitud: decodeBytes(profile.longitud),
@@ -170,12 +169,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           });
         }
 
-        const totalAdmin = ledgerState.admins.size();
-        const totalInviteAdmin = ledgerState.inviteAdminHash.size();
-        const totalInviteClinic = ledgerState.inviteClinicHash.size();
+        const totalAdmin = ledgerState.totalAdmin;
+        const totalInviteAdmin = ledgerState.totalInviteAdmin;
+        const totalInviteClinic = ledgerState.totalInviteClinic;
         const totalClinics = clinics.length;
         const totalVaccines = vaccines.length;
-        const totalActiveClinicOwners = ledgerState.ownerClinics.size();
+        const totalActiveClinicOwners = ledgerState.totalOwnerClinics;
 
         return {
           clinics,

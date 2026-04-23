@@ -51,7 +51,6 @@ const clinicId = (user: TestUser): Uint8Array =>
 const mockProfile = (user?: TestUser) => ({
   ownerId: user ? adminId(user) : randomBytes(32),
   name: randomBytes(32),
-  urlImage: randomBytes(64),
   address: randomBytes(64),
   latitud: randomBytes(20),
   longitud: randomBytes(20),
@@ -493,9 +492,15 @@ describe("VaxZk contract", () => {
       const adminsBefore = simulator.getLedger().totalAdmin;
       const invitesBefore = simulator.getLedger().totalInviteAdmin;
 
+      console.log('adminsBefore', adminsBefore);
+      console.log('invitesBefore', invitesBefore);
+
       const newAdmin = randomUser();
       simulator.switchUser(newAdmin);
       simulator.acceptInviteAdmin(inviteCode);
+
+      console.log('adminsBefore', simulator.getLedger().totalAdmin);
+      console.log('invitesBefore', simulator.getLedger().totalInviteAdmin);
 
       expect(simulator.getLedger().totalAdmin).toBe(adminsBefore + 1n);
       expect(simulator.getLedger().totalInviteAdmin).toBe(invitesBefore - 1n);
@@ -530,9 +535,6 @@ describe("VaxZk contract", () => {
 
   describe("registerInviteClinic", () => {
     it("registered clinic can register an invite code and totalInviteClinic increments", () => {
-      const clinic = randomUser();
-      simulator.addClinic(clinicId(clinic), mockProfile(clinic));
-      simulator.switchUser(clinic);
       const before = simulator.getLedger().totalInviteClinic;
       simulator.registerInviteClinic(randomBytes(32));
       expect(simulator.getLedger().totalInviteClinic).toBe(before + 1n);
@@ -540,7 +542,7 @@ describe("VaxZk contract", () => {
 
     it("non-clinic cannot register a clinic invite", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.registerInviteClinic(randomBytes(32))).toThrow("You are not a registered clinic");
+      expect(() => simulator.registerInviteClinic(randomBytes(32))).toThrow("You are not an admin");
     });
   });
 });
