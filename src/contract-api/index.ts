@@ -66,6 +66,7 @@ export interface DeployedVaxZkAPI {
   delVaccine: (name: string) => Promise<void>;
   registerInviteAdmin: (key: string) => Promise<void>;
   acceptInviteAdmin: (key: string) => Promise<void>;
+  acceptInviteClinic: (key: string) => Promise<void>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
   revokeAdmin: () => Promise<void>;
@@ -170,12 +171,12 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           });
         }
 
-        const totalAdmin = ledgerState.admins.size();
-        const totalInviteAdmin = ledgerState.inviteAdminHash.size();
-        const totalInviteClinic = ledgerState.inviteClinicHash.size();
+        const totalAdmin = ledgerState.totalAdmin;
+        const totalInviteAdmin = ledgerState.totalInviteAdmin;
+        const totalInviteClinic = ledgerState.totalInviteClinic;
+        const totalActiveClinicOwners = ledgerState.totalOwnerClinics;
         const totalClinics = clinics.length;
         const totalVaccines = vaccines.length;
-        const totalActiveClinicOwners = ledgerState.ownerClinics.size();
 
         return {
           clinics,
@@ -354,6 +355,22 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     console.log({
       transactionAdded: {
         circuit: "acceptInviteAdmin",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async acceptInviteClinic(uuid: string): Promise<void> {
+    console.log(`acceptInviteClinic`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(uuid);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData =
+      await this.deployedContract.callTx.acceptInviteClinic(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "acceptInviteClinic",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },
