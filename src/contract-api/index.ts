@@ -65,7 +65,8 @@ export interface DeployedVaxZkAPI {
   addVaccine: (name: string) => Promise<void>;
   delVaccine: (name: string) => Promise<void>;
   registerInviteAdmin: (key: string) => Promise<void>;
-  acceptInviteAdmin: (key: string) => Promise<void>;
+  registerInviteClinic: (key: string) => Promise<void>;
+  acceptInvite: (role: 'admin' | 'clinic', key: string) => Promise<void>;
   revokeClinic: (id: Uint8Array) => Promise<void>;
   requestVaccineProof: (req: VaccineProofRequest) => Promise<Uint8Array>;
   revokeAdmin: () => Promise<void>;
@@ -344,15 +345,35 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     });
   }
 
-  async acceptInviteAdmin(uuid: string): Promise<void> {
-    console.log(`acceptInviteAdmin`);
+  async registerInviteClinic(inviteCode: string): Promise<void> {
+    console.log(`registerInviteClinic`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(inviteCode);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData =
+      await this.deployedContract.callTx.registerInviteClinic(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "registerInviteClinic",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async acceptInvite(role: 'admin' | 'clinic', uuid: string): Promise<void> {
+    console.log(`acceptInvite ${role}`);
     const padded = new Uint8Array(32);
     const uuidBytes = new TextEncoder().encode(uuid);
     padded.set(uuidBytes.slice(0, 32));
-    const txData = await this.deployedContract.callTx.acceptInviteAdmin(padded);
+    
+    // Mapping string role to enum index (admin=0, clinic=1)
+    const roleCode = role === 'clinic' ? 1n : 0n;
+    
+    const txData = await this.deployedContract.callTx.acceptInvite(roleCode, padded);
     console.log({
       transactionAdded: {
-        circuit: "acceptInviteAdmin",
+        circuit: "acceptInvite",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },

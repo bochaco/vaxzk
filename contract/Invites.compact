@@ -40,35 +40,35 @@ export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
   totalInviteClinic = inviteClinicHash.size();
 }
 
-/*
-export circuit acceptInviteAdmin(inviteClinicCode: Bytes<32>): [] {
-  assert(inviteClinicHash.member(disclose(inviteClinicCode)), "Invalid invite code");
+export enum Role { admin, clinic }
 
+export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
+  const d_inviteCode = disclose(inviteCode);
   const own = ownPublicKey();
-  const ownerId = getShieldedId(own.bytes);
 
-  assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
-  ownerClinics.insert(disclose(ownerId));
+  if (role == Role.clinic) {
+    assert(inviteClinicHash.member(d_inviteCode), "Invalid clinic invite code");
 
-  inviteClinicHash.remove(disclose(inviteClinicCode));
-  totalInviteClinic = inviteClinicHash.size();
+    const ownerId = getShieldedId(own.bytes);
+    assert(!ownerClinics.member(disclose(ownerId)), "user is already a clinic");
+    ownerClinics.insert(disclose(ownerId));
+
+    inviteClinicHash.remove(d_inviteCode);
+    totalOwnerClinics = ownerClinics.size();
+    totalInviteClinic = inviteClinicHash.size();
+  } else {
+    assert(inviteAdminHash.member(d_inviteCode), "Invalid admin invite code");
+
+    const adminId = getShieldedId(own.bytes);
+    assert(!admins.member(disclose(adminId)), "user is already an admin");
+    admins.insert(disclose(adminId));
+
+    inviteAdminHash.remove(d_inviteCode);
+    totalAdmin = admins.size();
+    totalInviteAdmin = inviteAdminHash.size();
+  }
 }
-*/
 
-export circuit acceptInviteAdmin(inviteCode: Bytes<32>): [] {
-  assert(inviteAdminHash.member(disclose(inviteCode)), "Invalid invite code");
-
-  const own = ownPublicKey();
-  const adminId = getShieldedId(own.bytes);
-
-  assert(!admins.member(disclose(adminId)), "user is already an admin");
-  admins.insert(disclose(adminId));
-
-  inviteAdminHash.remove(disclose(inviteCode));
-
-  totalAdmin = admins.size();
-  totalInviteAdmin = inviteAdminHash.size();
-}
 
 export circuit revokeAdmin(): [] {
   isAdmin();

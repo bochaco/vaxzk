@@ -101,8 +101,8 @@ export class VaxZkSimulator {
     return res.result;
   }
 
-  public acceptInviteAdmin(inviteCode: Uint8Array): [] {
-    const res = this.contract.impureCircuits.acceptInviteAdmin(this.circuitContext, inviteCode);
+  public acceptInvite(role: bigint, inviteCode: Uint8Array): [] {
+    const res = this.contract.impureCircuits.acceptInvite(this.circuitContext, role, inviteCode);
     this.circuitContext = res.context;
     return res.result;
   }

@@ -27,7 +27,8 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     if (!vaxApi) return;
 
     try {
-      await vaxApi.acceptInviteAdmin(code.trim());
+      const inviteRole = role === "clinic" ? "clinic" : "admin";
+      await vaxApi.acceptInvite(inviteRole, code.trim());
     } catch (err) {
       console.error("Contract failed:", err);
       if (err instanceof Error) {
@@ -45,7 +46,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
         className="text-4xl font-extrabold tracking-tight text-on-surface mb-2"
         style={{}}
       >
-        Adicionar como Admin
+        Adicionar como {role === "clinic" ? "Clínica" : "Admin"}
       </h2>
     </section>
     <div className="space-y-16">
