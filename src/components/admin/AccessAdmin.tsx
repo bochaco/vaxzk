@@ -11,10 +11,13 @@ interface AccessAdminProps {
 const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
+  const [loadingRemove, setLoadingRemove] = useState(false);
   const [errorAdmin, setErrorAdmin] = useState<string | null>(null);
   const [errorClinic, setErrorClinic] = useState<string | null>(null);
+  const [errorRemove, setErrorRemove] = useState<string | null>(null);
   const [linkAdminAddress, setLinkAdminAddress] = useState<string | null>(null);
   const [linkClinicAddress, setLinkClinicAddress] = useState<string | null>(null);
+  const [removedSuccess, setRemovedSuccess] = useState(false);
 
   const handleAddInviteAdmin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,6 +66,27 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRemoveSelfAdmin = async () => {
+    if (!vaxApi) return;
+
+    setLoadingRemove(true);
+    setErrorRemove(null);
+    setRemovedSuccess(false);
+    try {
+      await vaxApi.revokeAdmin();
+      setRemovedSuccess(true);
+    } catch (err) {
+      console.error("Failed to remove admin:", err);
+      if (err instanceof Error) {
+        setErrorRemove("Erro ao remover admin: " + err.message);
+      } else {
+        setErrorRemove("Erro ao remover admin: " + String(err));
+      }
+    } finally {
+      setLoadingRemove(false);
     }
   };
 
@@ -176,6 +200,41 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
               </div>
             )}
         </form>
+      </div>
+
+      <div className="bg-white p-8 rounded-xl shadow-sm border border-red-100 mb-12 text-left">
+        <h3 className="text-lg font-semibold text-red-600 mb-4">Remover meu acesso de admin</h3>
+        <p className="text-on-surface-variant text-sm mb-4">Remova suas permissoes de admin da blockchain. Esta acao nao pode ser desfeita.</p>
+        <div className="flex flex-col gap-4">
+            <button 
+              className="px-8 py-4 bg-red-600 text-white font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
+              type="button"
+              onClick={handleRemoveSelfAdmin}
+              disabled={loadingRemove}>
+                {loadingRemove ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin">
+                      sync
+                    </span>
+                    <span>{t.loading}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined">delete_forever</span>
+                    <span>Remover meu acesso de admin</span>
+                  </>
+                )}
+            </button>
+          {errorRemove && <p className="text-error text-sm mt-3 px-1">{errorRemove}</p>}
+          {removedSuccess && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-green-700 font-bold">
+                  <span className="material-symbols-outlined">check_circle</span>
+                  <span>Admin acesso removido com sucesso!</span>
+                </div>
+              </div>
+            )}
+        </div>
       </div>
 
     </main>

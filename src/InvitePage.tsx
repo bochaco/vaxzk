@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { VaxZkAPI } from "./contract-api/index";
 
 interface InvitePageProps {
@@ -8,8 +8,11 @@ interface InvitePageProps {
 
 const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
   const code = params.get("code");
@@ -21,10 +24,17 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     return "role is necessary"
   }
 
-  const handleAceptInvite = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const isAdmin = role === 'admin';
+  const isClinic = role === 'clinic';
+
+  const handleAcceptInvite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!vaxApi) return;
+
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     try {
       const inviteRole = role === "clinic" ? "clinic" : "admin";
@@ -32,10 +42,12 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     } catch (err) {
       console.error("Contract failed:", err);
       if (err instanceof Error) {
-        setError("Erro ao usar o convite: " + err.message);
+        setError(err.message);
       } else {
-        setError("Erro ao usar o convite: " + String(err));
+        setError(String(err));
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,37 +73,34 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
                 verified_user
               </span>
             </div>
-            <div>
-              <h4 className="font-bold text-on-secondary-container text-sm">
-                Registro Seguro
-              </h4>
-              <p className="text-xs text-on-secondary-container/80 leading-relaxed">
-                Suas informações de saúde são criptografadas e utilizadas apenas
-                para o seu controle pessoal de imunização.
-              </p>
+            {error && (
+              <p className="text-error text-sm mt-3 px-1">{error}</p>
+            )}
+            {success && (
+              <p className="text-green-600 text-sm mt-3 px-1 font-medium">{success}</p>
+            )}
+            <div className="pt-6">
+              <button
+                className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                style={{ background: "#0070eb" }}
+                type="submit"
+                disabled={loading}
+              >
+                <span className="">
+                  {loading ? "Processando..." : "Salvar Registro"}
+                </span>
+                {!loading && (
+                  <span className="material-symbols-outlined">
+                    check_circle
+                  </span>
+                )}
+              </button>
             </div>
-          </div>
-          {error && <p className="text-error text-sm mt-3 px-1">{error}</p>}
-          <div className="pt-6">
-            <button
-              className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"
-              style={{ background: "#0070eb" }}
-              type="submit"
-            >
-              <span className="">
-                Salvar Registro
-              </span>
-              <span className="material-symbols-outlined">
-                check_circle
-              </span>
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
   );
-  
 };
 
 export { InvitePage };

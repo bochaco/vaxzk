@@ -25,7 +25,6 @@ interface DashboardProps {
   vaxApi: VaxZkAPI;
 }
 
-
 const Dashboard: React.FC<DashboardProps> = ({
   onLogout,
   walletAddress,
@@ -43,11 +42,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const renderView = () => {
     switch (activeTab) {
       case "home":
-        return (
-          <HomeView
-            walletAddress={walletAddress}
-          />
-        );
+        return <HomeView walletAddress={walletAddress} />;
       case "wallet": // USER
         return <WalletView />;
       case "listclinics": // USER
@@ -112,14 +107,17 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="hidden md:block h-8 w-[1px] bg-slate-200 mx-2"></div>
             <h1 className="hidden md:block text-xl font-bold text-blue-800 tracking-tight">
               VaxZk
-            {getContractId() && (
-              <a href={`https://${networkId}.nightforge.jp/address/${getContractId()}`} target="_blank">
-                <br/>
-                <span className="text-xs font-medium text-slate-500">
-                  ContractID: {getContractId()}
-                </span>
-              </a>
-            )}
+              {getContractId() && (
+                <a
+                  href={`https://${networkId}.nightforge.jp/address/${getContractId()}`}
+                  target="_blank"
+                >
+                  <br />
+                  <span className="text-xs font-medium text-slate-500">
+                    ContractID: {getContractId()}
+                  </span>
+                </a>
+              )}
             </h1>
           </div>
 
@@ -141,104 +139,79 @@ const Dashboard: React.FC<DashboardProps> = ({
 
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:flex">
-
         {profile == "user" && (
-        <button
-          onClick={() => handleTabChange("home")}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "home"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "home" ? "'FILL' 1" : undefined,
-            }}
+          <button
+            onClick={() => handleTabChange("home")}
+            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "home"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
           >
-            home
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            Home
-          </span>
-        </button>
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "home" ? "'FILL' 1" : undefined,
+              }}
+            >
+              home
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Home
+            </span>
+          </button>
         )}
 
         {profile == "user" && (
-        <button
-          onClick={() => handleTabChange("wallet")}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "wallet"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "wallet" ? "'FILL' 1" : undefined,
-            }}
+          <button
+            onClick={() => handleTabChange("wallet")}
+            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "wallet"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
           >
-            account_balance_wallet
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            Wallet
-          </span>
-        </button>
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "wallet" ? "'FILL' 1" : undefined,
+              }}
+            >
+              account_balance_wallet
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Wallet
+            </span>
+          </button>
         )}
 
         {profile == "user" && (
-        <button
-          onClick={() => handleTabChange("listclinics")}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "listclinics"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "listclinics" ? "'FILL' 1" : undefined,
-            }}
+          <button
+            onClick={() => handleTabChange("listclinics")}
+            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "listclinics"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
           >
-            local_hospital
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            Clinics
-          </span>
-        </button>
+            <span
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "listclinics" ? "'FILL' 1" : undefined,
+              }}
+            >
+              local_hospital
+            </span>
+            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
+              Clinics
+            </span>
+          </button>
         )}
 
         {profile == "user" && (
-        <button
-          onClick={() => handleTabChange("myproofs")}
-          className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-            activeTab === "myproofs"
-              ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-              : "text-slate-400 hover:text-blue-600"
-          }`}
-        >
-          <span
-            className="material-symbols-outlined"
-            style={{
-              fontVariationSettings:
-                activeTab === "myproofs" ? "'FILL' 1" : undefined,
-            }}
-          >
-            vaccines
-          </span>
-          <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-            My Proofs
-          </span>
-        </button>
-        )}
-
-        {profile == "clinic" && (
           <button
             onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('proofReq'); }}
             className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"

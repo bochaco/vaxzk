@@ -111,7 +111,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
             map((contractState) => VaxZk.ledger(contractState.data)),
             tap((ledgerState) =>
               console.log(
-                `ledger state changed: invites: ${ledgerState.totalInviteAdmin} admins; ${ledgerState.totalAdmin} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
+                `ledger state changed: invites: ${ledgerState.inviteAdminHash.size()} admins; ${ledgerState.admins.size()} clinics: ${ledgerState.clinics.size()}, vaccines: ${ledgerState.vaccines.size()}`,
               ),
             ),
           ),
@@ -172,9 +172,9 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
         const totalAdmin = ledgerState.totalAdmin;
         const totalInviteAdmin = ledgerState.totalInviteAdmin;
         const totalInviteClinic = ledgerState.totalInviteClinic;
+        const totalActiveClinicOwners = ledgerState.totalOwnerClinics;
         const totalClinics = clinics.length;
         const totalVaccines = vaccines.length;
-        const totalActiveClinicOwners = ledgerState.totalOwnerClinics;
 
         return {
           clinics,
@@ -360,6 +360,22 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     console.log({
       transactionAdded: {
         circuit: "acceptInvite",
+        txHash: txData.public.txHash,
+        blockHeight: txData.public.blockHeight,
+      },
+    });
+  }
+
+  async acceptInviteClinic(uuid: string): Promise<void> {
+    console.log(`acceptInviteClinic`);
+    const padded = new Uint8Array(32);
+    const uuidBytes = new TextEncoder().encode(uuid);
+    padded.set(uuidBytes.slice(0, 32));
+    const txData =
+      await this.deployedContract.callTx.acceptInviteClinic(padded);
+    console.log({
+      transactionAdded: {
+        circuit: "acceptInviteClinic",
         txHash: txData.public.txHash,
         blockHeight: txData.public.blockHeight,
       },

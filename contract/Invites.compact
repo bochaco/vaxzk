@@ -79,7 +79,6 @@ export circuit revokeAdmin(): [] {
   const adminId = getShieldedId(own.bytes);
 
   admins.remove(disclose(adminId));
-  totalAdmin = admins.size();
 }
 
 /*
