@@ -96,7 +96,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex items-center gap-3">
               <div className="flex flex-col text-left">
                 <span className="text-xs font-medium text-slate-500">
-                  {t.loggedInAs} {profile}
+                  {t.loggedInAs}
                 </span>
                 <span className="text-sm font-bold text-on-surface">
                   Midnight{" "}
@@ -128,7 +128,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               onClick={onLogout}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
             >
-              <span className="material-symbols-outlined text-lg">logout</span>
+              <span translate="no" className="material-symbols-outlined text-lg">logout</span>
               <span className="hidden sm:inline">{t.logout}</span>
             </button>
           </div>
@@ -148,7 +148,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -172,7 +172,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -196,7 +196,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -216,7 +216,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('proofReq'); }}
             className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"
           >
-            <span className="material-symbols-outlined">assignment_add</span>
+            <span translate="no" className="material-symbols-outlined">assignment_add</span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Proof Req
             </span>
@@ -232,7 +232,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -256,7 +256,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -280,7 +280,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -304,7 +304,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -328,7 +328,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
@@ -352,7 +352,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span
+            <span translate="no" 
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
