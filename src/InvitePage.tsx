@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { VaxZkAPI } from "./contract-api/index";
 
 interface InvitePageProps {
@@ -10,9 +10,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
   const location = useLocation();
-  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
   const code = params.get("code");
@@ -23,9 +21,6 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   if (!role) {
     return "role is necessary"
   }
-
-  const isAdmin = role === 'admin';
-  const isClinic = role === 'clinic';
 
   const handleAcceptInvite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,7 +59,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     <div className="space-y-16">
       <div className="bg-surface-container-low p-8 rounded-xl shadow-sm border-none relative overflow-hidden">
         <form 
-        onSubmit={handleAceptInvite}
+        onSubmit={handleAcceptInvite}
         className="space-y-8 relative z-10">
           <div className="bg-secondary-container/20 p-5 rounded-lg border-none flex items-start gap-4 mt-12"
           style={{"background": "rgb(161 190 253 / 0.2)"}}>
@@ -80,21 +75,22 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
               <p className="text-green-600 text-sm mt-3 px-1 font-medium">{success}</p>
             )}
             <div className="pt-6">
-              <button
-                className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
-                style={{ background: "#0070eb" }}
-                type="submit"
-                disabled={loading}
-              >
-                <span className="">
-                  {loading ? "Processando..." : "Salvar Registro"}
-                </span>
-                {!loading && (
-                  <span className="material-symbols-outlined">
-                    check_circle
+                <button
+                  className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  style={{ background: "#0070eb" }}
+                  type="submit"
+                  disabled={loading}
+                >
+                  <span className="">
+                    {loading ? "Processando..." : "Salvar Registro"}
                   </span>
-                )}
-              </button>
+                  {!loading && (
+                    <span className="material-symbols-outlined">
+                      check_circle
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>

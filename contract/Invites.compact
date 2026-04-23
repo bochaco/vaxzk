@@ -71,7 +71,6 @@ export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
   }
 }
 
-
 export circuit revokeAdmin(): [] {
   isAdmin();
 
@@ -79,11 +78,5 @@ export circuit revokeAdmin(): [] {
   const adminId = getShieldedId(own.bytes);
 
   admins.remove(disclose(adminId));
+  totalAdmin = admins.size();
 }
-
-/*
-export circuit revokeAllInviteAdmin(): [] {
-  isAdmin();
-  inviteAdminHash.resetToDefault();
-}
-*/
