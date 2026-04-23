@@ -368,7 +368,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
     padded.set(uuidBytes.slice(0, 32));
     
     // Mapping string role to enum index (admin=0, clinic=1)
-    const roleCode = role === 'clinic' ? 1n : 0n;
+    const roleCode = role === 'clinic' ? VaxZk.Role.clinic : VaxZk.Role.admin;
     
     const txData = await this.deployedContract.callTx.acceptInvite(roleCode, padded);
     console.log({

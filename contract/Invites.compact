@@ -43,10 +43,11 @@ export circuit registerInviteClinic(inviteCode: Bytes<32>): [] {
 export enum Role { admin, clinic }
 
 export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
+  const d_role = disclose(role);
   const d_inviteCode = disclose(inviteCode);
   const own = ownPublicKey();
 
-  if (role == Role.clinic) {
+  if (d_role == Role.clinic) {
     assert(inviteClinicHash.member(d_inviteCode), "Invalid clinic invite code");
 
     const ownerId = getShieldedId(own.bytes);

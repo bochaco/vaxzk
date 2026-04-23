@@ -9,6 +9,7 @@ import {
 } from "@midnight-ntwrk/compact-runtime";
 import {
   Contract,
+  Role,
   type Ledger,
   ledger,
   type CertIssuerInfo,
@@ -101,7 +102,7 @@ export class VaxZkSimulator {
     return res.result;
   }
 
-  public acceptInvite(role: bigint, inviteCode: Uint8Array): [] {
+  public acceptInvite(role: Role, inviteCode: Uint8Array): [] {
     const res = this.contract.impureCircuits.acceptInvite(this.circuitContext, role, inviteCode);
     this.circuitContext = res.context;
     return res.result;
