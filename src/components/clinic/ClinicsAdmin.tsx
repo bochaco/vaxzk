@@ -106,7 +106,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
           <span className="text-primary">Manage</span> Clinics
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed">
-          Register new clinics on-chain and view all currently registered
+          Register your clinics on-chain and view all currently registered
           clinics.
         </p>
       </section>
@@ -204,7 +204,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
           >
             {loading ? (
               <>
-                <span className="material-symbols-outlined animate-spin">
+                <span translate="no" className="material-symbols-outlined animate-spin">
                   sync
                 </span>
                 <span>Registering...</span>
