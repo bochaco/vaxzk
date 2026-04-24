@@ -117,9 +117,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             className="w-full midnight-gradient text-white font-semibold py-5 px-8 rounded-full shadow-xl shadow-primary/20 flex items-center justify-center gap-3 transition-transform active:scale-95 duration-200 group disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {status === 'connecting' ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+              <div translate="no" className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
             ) : (
-              <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">account_balance_wallet</span>
+              <span translate="no" className="material-symbols-outlined group-hover:rotate-12 transition-transform">account_balance_wallet</span>
             )}
             <span className="text-lg">
               {status === 'connecting' ? t.connecting : status === 'connected' ? t.connected : t.connectButton}
