@@ -72,13 +72,13 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         <div className="relative w-48 h-48 mb-12 flex items-center justify-center">
           <div className="absolute inset-0 bg-primary/5 rounded-full blur-3xl opacity-50"></div>
           <div className="relative z-10 p-6 bg-surface-container-lowest rounded-[2rem] shadow-2xl shadow-primary/5">
-            <span className="material-symbols-outlined text-primary text-7xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <span translate="no" className="material-symbols-outlined text-primary text-7xl" style={{ fontVariationSettings: "'FILL' 1" }}>
               health_and_safety
             </span>
           </div>
           {/* Secondary Floating Elements for Visual Interest */}
           <div className="absolute top-0 right-0 p-3 bg-secondary-container rounded-full shadow-lg">
-            <span className="material-symbols-outlined text-on-secondary-container text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <span translate="no" className="material-symbols-outlined text-on-secondary-container text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
               lock
             </span>
           </div>
@@ -96,7 +96,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           </p>
           <div className="bg-surface-container-low p-5 rounded-xl text-sm border-none shadow-sm text-left">
             <div className="flex items-start gap-3">
-              <span className="material-symbols-outlined text-primary mt-0.5">verified_user</span>
+              <span translate="no" className="material-symbols-outlined text-primary mt-0.5">verified_user</span>
               <p className="text-on-surface-variant leading-snug">
                 {t.privacyNote} <span className="font-bold text-primary">Midnight</span> {t.privacyNote2}
               </p>
@@ -137,7 +137,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         <div className="flex flex-col gap-4 items-center">
           <a className="text-primary text-sm font-semibold hover:underline flex items-center gap-1" href="https://midnight.network/" target="_blank">
             {t.learnMore}
-            <span className="material-symbols-outlined text-sm">open_in_new</span>
+            <span translate="no" className="material-symbols-outlined text-sm">open_in_new</span>
           </a>
           <div className="w-12 h-1 bg-surface-container-highest rounded-full"></div>
           <a className="text-on-surface-variant text-xs hover:text-primary transition-colors" href="https://github.com/bochaco/vaxzk" target="_blank">
