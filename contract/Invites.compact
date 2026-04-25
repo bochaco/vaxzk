@@ -1,16 +1,12 @@
 import CompactStandardLibrary;
 
-ledger admins: Set<Bytes<32>>;
-export ledger totalAdmin: Uint<128>;
+export ledger admins: Set<Bytes<32>>;
 
-ledger inviteAdminHash: Set<Bytes<32>>;
-export ledger totalInviteAdmin: Uint<128>;
+export ledger inviteAdminHash: Set<Bytes<32>>;
 
-ledger ownerClinics: Set<Bytes<32>>;
-export ledger totalOwnerClinics: Uint<128>;
+export ledger ownerClinics: Set<Bytes<32>>;
 
-ledger inviteClinicHash: Set<Bytes<32>>;
-export ledger totalInviteClinic: Uint<128>;
+export ledger inviteClinicHash: Set<Bytes<32>>;
 
 witness inviteNonce(): Bytes<32>;
 
@@ -36,10 +32,8 @@ export circuit registerInvite(role: Role, inviteCode: Bytes<32>): [] {
   const d_role = disclose(role);
   if (d_role == Role.clinic) {
     inviteClinicHash.insert(disclose(inviteCode));
-    totalInviteClinic = inviteClinicHash.size();
   } else if (d_role == Role.admin) {
     inviteAdminHash.insert(disclose(inviteCode));
-    totalInviteAdmin = inviteAdminHash.size();
   }
 }
 
@@ -56,8 +50,6 @@ export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
     ownerClinics.insert(disclose(ownerId));
 
     inviteClinicHash.remove(d_inviteCode);
-    totalOwnerClinics = ownerClinics.size();
-    totalInviteClinic = inviteClinicHash.size();
   } else if (d_role == Role.admin) {
     assert(inviteAdminHash.member(d_inviteCode), "Invalid admin invite code");
 
@@ -66,8 +58,6 @@ export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
     admins.insert(disclose(adminId));
 
     inviteAdminHash.remove(d_inviteCode);
-    totalAdmin = admins.size();
-    totalInviteAdmin = inviteAdminHash.size();
   }
 }
 
@@ -78,5 +68,4 @@ export circuit revokeAdmin(): [] {
   const adminId = getShieldedId(own.bytes);
 
   admins.remove(disclose(adminId));
-  totalAdmin = admins.size();
 }

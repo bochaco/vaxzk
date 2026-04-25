@@ -622,10 +622,10 @@ describe("VaxZk contract", () => {
   // ── Admin invite management ────────────────────────────────────────────────
 
   describe("registerInviteAdmin", () => {
-    it("admin can register an invite code and totalInviteAdmin increments", () => {
-      const before = simulator.getLedger().totalInviteAdmin;
+    it("admin can register an invite code and invite count increments", () => {
+      const before = simulator.getLedger().inviteAdminHash.size();
       simulator.registerInvite(Role.admin, randomBytes(32));
-      expect(simulator.getLedger().totalInviteAdmin).toBe(before + 1n);
+      expect(simulator.getLedger().inviteAdminHash.size()).toBe(before + 1n);
     });
 
     it("non-admin cannot register an invite", () => {
@@ -636,9 +636,9 @@ describe("VaxZk contract", () => {
     it("registering the same invite code twice does not increase the invite count", () => {
       const inviteCode = randomBytes(32);
       simulator.registerInvite(Role.admin, inviteCode);
-      const countAfterFirst = simulator.getLedger().totalInviteAdmin;
+      const countAfterFirst = simulator.getLedger().inviteAdminHash.size();
       simulator.registerInvite(Role.admin, inviteCode);
-      expect(simulator.getLedger().totalInviteAdmin).toBe(countAfterFirst);
+      expect(simulator.getLedger().inviteAdminHash.size()).toBe(countAfterFirst);
     });
   });
 
@@ -646,15 +646,15 @@ describe("VaxZk contract", () => {
     it("user with a valid invite code becomes admin and invite is consumed", () => {
       const inviteCode = randomBytes(32);
       simulator.registerInvite(Role.admin, inviteCode);
-      const adminsBefore = simulator.getLedger().totalAdmin;
-      const invitesBefore = simulator.getLedger().totalInviteAdmin;
+      const adminsBefore = simulator.getLedger().admins.size();
+      const invitesBefore = simulator.getLedger().inviteAdminHash.size();
 
       const newAdmin = randomUser();
       simulator.switchUser(newAdmin);
       simulator.acceptInvite(Role.admin, inviteCode);
 
-      expect(simulator.getLedger().totalAdmin).toBe(adminsBefore + 1n);
-      expect(simulator.getLedger().totalInviteAdmin).toBe(invitesBefore - 1n);
+      expect(simulator.getLedger().admins.size()).toBe(adminsBefore + 1n);
+      expect(simulator.getLedger().inviteAdminHash.size()).toBe(invitesBefore - 1n);
     });
 
     it("rejects an invalid invite code", () => {
@@ -673,15 +673,15 @@ describe("VaxZk contract", () => {
     it("user with a valid clinic invite code becomes clinic owner and invite is consumed", () => {
       const inviteCode = randomBytes(32);
       simulator.registerInvite(Role.clinic, inviteCode);
-      const clinicsBefore = simulator.getLedger().totalOwnerClinics;
-      const invitesBefore = simulator.getLedger().totalInviteClinic;
+      const clinicsBefore = simulator.getLedger().ownerClinics.size();
+      const invitesBefore = simulator.getLedger().inviteClinicHash.size();
 
       const newClinicOwner = randomUser();
       simulator.switchUser(newClinicOwner);
       simulator.acceptInvite(Role.clinic, inviteCode);
 
-      expect(simulator.getLedger().totalOwnerClinics).toBe(clinicsBefore + 1n);
-      expect(simulator.getLedger().totalInviteClinic).toBe(invitesBefore - 1n);
+      expect(simulator.getLedger().ownerClinics.size()).toBe(clinicsBefore + 1n);
+      expect(simulator.getLedger().inviteClinicHash.size()).toBe(invitesBefore - 1n);
     });
 
     it("rejects an invalid clinic invite code", () => {
@@ -707,10 +707,10 @@ describe("VaxZk contract", () => {
   });
 
   describe("revokeAdmin", () => {
-    it("admin can revoke themselves and totalAdmin decrements", () => {
-      const before = simulator.getLedger().totalAdmin;
+    it("admin can revoke themselves and admin count decrements", () => {
+      const before = simulator.getLedger().admins.size();
       simulator.revokeAdmin();
-      expect(simulator.getLedger().totalAdmin).toBe(before - 1n);
+      expect(simulator.getLedger().admins.size()).toBe(before - 1n);
     });
 
     it("non-admin cannot revoke", () => {
@@ -752,10 +752,10 @@ describe("VaxZk contract", () => {
   // ── Clinic invite management ───────────────────────────────────────────────
 
   describe("registerInviteClinic", () => {
-    it("registered clinic can register an invite code and totalInviteClinic increments", () => {
-      const before = simulator.getLedger().totalInviteClinic;
+    it("registered clinic can register an invite code and invite count increments", () => {
+      const before = simulator.getLedger().inviteClinicHash.size();
       simulator.registerInvite(Role.clinic, randomBytes(32));
-      expect(simulator.getLedger().totalInviteClinic).toBe(before + 1n);
+      expect(simulator.getLedger().inviteClinicHash.size()).toBe(before + 1n);
     });
 
     it("non-clinic cannot register a clinic invite", () => {
