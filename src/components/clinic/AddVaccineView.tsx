@@ -155,7 +155,16 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
 
         {/* Vaccine Proof Requests list */}
         <div className="space-y-4 text-left mb-12">
-          <h3 className="text-2xl font-bold mb-6">Vaccine Proof Requests</h3>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold">Vaccine Proof Requests</h3>
+            <button
+              onClick={() => { setProofReqError(null); setShowProofReqModal(true); }}
+              className="flex items-center gap-2 px-4 py-2 bg-tertiary text-on-tertiary font-semibold rounded-full shadow active:scale-95 transition-all duration-200 text-sm"
+            >
+              <span className="material-symbols-outlined text-base">add</span>
+              New Request
+            </button>
+          </div>
           {loading ? (
             <div className="flex items-center gap-3 text-on-surface-variant text-sm py-12 justify-center">
               <span className="material-symbols-outlined animate-spin text-2xl">sync</span>

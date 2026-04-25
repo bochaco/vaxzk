@@ -32,7 +32,6 @@ const Dashboard: React.FC<DashboardProps> = ({
 }) => {
   const { t } = useLanguage();
   const { profile, activeTab, setActiveTab } = useProfile();
-  const [clinicModalTrigger, setClinicModalTrigger] = React.useState<'proofReq' | null>(null);
 
   const handleTabChange = (tab: Tab) => {
     setActiveTab(tab);
@@ -49,13 +48,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       case "myproofs": // USER
         return <UserProofRequestsView connectedApi={connectedApi!} />;
       case "addvaccine": // CLINIC
-        return (
-          <AddVaccineView
-            connectedApi={connectedApi!}
-            triggerModal={clinicModalTrigger}
-            onModalTriggered={() => setClinicModalTrigger(null)}
-          />
-        );
+        return <AddVaccineView connectedApi={connectedApi!} />;
       case "clinicprofile": // CLINIC
         return <ClinicsAdmin connectedApi={connectedApi!} />;
       case "metrics": // ADMIN
@@ -71,13 +64,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           case "admin":
             return <MetricsAdmin vaxApi={vaxApi!} />;
           case "clinic":
-            return (
-              <AddVaccineView
-                connectedApi={connectedApi!}
-                triggerModal={clinicModalTrigger}
-                onModalTriggered={() => setClinicModalTrigger(null)}
-              />
-            );
+            return <AddVaccineView connectedApi={connectedApi!} />;
           default:
             return <HomeView walletAddress={walletAddress} />;
         }
@@ -210,12 +197,24 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         {profile == "user" && (
           <button
-            onClick={() => { handleTabChange("addvaccine"); setClinicModalTrigger('proofReq'); }}
-            className="flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all text-slate-400 hover:text-blue-600"
+            onClick={() => handleTabChange("myproofs")}
+            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
+              activeTab === "myproofs"
+                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
+                : "text-slate-400 hover:text-blue-600"
+            }`}
           >
-            <span translate="no" className="material-symbols-outlined">assignment_add</span>
+            <span translate="no"
+              className="material-symbols-outlined"
+              style={{
+                fontVariationSettings:
+                  activeTab === "myproofs" ? "'FILL' 1" : undefined,
+              }}
+            >
+              vaccines
+            </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Proof Req
+              My Proofs
             </span>
           </button>
         )}
