@@ -59,7 +59,7 @@ The "Clinic" role is not limited to traditional health facilities. Any organizat
 
 Capabilities:
 
-- Create and manage an organization profile (name, location, coordinates, image).
+- Create and manage an organization profile (name, location, coordinates).
 - Issue Schnorr-signed vaccine certificates to users and deliver the signed proof to their private state.
 - Create vaccine proof requests on-chain — specifying the required vaccine type, the user's personal/passport ID, and a minimum certificate validity date.
 - View proofs that users have submitted in response to requests.
@@ -88,7 +88,7 @@ Capabilities:
 | Maps & QR | Leaflet / react-leaflet, qrcode.react |
 | Reactive state | RxJS |
 | Blockchain | Midnight Network (preprod testnet) |
-| Smart contracts | Compact language, ZK circuits (28 circuit pairs) |
+| Smart contracts | Compact language, ZK circuits (10 circuit pairs) |
 | Wallet | [Lace](https://www.lace.io/) (Midnight-enabled) or [1AM](https://1am.xyz/) browser extension |
 | Build & lint | Vite, ESLint, Vitest |
 
