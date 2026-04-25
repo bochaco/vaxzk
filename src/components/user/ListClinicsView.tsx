@@ -13,6 +13,8 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
    useEffect(() => {
+    if (!vaxApi) return;
+
     let subscription: { unsubscribe: () => void } | undefined;
 
     async function init() {
@@ -32,7 +34,7 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, []);
+  }, [vaxApi]);
 
   const hasValidCoords = (latitud: string, longitud: string): boolean => {
     const lat = parseFloat(latitud);

@@ -52,6 +52,8 @@ const IssuersAdmin: React.FC<IssuersAdminProps> = ({ vaxApi }) => {
   const [issuerKey, setIssuerKey] = useState("");
 
   useEffect(() => {
+    if (!vaxApi) return;
+
     let subscription: { unsubscribe: () => void } | undefined;
 
     try {
@@ -67,7 +69,7 @@ const IssuersAdmin: React.FC<IssuersAdminProps> = ({ vaxApi }) => {
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, []);
+  }, [vaxApi]);
 
   const handleAddIssuer = async () => {
     setIssuerLoading(true);

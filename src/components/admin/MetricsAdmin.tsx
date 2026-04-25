@@ -14,6 +14,8 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
     const [totalActiveClinicOwners, setTotalActiveClinicOwners] = useState<bigint>(0n);
 
   useEffect(() => {
+    if (!vaxApi) return;
+
     let subscription: { unsubscribe: () => void } | undefined;
 
     async function init() {
@@ -36,7 +38,7 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, []);
+  }, [vaxApi]);
 
   return (
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">

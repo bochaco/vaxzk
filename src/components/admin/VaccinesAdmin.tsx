@@ -14,6 +14,8 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!vaxApi) return;
+
     let subscription: { unsubscribe: () => void } | undefined;
 
     async function init() {
@@ -32,7 +34,7 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, []);
+  }, [vaxApi]);
 
   const handleAddVaccine = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
