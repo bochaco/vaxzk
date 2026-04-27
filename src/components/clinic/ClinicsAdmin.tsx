@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "../../LanguageContext";
 import {
   buildProviders,
   VaxZkAPI,
@@ -20,6 +21,7 @@ function encodeBytes(value: string, length: number): Uint8Array {
 }
 
 const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
+  const { i18n } = useLanguage();
   const [clinics, setClinics] = useState<DerivedClinic[]>([]);
   const [clinicsLoading, setClinicsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -55,7 +57,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
         });
       } catch (err) {
         console.error("Failed to join contract:", err);
-        setError("Failed to connect to the contract");
+        setError(i18n.errConnectContract);
         setClinicsLoading(false);
       }
     }
@@ -103,31 +105,30 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-          <span className="text-primary">Manage</span> Clinics
+          <span className="text-primary">{i18n.manage}</span> {i18n.clinicsTitleEnd}
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed">
-          Register your clinics on-chain and view all currently registered
-          clinics.
+          {i18n.manageClinicsSubtitle}
         </p>
       </section>
 
       {/* Add Clinic Form */}
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
         <h3 className="text-lg font-semibold text-on-surface mb-6">
-          Register New Clinic
+          {i18n.registerNewClinic}
         </h3>
 
         <form onSubmit={handleAddClinic} className="space-y-4">
           {/* Name */}
           <div>
             <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-              Clinic Name
+              {i18n.clinicName}
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value.slice(0, 32))}
-              placeholder="e.g. City Health Clinic"
+              placeholder={i18n.clinicNamePlaceholder}
               maxLength={32}
               className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
@@ -136,13 +137,13 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
           {/* Address */}
           <div>
             <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-              Address
+              {i18n.clinicAddress}
             </label>
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value.slice(0, 64))}
-              placeholder="e.g. 123 Main St, Springfield"
+              placeholder={i18n.addressPlaceholder}
               maxLength={64}
               className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
@@ -152,26 +153,26 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-                Latitude
+                {i18n.latitude}
               </label>
               <input
                 type="text"
                 value={latitud}
                 onChange={(e) => setLatitud(e.target.value.slice(0, 20))}
-                placeholder="e.g. -23.5990263"
+                placeholder={i18n.latitudePlaceholder}
                 maxLength={20}
                 className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <div>
               <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-                Longitude
+                {i18n.longitude}
               </label>
               <input
                 type="text"
                 value={longitud}
                 onChange={(e) => setLongitud(e.target.value.slice(0, 20))}
-                placeholder="e.g. -46.6419712"
+                placeholder={i18n.longitudePlaceholder}
                 maxLength={20}
                 className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
@@ -191,7 +192,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
               htmlFor="isOnline"
               className="text-sm font-medium text-on-surface"
             >
-              Online clinic (offers remote/telehealth services)
+              {i18n.onlineClinic}
             </label>
           </div>
 
@@ -207,14 +208,14 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
                 <span translate="no" className="material-symbols-outlined animate-spin">
                   sync
                 </span>
-                <span>Registering...</span>
+                <span>{i18n.registering}</span>
               </>
             ) : (
               <>
                 <span className="material-symbols-outlined">
                   local_hospital
                 </span>
-                <span>Register Clinic</span>
+                <span>{i18n.registerClinic}</span>
               </>
             )}
           </button>
@@ -223,12 +224,12 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
 
       {/* Clinics List */}
       <div className="text-left">
-        <h3 className="text-2xl font-bold mb-6">Registered Clinics</h3>
+        <h3 className="text-2xl font-bold mb-6">{i18n.registeredClinics}</h3>
 
         {clinicsLoading ? (
           <div className="flex items-center gap-2 text-on-surface-variant text-sm py-4">
             <span className="material-symbols-outlined animate-spin">sync</span>
-            <span>Loading clinics...</span>
+            <span>{i18n.loadingClinics}</span>
           </div>
         ) : clinics.length === 0 ? (
           <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
@@ -236,7 +237,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
               local_hospital
             </span>
             <p className="text-on-surface-variant italic">
-              No clinics registered on-chain yet.
+              {i18n.noClinicsOnChain}
             </p>
           </div>
         ) : (
@@ -256,20 +257,20 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
                     <p className="font-semibold text-on-surface">
                       {clinic.name || (
                         <span className="italic text-on-surface-variant">
-                          Unnamed
+                          {i18n.unnamed}
                         </span>
                       )}
                     </p>
                     {clinic.isOnline && (
                       <span className="ml-2 text-xs font-semibold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                        Online
+                        {i18n.online}
                       </span>
                     )}
                   </div>
                   <div className="grid grid-cols-1 gap-1 pl-1 text-xs">
                     <div>
                       <span className="font-semibold text-on-surface-variant uppercase tracking-wide">
-                        Clinic Shielded ID:{" "}
+                        {i18n.clinicShieldedId}{" "}
                       </span>
                       <span className="font-mono text-on-surface-variant break-all">
                         {idHex}
@@ -277,7 +278,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
                     </div>
                     <div>
                       <span className="font-semibold text-on-surface-variant uppercase tracking-wide">
-                        Owner Shielded ID:{" "}
+                        {i18n.ownerShieldedId}{" "}
                       </span>
                       <span className="font-mono text-on-surface-variant break-all">
                         {ownerHex}
@@ -286,7 +287,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
                     {clinic.address && (
                       <div>
                         <span className="font-semibold text-on-surface-variant uppercase tracking-wide">
-                          Address:{" "}
+                          {i18n.clinicAddress}{" "}
                         </span>
                         <span className="text-on-surface-variant">
                           {clinic.address}
@@ -296,7 +297,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
                     {(clinic.latitud || clinic.longitud) && (
                       <div>
                         <span className="font-semibold text-on-surface-variant uppercase tracking-wide">
-                          Coordinates:{" "}
+                          {i18n.coordinates}{" "}
                         </span>
                         <span className="text-on-surface-variant">
                           {clinic.latitud}, {clinic.longitud}

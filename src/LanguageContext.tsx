@@ -4,20 +4,20 @@ import { translations, type Language, type Translations } from './i18n';
 interface LanguageContextValue {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: Translations;
+  i18n: Translations;
 }
 
 const LanguageContext = createContext<LanguageContextValue>({
   language: 'en',
   setLanguage: () => {},
-  t: translations.en,
+  i18n: translations.en,
 });
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [language, setLanguage] = useState<Language>('en');
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t: translations[language] }}>
+    <LanguageContext.Provider value={{ language, setLanguage, i18n: translations[language] }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import { useLanguage } from "../../LanguageContext";
 import {
   buildProviders,
   VaxZkAPI,
@@ -18,6 +19,7 @@ interface UserProofRequestsViewProps {
 const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
   connectedApi,
 }) => {
+  const { i18n } = useLanguage();
   const [issuers, setIssuers] = useState<DerivedIssuer[]>([]);
   const [proofReqs, setProofReqs] = useState<DerivedProofRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +66,7 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
 
     const issuer = issuers[0];
     if (!issuer) {
-      setSubmitProofError("No registered issuer found.");
+      setSubmitProofError(i18n.errNoIssuerFound);
       return;
     }
 
@@ -81,7 +83,8 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
     } catch (err) {
       console.error("Failed to submit vaccine proof:", err);
       setSubmitProofError(
-        err instanceof Error ? "Failed to submit proof: " + err.message : String(err),
+        i18n.errSubmitProof +
+          (err instanceof Error ? err.message : String(err)),
       );
     } finally {
       setSubmitingProofId(null);
@@ -92,10 +95,10 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-          <span className="text-primary">My</span> Vaccine Proofs
+          <span className="text-primary">{i18n.myProofsTitleStart}</span> {i18n.myProofsTitleEnd}
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed">
-          View and submit your vaccine proof requests.
+          {i18n.vaccineProofsSubtitle}
         </p>
       </section>
 
@@ -106,7 +109,7 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
       {loading ? (
         <div className="flex items-center gap-2 text-on-surface-variant text-sm py-8">
           <span className="material-symbols-outlined animate-spin text-base">sync</span>
-          <span>Loading proof requests...</span>
+          <span>{i18n.loadingProofRequests}</span>
         </div>
       ) : proofReqs.length === 0 ? (
         <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
@@ -114,7 +117,7 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
             assignment
           </span>
           <p className="text-on-surface-variant italic">
-            No proof requests on-chain yet.
+            {i18n.noProofRequestsYet}
           </p>
         </div>
       ) : (
@@ -133,7 +136,7 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
             const issuer = issuers[0];
             const issuerLabel = issuer
               ? `${issuer.name} (${toHex(issuer.id).slice(0, 16)}…)`
-              : "No issuer registered";
+              : i18n.noIssuerRegistered;
             return (
               <div
                 key={reqIdHex}
@@ -151,10 +154,10 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
                       </span>
                     </p>
                     <p className="text-xs text-on-surface-variant font-mono">
-                      Req ID: {reqIdHex.slice(0, 16)}…
+                      {i18n.reqIdLabel} {reqIdHex.slice(0, 16)}…
                     </p>
                     <p className="text-xs text-on-surface-variant">
-                      Issuer:{" "}
+                      {i18n.issuerLabel}{" "}
                       <span className="font-semibold text-secondary">
                         {issuerLabel}
                       </span>
@@ -163,7 +166,7 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
                   {req.submitted ? (
                     <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm font-semibold">
                       <span className="material-symbols-outlined text-base">task_alt</span>
-                      <span>Submitted</span>
+                      <span>{i18n.submitted}</span>
                     </div>
                   ) : (
                     <button
@@ -174,12 +177,12 @@ const UserProofRequestsView: React.FC<UserProofRequestsViewProps> = ({
                       {isSubmitting ? (
                         <>
                           <span className="material-symbols-outlined animate-spin text-base">sync</span>
-                          <span>Submitting…</span>
+                          <span>{i18n.submitting}</span>
                         </>
                       ) : (
                         <>
                           <span className="material-symbols-outlined text-base">verified</span>
-                          <span>Submit Proof</span>
+                          <span>{i18n.submitProof}</span>
                         </>
                       )}
                     </button>

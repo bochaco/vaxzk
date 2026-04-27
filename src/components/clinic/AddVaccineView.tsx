@@ -52,7 +52,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
   triggerModal,
   onModalTriggered,
 }) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const [issuers, setIssuers] = useState<DerivedIssuer[]>([]);
   const [loading, setLoading] = useState(true);
   const [vaccines, setVaccines] = useState<string[]>([]);
@@ -97,7 +97,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
         });
       } catch (err) {
         console.error("Failed to join contract:", err);
-        setProofReqError("Erro ao conectar ao contrato");
+        setProofReqError(i18n.errConnectContract);
       }
     }
 
@@ -129,46 +129,44 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
       setShowProofReqModal(false);
     } catch (err) {
       console.error("Failed to request vaccine proof:", err);
-      if (err instanceof Error) {
-        setProofReqError("Erro ao solicitar prova de vacina: " + err.message);
-      } else {
-        setProofReqError("Erro ao solicitar prova de vacina: " + String(err));
-      }
+      setProofReqError(
+        i18n.errRequestVaccineProof +
+          (err instanceof Error ? err.message : String(err)),
+      );
     } finally {
       setProofReqLoading(false);
     }
   };
-
 
   return (
     <>
       <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
         <section className="mb-12 text-left">
           <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-            <span className="text-primary">{t.manage}</span>{" "}
-            {t.vaccinesAdminTitleEnd}{" "}
+            <span className="text-primary">{i18n.manage}</span>{" "}
+            {i18n.vaccinesAdminTitleEnd}{" "}
           </h2>
           <p className="text-on-surface-variant text-lg leading-relaxed">
-            {t.vaccinesAdminSubtitle}
+            {i18n.vaccinesAdminSubtitle}
           </p>
         </section>
 
         {/* Vaccine Proof Requests list */}
         <div className="space-y-4 text-left mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold">Vaccine Proof Requests</h3>
+            <h3 className="text-2xl font-bold">{i18n.vaccineProofRequests}</h3>
             <button
               onClick={() => { setProofReqError(null); setShowProofReqModal(true); }}
               className="flex items-center gap-2 px-4 py-2 bg-tertiary text-on-tertiary font-semibold rounded-full shadow active:scale-95 transition-all duration-200 text-sm"
             >
               <span className="material-symbols-outlined text-base">add</span>
-              New Request
+              {i18n.newRequest}
             </button>
           </div>
           {loading ? (
             <div className="flex items-center gap-3 text-on-surface-variant text-sm py-12 justify-center">
               <span className="material-symbols-outlined animate-spin text-2xl">sync</span>
-              <span>Loading proof requests...</span>
+              <span>{i18n.loadingProofRequests}</span>
             </div>
           ) : proofReqs.length === 0 ? (
             <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
@@ -176,7 +174,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                 assignment
               </span>
               <p className="text-on-surface-variant italic">
-                No proof requests on-chain yet.
+                {i18n.noProofRequestsYet}
               </p>
             </div>
           ) : (
@@ -194,7 +192,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                 const issuer = issuers[0];
                 const issuerLabel = issuer
                   ? `${issuer.name} (${toHex(issuer.id).slice(0, 16)}…)`
-                  : "No issuer registered";
+                  : i18n.noIssuerRegistered;
                 return (
                   <div
                     key={reqIdHex}
@@ -213,10 +211,10 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                           </span>
                         </p>
                         <p className="text-xs text-on-surface-variant font-mono">
-                          Req ID: {reqIdHex.slice(0, 16)}…
+                          {i18n.reqIdLabel} {reqIdHex.slice(0, 16)}…
                         </p>
                         <p className="text-xs text-on-surface-variant">
-                          Issuer:{" "}
+                          {i18n.issuerLabel}{" "}
                           <span className="font-semibold text-secondary">
                             {issuerLabel}
                           </span>
@@ -225,12 +223,12 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                       {req.submitted ? (
                         <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm font-semibold">
                           <span className="material-symbols-outlined text-base">task_alt</span>
-                          <span>Submitted</span>
+                          <span>{i18n.submitted}</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-sm font-semibold">
                           <span className="material-symbols-outlined text-base">pending</span>
-                          <span>Pending</span>
+                          <span>{i18n.pending}</span>
                         </div>
                       )}
                     </div>
@@ -245,20 +243,20 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
       {/* New Vaccine Proof Request modal */}
       {showProofReqModal && (
         <Modal
-          title="New Vaccine Proof Request"
+          title={i18n.newVaccineProofRequest}
           onClose={() => setShowProofReqModal(false)}
         >
           <div className="grid grid-cols-1 gap-4 mb-6">
             <div>
               <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-                Vaccine
+                {i18n.vaccineLabel}
               </label>
               {loading ? (
                 <div className="flex items-center gap-2 text-on-surface-variant text-sm py-2">
                   <span className="material-symbols-outlined animate-spin text-base">
                     sync
                   </span>
-                  <span>Loading vaccines...</span>
+                  <span>{i18n.loadingVaccines}</span>
                 </div>
               ) : (
                 <select
@@ -269,8 +267,8 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                 >
                   <option value="">
                     {vaccines.length === 0
-                      ? "No vaccines registered"
-                      : "Select a vaccine..."}
+                      ? i18n.noVaccinesRegistered
+                      : i18n.selectVaccine}
                   </option>
                   {vaccines.map((v) => (
                     <option key={v} value={v}>
@@ -282,7 +280,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
             </div>
             <div>
               <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-                Patient ID
+                {i18n.patientId}
               </label>
               <input
                 type="text"
@@ -290,14 +288,14 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                 onChange={(e) =>
                   setProofPersonalId(e.target.value.slice(0, 20))
                 }
-                placeholder="e.g. PASSPORT-001"
+                placeholder={i18n.patientIdPlaceholder}
                 maxLength={20}
                 className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-tertiary"
               />
             </div>
             <div>
               <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1">
-                Valid Until
+                {i18n.validUntilLabel}
               </label>
               <input
                 type="date"
@@ -318,7 +316,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
               onClick={() => setShowProofReqModal(false)}
               disabled={proofReqLoading}
             >
-              Cancel
+              {i18n.cancel}
             </button>
             <button
               className="px-6 py-2.5 bg-tertiary font-bold rounded-lg shadow active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2 text-sm"
@@ -335,14 +333,14 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
                   <span className="material-symbols-outlined animate-spin text-base">
                     sync
                   </span>
-                  <span>Requesting...</span>
+                  <span>{i18n.requesting}</span>
                 </>
               ) : (
                 <>
                   <span className="material-symbols-outlined text-base">
                     assignment
                   </span>
-                  <span>Request Vaccine Proof</span>
+                  <span>{i18n.requestVaccineProofBtn}</span>
                 </>
               )}
             </button>

@@ -8,7 +8,7 @@ interface ListClinicsViewProps {
 }
 
 const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const [clinics, setClinics] = useState<DerivedClinic[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -53,10 +53,10 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
           <div className="max-w-2xl text-left">
             <p className="text-primary font-semibold tracking-wide uppercase text-xs mb-2">Healthcare Network</p>
             <h2 className="text-5xl font-extrabold tracking-tight text-on-surface leading-tight">
-              {t.listClinicsTitle || 'List of Clinics'}
+              {i18n.listClinicsTitle || 'List of Clinics'}
             </h2>
             <p className="text-on-surface-variant mt-4 text-lg">
-              {t.listClinicsSubtitle || 'Find authorized vaccination centers near you'}
+              {i18n.listClinicsSubtitle || 'Find authorized vaccination centers near you'}
             </p>
           </div>
           <div className="hidden md:block">
@@ -65,7 +65,7 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>local_hospital</span>
               </div>
               <div>
-                <p className="text-xs text-on-surface-variant font-medium">{t.registeredClinics || 'Registered Clinics'}</p>
+                <p className="text-xs text-on-surface-variant font-medium">{i18n.registeredClinics || 'Registered Clinics'}</p>
                 <p className="text-lg font-bold text-on-surface">{clinics.length}</p>
               </div>
             </div>
@@ -78,7 +78,7 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
           <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
           <input
             type="text"
-            placeholder={t.searchClinics || 'Search clinics...'}
+            placeholder={i18n.searchClinics || 'Search clinics...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-surface-container-low rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary"
@@ -113,7 +113,7 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
               <div className="mt-4 pt-4 border-t border-surface-container-high">
                 <div className="flex items-center gap-2 text-sm text-on-surface-variant">
                   <span className="material-symbols-outlined text-primary">verified</span>
-                  <span>{t.verifiedProvider || 'Verified Provider'}</span>
+                  <span>{i18n.verifiedProvider || 'Verified Provider'}</span>
                 </div>
               </div>
             </div>
@@ -124,12 +124,12 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
               <span className="material-symbols-outlined text-4xl">search_off</span>
             </div>
             <h3 className="text-xl font-bold text-on-surface mb-2">
-              {t.noClinicsFound || 'No clinics found'}
+              {i18n.noClinicsFound || 'No clinics found'}
             </h3>
             <p className="text-on-surface-variant">
               {searchQuery
-                ? (t.tryDifferentSearch || 'Try a different search term')
-                : (t.noClinicsRegistered || 'No clinics have been registered yet')}
+                ? (i18n.tryDifferentSearch || 'Try a different search term')
+                : (i18n.noClinicsRegistered || 'No clinics have been registered yet')}
             </p>
           </div>
         )}
@@ -143,10 +143,10 @@ const ListClinicsView: React.FC<ListClinicsViewProps> = ({ vaxApi }) => {
             </div>
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-xl font-bold mb-2">
-                {t.needHelpFinding || 'Need help finding a clinic?'}
+                {i18n.needHelpFinding || 'Need help finding a clinic?'}
               </h3>
               <p className="opacity-90">
-                {t.contactLocalHealth || 'Contact your local health authority for the most up-to-date information about vaccination centers.'}
+                {i18n.contactLocalHealth || 'Contact your local health authority for the most up-to-date information about vaccination centers.'}
               </p>
             </div>
           </div>

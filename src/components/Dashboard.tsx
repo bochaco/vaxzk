@@ -28,7 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   connectedApi,
   vaxApi,
 }) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const { profile, activeTab, setActiveTab } = useProfile();
 
   const handleTabChange = (tab: Tab) => {
@@ -74,7 +74,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex items-center gap-3">
               <div className="flex flex-col text-left">
                 <span className="text-xs font-medium text-slate-500">
-                  {t.loggedInAs}
+                  {i18n.loggedInAs}
                 </span>
                 <span className="text-sm font-bold text-on-surface">
                   Midnight{" "}
@@ -107,7 +107,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
             >
               <span translate="no" className="material-symbols-outlined text-lg">logout</span>
-              <span className="hidden sm:inline">{t.logout}</span>
+              <span className="hidden sm:inline">{i18n.logout}</span>
             </button>
           </div>
         </div>

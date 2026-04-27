@@ -20,13 +20,13 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const [status, setStatus] = useState<'connecting' | 'connected' | 'idle' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
 
   const connectWallet = async () => {
     if (!wallet) {
-      setError(t.walletNotFound);
+      setError(i18n.walletNotFound);
       setStatus('error');
       return;
     }
@@ -56,11 +56,11 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         }
 
       } else {
-        throw new Error(t.shieldedAddressNotFound);
+        throw new Error(i18n.shieldedAddressNotFound);
       }
     } catch (err) {
       console.error('Connection failed:', err);
-      setError(err instanceof Error ? err.message : t.connectionFailed);
+      setError(err instanceof Error ? err.message : i18n.connectionFailed);
       setStatus('error');
     }
   };
@@ -92,13 +92,13 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         {/* Value Proposition Section */}
         <section className="mb-12 space-y-4">
           <p className="text-on-surface-variant text-lg leading-relaxed font-medium px-4">
-            {t.tagline}
+            {i18n.tagline}
           </p>
           <div className="bg-surface-container-low p-5 rounded-xl text-sm border-none shadow-sm text-left">
             <div className="flex items-start gap-3">
               <span translate="no" className="material-symbols-outlined text-primary mt-0.5">verified_user</span>
               <p className="text-on-surface-variant leading-snug">
-                {t.privacyNote} <span className="font-bold text-primary">Midnight</span> {t.privacyNote2}
+                {i18n.privacyNote} <span className="font-bold text-primary">Midnight</span> {i18n.privacyNote2}
               </p>
             </div>
             {status === 'error' && error && (
@@ -122,12 +122,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               <span translate="no" className="material-symbols-outlined group-hover:rotate-12 transition-transform">account_balance_wallet</span>
             )}
             <span className="text-lg">
-              {status === 'connecting' ? t.connecting : status === 'connected' ? t.connected : t.connectButton}
+              {status === 'connecting' ? i18n.connecting : status === 'connected' ? i18n.connected : i18n.connectButton}
             </span>
           </button>
           {/* Contextual Hint */}
           <p className="text-xs text-outline uppercase tracking-widest font-bold">
-            {t.secureConnection}
+            {i18n.secureConnection}
           </p>
         </div>
       </main>
@@ -136,12 +136,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       <footer className="w-full max-w-md px-8 pb-12">
         <div className="flex flex-col gap-4 items-center">
           <a className="text-primary text-sm font-semibold hover:underline flex items-center gap-1" href="https://midnight.network/" target="_blank">
-            {t.learnMore}
+            {i18n.learnMore}
             <span translate="no" className="material-symbols-outlined text-sm">open_in_new</span>
           </a>
           <div className="w-12 h-1 bg-surface-container-highest rounded-full"></div>
           <a className="text-on-surface-variant text-xs hover:text-primary transition-colors" href="https://github.com/bochaco/vaxzk" target="_blank">
-            {t.needHelp}
+            {i18n.needHelp}
           </a>
         </div>
       </footer>

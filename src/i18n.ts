@@ -188,6 +188,109 @@ export const translations = {
     needHelpFinding: "Need help finding a clinic?",
     contactLocalHealth:
       "Contact your local health authority for the most up-to-date information about vaccination centers.",
+
+    // Shared UI
+    cancel: "Cancel",
+    online: "Online",
+    unnamed: "Unnamed",
+    coordinates: "Coordinates:",
+    issuerLabel: "Issuer:",
+    noIssuerRegistered: "No issuer registered",
+    reqIdLabel: "Req ID:",
+    errConnectContract: "Failed to connect to the contract",
+
+    // Access Admin
+    inviteLinkCreated: "Invitation link created!",
+    inviteLinkStoredDesc: "Share this link securely with the intended recipient.",
+    copyLink: "Copy link",
+    removeAdminTitle: "Remove my admin access",
+    removeAdminDesc: "Remove your admin permissions from the blockchain. This action cannot be undone.",
+    adminAccessRemoved: "Admin access removed successfully!",
+    errCreateInvite: "Failed to create invite: ",
+    errRemoveAdmin: "Failed to remove admin: ",
+
+    // Deploy Contract
+    deploySuccessDesc: "This address is stored in your browser. All views will use it automatically on the next page load.",
+    copyAddress: "Copy address",
+
+    // Metrics Admin
+    totalVaccinesRegistered: "Total Vaccines Registered",
+    activeAdmins: "Active Admins",
+    activeVerifierOwners: "Active Verifier Owners",
+    totalClinicsMetric: "Total Clinics",
+    pendingAdminInvites: "Pending Admin Invites",
+    pendingVerifierInvites: "Pending Verifier Invites",
+
+    // Issuers Admin
+    issuersAdminTitleEnd: "Certificate Issuers",
+    issuersAdminSubtitle: "Register and review the organizations authorized to issue vaccine certificates.",
+    addIssuer: "Add Issuer",
+    addingIssuer: "Adding Issuer...",
+    vaccinationCertIssuers: "Vaccination Certificate Issuers",
+    loadingIssuers: "Loading issuers...",
+    noIssuersRegistered: "No issuers registered yet.",
+    addCertIssuerTitle: "Add Certificate Issuer",
+    addIssuerInfo: "To register a certificate issuer, contact the vaccine certificate provider/issuer to obtain their details (name, service URI, verification endpoint, and public key).",
+    issuerName: "Issuer Name",
+    issuerUri: "Issuer URI",
+    verificationEndpoint: "Verification Endpoint",
+    verificationEndpointDesc: "URL used by administrative agents or personnel to verify the authenticity of a vaccination certificate.",
+    publicKey: "Public Key",
+    issuerNamePlaceholder: "e.g. National Health Authority",
+    issuerUriPlaceholder: "e.g. https://issuer.example.com",
+    issuerVerifEndpointPlaceholder: "e.g. https://issuer.example.com/verify",
+    issuerKeyPlaceholder: "Public key provided by the issuer",
+    issuerShieldedId: "Issuer Shielded Id:",
+    signaturePubKey: "Signature Public Key:",
+    uriLabel: "URI:",
+    verificationEndpointLabel: "Verification Endpoint:",
+
+    // Clinics Admin
+    clinicsTitleEnd: "Clinics",
+    manageClinicsSubtitle: "Register your clinics on-chain and view all currently registered clinics.",
+    registerNewClinic: "Register New Clinic",
+    clinicName: "Clinic Name",
+    clinicAddress: "Address",
+    latitude: "Latitude",
+    longitude: "Longitude",
+    clinicNamePlaceholder: "e.g. City Health Clinic",
+    addressPlaceholder: "e.g. 123 Main St, Springfield",
+    latitudePlaceholder: "e.g. -23.5990263",
+    longitudePlaceholder: "e.g. -46.6419712",
+    onlineClinic: "Online clinic (offers remote/telehealth services)",
+    registering: "Registering...",
+    registerClinic: "Register Clinic",
+    loadingClinics: "Loading clinics...",
+    noClinicsOnChain: "No clinics registered on-chain yet.",
+    clinicShieldedId: "Clinic Shielded ID:",
+    ownerShieldedId: "Owner Shielded ID:",
+
+    // Vaccine Proof Requests (shared between AddVaccineView and UserProofRequestsView)
+    vaccineProofRequests: "Vaccine Proof Requests",
+    newRequest: "New Request",
+    loadingProofRequests: "Loading proof requests...",
+    noProofRequestsYet: "No proof requests on-chain yet.",
+    submitted: "Submitted",
+    newVaccineProofRequest: "New Vaccine Proof Request",
+    vaccineLabel: "Vaccine",
+    loadingVaccines: "Loading vaccines...",
+    noVaccinesRegistered: "No vaccines registered",
+    selectVaccine: "Select a vaccine...",
+    patientId: "Patient ID",
+    validUntilLabel: "Valid Until",
+    requesting: "Requesting...",
+    requestVaccineProofBtn: "Request Vaccine Proof",
+    errRequestVaccineProof: "Failed to request vaccine proof: ",
+    patientIdPlaceholder: "e.g. PASSPORT-001",
+
+    // User Proof Requests View
+    myProofsTitleStart: "My",
+    myProofsTitleEnd: "Vaccine Proofs",
+    vaccineProofsSubtitle: "View and submit your vaccine proof requests.",
+    submitting: "Submitting…",
+    submitProof: "Submit Proof",
+    errNoIssuerFound: "No registered issuer found.",
+    errSubmitProof: "Failed to submit proof: ",
   },
   pt: {
     // Login
@@ -357,10 +460,10 @@ export const translations = {
     accessAddAdminLink: "Criar link de convite",
     accessAddAdminDesc:
       "Crie um link de convite e envie para o usuario se tornar admin.",
-    accessAddClinicTitle: "Add a new Clinic",
-    accessAddAClinicLink: "Create invitation link",
+    accessAddClinicTitle: "Adicionar uma nova Clínica",
+    accessAddAClinicLink: "Criar link de convite",
     accessAddClinicDesc:
-      "Create an invitation link and send it to the user to become an clinic.",
+      "Crie um link de convite e envie para o usuário se tornar uma clínica.",
     removeAccess: "Remover meu acesso de admin",
 
     // List Clinics View
@@ -377,6 +480,109 @@ export const translations = {
     needHelpFinding: "Precisa de ajuda para encontrar uma clinica?",
     contactLocalHealth:
       "Entre em contato com a autoridade de saude local para informacoes atualizadas sobre centros de vacinacao.",
+
+    // Shared UI
+    cancel: "Cancelar",
+    online: "Online",
+    unnamed: "Sem nome",
+    coordinates: "Coordenadas:",
+    issuerLabel: "Emissor:",
+    noIssuerRegistered: "Nenhum emissor registrado",
+    reqIdLabel: "ID Req:",
+    errConnectContract: "Falha ao conectar ao contrato",
+
+    // Access Admin
+    inviteLinkCreated: "Link de convite criado!",
+    inviteLinkStoredDesc: "Compartilhe este link com segurança com o destinatário.",
+    copyLink: "Copiar link",
+    removeAdminTitle: "Remover meu acesso de admin",
+    removeAdminDesc: "Remova suas permissões de admin da blockchain. Esta ação não pode ser desfeita.",
+    adminAccessRemoved: "Acesso de admin removido com sucesso!",
+    errCreateInvite: "Erro ao criar convite: ",
+    errRemoveAdmin: "Erro ao remover admin: ",
+
+    // Deploy Contract
+    deploySuccessDesc: "Este endereço está salvo no seu navegador. Todas as visualizações o usarão automaticamente no próximo carregamento.",
+    copyAddress: "Copiar endereço",
+
+    // Metrics Admin
+    totalVaccinesRegistered: "Total de Vacinas Cadastradas",
+    activeAdmins: "Admins Ativos",
+    activeVerifierOwners: "Proprietários Ativos",
+    totalClinicsMetric: "Total de Clínicas",
+    pendingAdminInvites: "Convites de Admin Pendentes",
+    pendingVerifierInvites: "Convites de Clínica Pendentes",
+
+    // Issuers Admin
+    issuersAdminTitleEnd: "Emissores de Certificado",
+    issuersAdminSubtitle: "Cadastre e revise as organizações autorizadas a emitir certificados de vacinação.",
+    addIssuer: "Adicionar Emissor",
+    addingIssuer: "Adicionando Emissor...",
+    vaccinationCertIssuers: "Emissores de Certificado de Vacinação",
+    loadingIssuers: "Carregando emissores...",
+    noIssuersRegistered: "Nenhum emissor cadastrado ainda.",
+    addCertIssuerTitle: "Adicionar Emissor de Certificado",
+    addIssuerInfo: "Para registrar um emissor de certificado, entre em contato com o provedor/emissor do certificado de vacina para obter os detalhes (nome, URI do serviço, endpoint de verificação e chave pública).",
+    issuerName: "Nome do Emissor",
+    issuerUri: "URI do Emissor",
+    verificationEndpoint: "Endpoint de Verificação",
+    verificationEndpointDesc: "URL usada por agentes ou pessoal administrativo para verificar a autenticidade de um certificado de vacinação.",
+    publicKey: "Chave Pública",
+    issuerNamePlaceholder: "Ex: Autoridade Nacional de Saúde",
+    issuerUriPlaceholder: "Ex: https://emissor.exemplo.com",
+    issuerVerifEndpointPlaceholder: "Ex: https://emissor.exemplo.com/verificar",
+    issuerKeyPlaceholder: "Chave pública fornecida pelo emissor",
+    issuerShieldedId: "ID Blindado do Emissor:",
+    signaturePubKey: "Chave Pública de Assinatura:",
+    uriLabel: "URI:",
+    verificationEndpointLabel: "Endpoint de Verificação:",
+
+    // Clinics Admin
+    clinicsTitleEnd: "Clínicas",
+    manageClinicsSubtitle: "Cadastre suas clínicas na blockchain e veja todas as clínicas registradas.",
+    registerNewClinic: "Registrar Nova Clínica",
+    clinicName: "Nome da Clínica",
+    clinicAddress: "Endereço",
+    latitude: "Latitude",
+    longitude: "Longitude",
+    clinicNamePlaceholder: "Ex: UBS Centro de Saúde",
+    addressPlaceholder: "Ex: Rua Principal, 123, São Paulo",
+    latitudePlaceholder: "Ex: -23.5990263",
+    longitudePlaceholder: "Ex: -46.6419712",
+    onlineClinic: "Clínica online (oferece serviços remotos/telesaúde)",
+    registering: "Registrando...",
+    registerClinic: "Registrar Clínica",
+    loadingClinics: "Carregando clínicas...",
+    noClinicsOnChain: "Nenhuma clínica cadastrada na blockchain ainda.",
+    clinicShieldedId: "ID Blindado da Clínica:",
+    ownerShieldedId: "ID Blindado do Proprietário:",
+
+    // Vaccine Proof Requests
+    vaccineProofRequests: "Solicitações de Prova de Vacina",
+    newRequest: "Nova Solicitação",
+    loadingProofRequests: "Carregando solicitações de prova...",
+    noProofRequestsYet: "Nenhuma solicitação de prova na blockchain ainda.",
+    submitted: "Enviada",
+    newVaccineProofRequest: "Nova Solicitação de Prova de Vacina",
+    vaccineLabel: "Vacina",
+    loadingVaccines: "Carregando vacinas...",
+    noVaccinesRegistered: "Nenhuma vacina cadastrada",
+    selectVaccine: "Selecione uma vacina...",
+    patientId: "ID do Paciente",
+    validUntilLabel: "Válido Até",
+    requesting: "Solicitando...",
+    requestVaccineProofBtn: "Solicitar Prova de Vacina",
+    errRequestVaccineProof: "Falha ao solicitar prova de vacina: ",
+    patientIdPlaceholder: "Ex: PASSAPORTE-001",
+
+    // User Proof Requests View
+    myProofsTitleStart: "Minhas",
+    myProofsTitleEnd: "Provas de Vacina",
+    vaccineProofsSubtitle: "Veja e envie suas solicitações de prova de vacina.",
+    submitting: "Enviando…",
+    submitProof: "Enviar Prova",
+    errNoIssuerFound: "Nenhum emissor registrado encontrado.",
+    errSubmitProof: "Falha ao enviar prova: ",
   },
   es: {
     // Login
@@ -495,7 +701,7 @@ export const translations = {
     applicationLocation: "Lugar de Aplicación",
     locationPlaceholder: "Ej: Clínica Central, Farmacia Popular...",
     locationTip:
-      "Consejo: Use o nome oficial do posto de saúde ou clínica para melhor rastreio.",
+      "Consejo: Use el nombre oficial del centro de salud o clínica para un mejor seguimiento.",
     secureRegistry: "Registro Seguro",
     secureRegistryDesc:
       "Su información de salud está cifrada y se utiliza únicamente para su control personal de inmunización.",
@@ -539,16 +745,16 @@ export const translations = {
     loading: "Procesando...",
 
     // Manage Access
-    accessAdminTitleEnd: "Acessos",
-    accessAdminSubtitle: "Gerencie as permissoes dos usuarios",
-    accessAddAdminTitle: "Adicionar um novo Admin",
+    accessAdminTitleEnd: "Accesos",
+    accessAdminSubtitle: "Gestionar permisos de usuario",
+    accessAddAdminTitle: "Agregar un nuevo Admin",
     accessAddAdminLink: "Crear enlace de invitación",
     accessAddAdminDesc:
       "Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.",
-    accessAddClinicTitle: "Add a new Clinic",
-    accessAddAClinicLink: "Create invitation link",
+    accessAddClinicTitle: "Agregar una nueva Clínica",
+    accessAddAClinicLink: "Crear enlace de invitación",
     accessAddClinicDesc:
-      "Create an invitation link and send it to the user to become an clinic.",
+      "Crea un enlace de invitación y envíalo al usuario para que se convierta en clínica.",
     removeAccess: "Retira mi acceso de administrador",
 
     // List Clinics View
@@ -565,6 +771,109 @@ export const translations = {
     needHelpFinding: "¿Necesitas ayuda para encontrar una clínica?",
     contactLocalHealth:
       "Contacta a tu autoridad de salud local para obtener información actualizada sobre los centros de vacunación.",
+
+    // Shared UI
+    cancel: "Cancelar",
+    online: "En línea",
+    unnamed: "Sin nombre",
+    coordinates: "Coordenadas:",
+    issuerLabel: "Emisor:",
+    noIssuerRegistered: "Ningún emisor registrado",
+    reqIdLabel: "ID Sol:",
+    errConnectContract: "Error al conectar con el contrato",
+
+    // Access Admin
+    inviteLinkCreated: "¡Enlace de invitación creado!",
+    inviteLinkStoredDesc: "Comparta este enlace de forma segura con el destinatario.",
+    copyLink: "Copiar enlace",
+    removeAdminTitle: "Retirar mi acceso de administrador",
+    removeAdminDesc: "Elimina tus permisos de administrador de la blockchain. Esta acción no se puede deshacer.",
+    adminAccessRemoved: "¡Acceso de administrador eliminado con éxito!",
+    errCreateInvite: "Error al crear invitación: ",
+    errRemoveAdmin: "Error al eliminar administrador: ",
+
+    // Deploy Contract
+    deploySuccessDesc: "Esta dirección está guardada en su navegador. Todas las vistas la usarán automáticamente en la próxima carga.",
+    copyAddress: "Copiar dirección",
+
+    // Metrics Admin
+    totalVaccinesRegistered: "Total de Vacunas Registradas",
+    activeAdmins: "Admins Activos",
+    activeVerifierOwners: "Propietarios Activos",
+    totalClinicsMetric: "Total de Clínicas",
+    pendingAdminInvites: "Invitaciones de Admin Pendientes",
+    pendingVerifierInvites: "Invitaciones de Clínica Pendientes",
+
+    // Issuers Admin
+    issuersAdminTitleEnd: "Emisores de Certificado",
+    issuersAdminSubtitle: "Registre y revise las organizaciones autorizadas para emitir certificados de vacunación.",
+    addIssuer: "Agregar Emisor",
+    addingIssuer: "Agregando Emisor...",
+    vaccinationCertIssuers: "Emisores de Certificado de Vacunación",
+    loadingIssuers: "Cargando emisores...",
+    noIssuersRegistered: "Aún no hay emisores registrados.",
+    addCertIssuerTitle: "Agregar Emisor de Certificado",
+    addIssuerInfo: "Para registrar un emisor de certificado, contacte al proveedor/emisor del certificado de vacuna para obtener sus datos (nombre, URI del servicio, endpoint de verificación y clave pública).",
+    issuerName: "Nombre del Emisor",
+    issuerUri: "URI del Emisor",
+    verificationEndpoint: "Endpoint de Verificación",
+    verificationEndpointDesc: "URL utilizada por agentes o personal administrativo para verificar la autenticidad de un certificado de vacunación.",
+    publicKey: "Clave Pública",
+    issuerNamePlaceholder: "Ej: Autoridad Nacional de Salud",
+    issuerUriPlaceholder: "Ej: https://emisor.ejemplo.com",
+    issuerVerifEndpointPlaceholder: "Ej: https://emisor.ejemplo.com/verificar",
+    issuerKeyPlaceholder: "Clave pública proporcionada por el emisor",
+    issuerShieldedId: "ID Blindado del Emisor:",
+    signaturePubKey: "Clave Pública de Firma:",
+    uriLabel: "URI:",
+    verificationEndpointLabel: "Endpoint de Verificación:",
+
+    // Clinics Admin
+    clinicsTitleEnd: "Clínicas",
+    manageClinicsSubtitle: "Registre sus clínicas en la blockchain y vea todas las clínicas actualmente registradas.",
+    registerNewClinic: "Registrar Nueva Clínica",
+    clinicName: "Nombre de la Clínica",
+    clinicAddress: "Dirección",
+    latitude: "Latitud",
+    longitude: "Longitud",
+    clinicNamePlaceholder: "Ej: Clínica de Salud Ciudad",
+    addressPlaceholder: "Ej: Calle Principal 123, Ciudad",
+    latitudePlaceholder: "Ej: -23.5990263",
+    longitudePlaceholder: "Ej: -46.6419712",
+    onlineClinic: "Clínica en línea (ofrece servicios remotos/telesalud)",
+    registering: "Registrando...",
+    registerClinic: "Registrar Clínica",
+    loadingClinics: "Cargando clínicas...",
+    noClinicsOnChain: "Aún no hay clínicas registradas en la blockchain.",
+    clinicShieldedId: "ID Blindado de la Clínica:",
+    ownerShieldedId: "ID Blindado del Propietario:",
+
+    // Vaccine Proof Requests
+    vaccineProofRequests: "Solicitudes de Prueba de Vacuna",
+    newRequest: "Nueva Solicitud",
+    loadingProofRequests: "Cargando solicitudes de prueba...",
+    noProofRequestsYet: "Aún no hay solicitudes de prueba en la blockchain.",
+    submitted: "Enviada",
+    newVaccineProofRequest: "Nueva Solicitud de Prueba de Vacuna",
+    vaccineLabel: "Vacuna",
+    loadingVaccines: "Cargando vacunas...",
+    noVaccinesRegistered: "No hay vacunas registradas",
+    selectVaccine: "Seleccione una vacuna...",
+    patientId: "ID del Paciente",
+    validUntilLabel: "Válido Hasta",
+    requesting: "Solicitando...",
+    requestVaccineProofBtn: "Solicitar Prueba de Vacuna",
+    errRequestVaccineProof: "Error al solicitar prueba de vacuna: ",
+    patientIdPlaceholder: "Ej: PASAPORTE-001",
+
+    // User Proof Requests View
+    myProofsTitleStart: "Mis",
+    myProofsTitleEnd: "Pruebas de Vacuna",
+    vaccineProofsSubtitle: "Vea y envíe sus solicitudes de prueba de vacuna.",
+    submitting: "Enviando…",
+    submitProof: "Enviar Prueba",
+    errNoIssuerFound: "No se encontró ningún emisor registrado.",
+    errSubmitProof: "Error al enviar prueba: ",
   },
 };
 
