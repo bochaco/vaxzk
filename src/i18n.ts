@@ -222,8 +222,11 @@ export const translations = {
     // Invite Page
     invitePageTitleClinic: "Join as Clinic",
     invitePageTitleAdmin: "Join as Admin",
+    invitePageSubtitleClinic: "You have been invited to join as an authorized clinic. Accept the invitation to start managing vaccination records on the network.",
+    invitePageSubtitleAdmin: "You have been invited to join as a system administrator. Accept the invitation to gain access to platform management.",
     acceptInviteBtn: "Accept Invitation",
     inviteAccepted: "Invitation accepted successfully!",
+    inviteAcceptedDesc: "You now have access to the platform. You can close this page or navigate to the main app.",
     inviteCodeMissing: "Invite code is required.",
     inviteRoleMissing: "Role is required.",
 
@@ -544,8 +547,11 @@ export const translations = {
     // Invite Page
     invitePageTitleClinic: "Entrar como Clínica",
     invitePageTitleAdmin: "Entrar como Admin",
+    invitePageSubtitleClinic: "Você foi convidado para participar como clínica autorizada. Aceite o convite para começar a gerenciar registros de vacinação na rede.",
+    invitePageSubtitleAdmin: "Você foi convidado para participar como administrador do sistema. Aceite o convite para obter acesso ao gerenciamento da plataforma.",
     acceptInviteBtn: "Aceitar Convite",
     inviteAccepted: "Convite aceito com sucesso!",
+    inviteAcceptedDesc: "Você agora tem acesso à plataforma. Você pode fechar esta página ou navegar até o aplicativo principal.",
     inviteCodeMissing: "Código de convite é necessário.",
     inviteRoleMissing: "Papel é necessário.",
 
@@ -865,8 +871,11 @@ export const translations = {
     // Invite Page
     invitePageTitleClinic: "Unirse como Clínica",
     invitePageTitleAdmin: "Unirse como Admin",
+    invitePageSubtitleClinic: "Has sido invitado a unirte como clínica autorizada. Acepta la invitación para comenzar a gestionar registros de vacunación en la red.",
+    invitePageSubtitleAdmin: "Has sido invitado a unirte como administrador del sistema. Acepta la invitación para obtener acceso a la gestión de la plataforma.",
     acceptInviteBtn: "Aceptar Invitación",
     inviteAccepted: "¡Invitación aceptada con éxito!",
+    inviteAcceptedDesc: "Ahora tienes acceso a la plataforma. Puedes cerrar esta página o navegar a la aplicación principal.",
     inviteCodeMissing: "El código de invitación es necesario.",
     inviteRoleMissing: "El rol es necesario.",
 

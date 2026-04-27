@@ -10,7 +10,7 @@ interface InvitePageProps {
 const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   const { i18n } = useLanguage();
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
@@ -24,6 +24,11 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     return <p className="p-8 text-error">{i18n.inviteRoleMissing}</p>;
   }
 
+  const isClinic = role === "clinic";
+  const pageTitle = isClinic ? i18n.invitePageTitleClinic : i18n.invitePageTitleAdmin;
+  const pageSubtitle = isClinic ? i18n.invitePageSubtitleClinic : i18n.invitePageSubtitleAdmin;
+  const roleIcon = isClinic ? "local_hospital" : "admin_panel_settings";
+
   const handleAcceptInvite = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -31,73 +36,83 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
 
     setLoading(true);
     setError(null);
-    setSuccess(null);
 
     try {
-      const inviteRole = role === "clinic" ? "clinic" : "admin";
-      await vaxApi.acceptInvite(inviteRole, code.trim());
-      setSuccess(i18n.inviteAccepted);
+      await vaxApi.acceptInvite(isClinic ? "clinic" : "admin", code.trim());
+      setSuccess(true);
     } catch (err) {
       console.error("Contract failed:", err);
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError(String(err));
-      }
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
 
-  const pageTitle = role === "clinic" ? i18n.invitePageTitleClinic : i18n.invitePageTitleAdmin;
-
   return (
-  <main className="pt-12 px-6 max-w-screen-md mx-auto">
-    <section className="mb-7">
-      <h2
-        className="text-4xl font-extrabold tracking-tight text-on-surface mb-2"
-      >
-        {pageTitle}
-      </h2>
-    </section>
-    <div className="space-y-16">
-      <div className="bg-surface-container-low p-8 rounded-xl shadow-sm border-none relative overflow-hidden">
-        <form
-        onSubmit={handleAcceptInvite}
-        className="space-y-8 relative z-10">
-          <div className="bg-secondary-container/20 p-5 rounded-lg border-none flex items-start gap-4 mt-12"
-          style={{"background": "rgb(161 190 253 / 0.2)"}}>
-            <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-on-secondary-container">
-                verified_user
-              </span>
-            </div>
-            {error && (
-              <p className="text-error text-sm mt-3 px-1">{error}</p>
-            )}
-            {success && (
-              <p className="text-green-600 text-sm mt-3 px-1 font-medium">{success}</p>
-            )}
-            <div className="pt-6">
-                <button
-                  className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
-                  style={{ background: "#0070eb" }}
-                  type="submit"
-                  disabled={loading}
-                >
-                  <span>
-                    {loading ? i18n.loading : i18n.acceptInviteBtn}
-                  </span>
-                  {!loading && (
-                    <span className="material-symbols-outlined">
-                      check_circle
-                    </span>
-                  )}
-                </button>
+    <main className="min-h-screen bg-slate-50 flex items-center justify-center px-6 py-16">
+      <div className="w-full max-w-lg">
+
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-5">
+            <span className="material-symbols-outlined text-primary text-3xl">{roleIcon}</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-on-surface mb-3">
+            {pageTitle}
+          </h1>
+          <p className="text-on-surface-variant text-base leading-relaxed max-w-sm mx-auto">
+            {pageSubtitle}
+          </p>
+        </div>
+
+        {/* Card */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
+          {success ? (
+            <div className="flex flex-col items-center gap-4 py-4 text-center">
+              <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
+                <span className="material-symbols-outlined text-green-600 text-3xl">check_circle</span>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-green-700">{i18n.inviteAccepted}</p>
+                <p className="text-sm text-on-surface-variant mt-1">{i18n.inviteAcceptedDesc}</p>
               </div>
             </div>
-          </form>
+          ) : (
+            <form onSubmit={handleAcceptInvite} className="flex flex-col gap-6">
+              {/* Invite code info */}
+              <div className="bg-slate-50 rounded-xl p-4 flex items-center gap-3">
+                <span className="material-symbols-outlined text-slate-400 shrink-0">key</span>
+                <code className="text-xs font-mono text-slate-500 break-all">{code}</code>
+              </div>
+
+              {error && (
+                <div className="flex items-start gap-2 bg-red-50 border border-red-100 rounded-xl p-4">
+                  <span className="material-symbols-outlined text-error text-base shrink-0 mt-0.5">error</span>
+                  <p className="text-error text-sm">{error}</p>
+                </div>
+              )}
+
+              <button
+                className="w-full py-4 bg-primary text-white font-bold text-base rounded-xl shadow-md shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-xl">sync</span>
+                    <span>{i18n.loading}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-xl">verified_user</span>
+                    <span>{i18n.acceptInviteBtn}</span>
+                  </>
+                )}
+              </button>
+            </form>
+          )}
         </div>
+
       </div>
     </main>
   );
