@@ -603,19 +603,21 @@ describe("VaxZk contract", () => {
   // ── revokeClinic and ownerClinics ─────────────────────────────────────────
 
   describe("revokeClinic and ownerClinics", () => {
-    it("revokeClinic does not remove the owner from ownerClinics, so they can still request proofs", () => {
+    it("revokeClinic removes the owner from ownerClinics, so they can no longer request proofs", () => {
       const clinic = randomUser();
       simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.revokeClinic(clinicId(clinic));
       expect(simulator.getLedger().clinics.member(clinicId(clinic))).toBe(false);
+      expect(simulator.getLedger().ownerClinics.member(clinicId(clinic))).toBe(false);
 
       simulator.switchUser(clinic);
-      const proofReqId = simulator.requestVaccineProof({
-        vaccine: encodeBytes20("HepB"),
-        personalId: encodeBytes20("PASS-REVOKED"),
-        validUntil: randomTimestamp(),
-      });
-      expect(simulator.getLedger().vaccineProofReqs.member(proofReqId)).toBe(true);
+      expect(() =>
+        simulator.requestVaccineProof({
+          vaccine: encodeBytes20("HepB"),
+          personalId: encodeBytes20("PASS-REVOKED"),
+          validUntil: randomTimestamp(),
+        })
+      ).toThrow("You are not a registered clinic");
     });
   });
 
