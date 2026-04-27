@@ -169,11 +169,11 @@ export const translations = {
     accessAdminTitleEnd: "Access",
     accessAdminSubtitle: "Manage user permissions",
     accessAddAdminTitle: "Add a new Admin",
-    accessAddAdminLink: "Create invitation link",
+    accessAddAdminLink: "Create Admin Invitation",
     accessAddAdminDesc:
       "Create an invitation link and send it to the user to become an admin.",
     accessAddClinicTitle: "Add a new Clinic",
-    accessAddAClinicLink: "Create invitation link",
+    accessAddAClinicLink: "Create Clinic Invitation",
     accessAddClinicDesc:
       "Create an invitation link and send it to the user to become an clinic.",
     removeAccess: "Remove my admin access",
@@ -215,6 +215,14 @@ export const translations = {
     // Deploy Contract
     deploySuccessDesc: "This address is stored in your browser. All views will use it automatically on the next page load.",
     copyAddress: "Copy address",
+
+    // Invite Page
+    invitePageTitleClinic: "Join as Clinic",
+    invitePageTitleAdmin: "Join as Admin",
+    acceptInviteBtn: "Accept Invitation",
+    inviteAccepted: "Invitation accepted successfully!",
+    inviteCodeMissing: "Invite code is required.",
+    inviteRoleMissing: "Role is required.",
 
     // Metrics Admin
     totalVaccinesRegistered: "Total Vaccines Registered",
@@ -475,11 +483,11 @@ export const translations = {
     accessAdminTitleEnd: "Acessos",
     accessAdminSubtitle: "Gerencie as permissoes dos usuarios",
     accessAddAdminTitle: "Adicionar um novo Admin",
-    accessAddAdminLink: "Criar link de convite",
+    accessAddAdminLink: "Criar convite de admin",
     accessAddAdminDesc:
       "Crie um link de convite e envie para o usuario se tornar admin.",
     accessAddClinicTitle: "Adicionar uma nova Clínica",
-    accessAddAClinicLink: "Criar link de convite",
+    accessAddAClinicLink: "Criar convite de clínica",
     accessAddClinicDesc:
       "Crie um link de convite e envie para o usuário se tornar uma clínica.",
     removeAccess: "Remover meu acesso de admin",
@@ -522,6 +530,14 @@ export const translations = {
     // Deploy Contract
     deploySuccessDesc: "Este endereço está salvo no seu navegador. Todas as visualizações o usarão automaticamente no próximo carregamento.",
     copyAddress: "Copiar endereço",
+
+    // Invite Page
+    invitePageTitleClinic: "Entrar como Clínica",
+    invitePageTitleAdmin: "Entrar como Admin",
+    acceptInviteBtn: "Aceitar Convite",
+    inviteAccepted: "Convite aceito com sucesso!",
+    inviteCodeMissing: "Código de convite é necessário.",
+    inviteRoleMissing: "Papel é necessário.",
 
     // Metrics Admin
     totalVaccinesRegistered: "Total de Vacinas Cadastradas",
@@ -781,11 +797,11 @@ export const translations = {
     accessAdminTitleEnd: "Accesos",
     accessAdminSubtitle: "Gestionar permisos de usuario",
     accessAddAdminTitle: "Agregar un nuevo Admin",
-    accessAddAdminLink: "Crear enlace de invitación",
+    accessAddAdminLink: "Crear invitación de admin",
     accessAddAdminDesc:
       "Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.",
     accessAddClinicTitle: "Agregar una nueva Clínica",
-    accessAddAClinicLink: "Crear enlace de invitación",
+    accessAddAClinicLink: "Crear invitación de clínica",
     accessAddClinicDesc:
       "Crea un enlace de invitación y envíalo al usuario para que se convierta en clínica.",
     removeAccess: "Retira mi acceso de administrador",
@@ -828,6 +844,14 @@ export const translations = {
     // Deploy Contract
     deploySuccessDesc: "Esta dirección está guardada en su navegador. Todas las vistas la usarán automáticamente en la próxima carga.",
     copyAddress: "Copiar dirección",
+
+    // Invite Page
+    invitePageTitleClinic: "Unirse como Clínica",
+    invitePageTitleAdmin: "Unirse como Admin",
+    acceptInviteBtn: "Aceptar Invitación",
+    inviteAccepted: "¡Invitación aceptada con éxito!",
+    inviteCodeMissing: "El código de invitación es necesario.",
+    inviteRoleMissing: "El rol es necesario.",
 
     // Metrics Admin
     totalVaccinesRegistered: "Total de Vacunas Registradas",

@@ -140,14 +140,21 @@ The output in `dist/` is a fully static site. Deploy it to any static host — V
 
 ### Network configuration
 
-The app connects to the Midnight preprod testnet by default. The currently deployed contract address is:
+The app connects to the Midnight `preprod` testnet by default. You can override the network ID using the `VITE_NETWORK_ID` environment variable. Create a `.env` file in the project root (see `.env.example`) or set the variable inline:
 
-```
-927b02ceb1bc3776e87cd5c316b1e43c2a93d6c5b92295f2609c010d1f51a678
+```bash
+# Use the default preprod network
+npm run dev
+
+# Use a local/undeployed network
+VITE_NETWORK_ID=undeployed npm run dev
+
+# Or persist it in a .env file
+echo "VITE_NETWORK_ID=undeployed" > .env
+npm run dev
 ```
 
-You can view it at:
-`https://preprod.nightforge.jp/address/927b02ceb1bc3776e87cd5c316b1e43c2a93d6c5b92295f2609c010d1f51a678`
+The variable is read at build time by Vite. Any value accepted by the Midnight SDK (e.g. `preprod`, `undeployed`) is valid.
 
 ---
 

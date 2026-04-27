@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useLocation } from "react-router-dom";
 import { VaxZkAPI } from "./contract-api/index";
+import { useLanguage } from './LanguageContext';
 
 interface InvitePageProps {
   vaxApi: VaxZkAPI;
 }
 
 const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
+  const { i18n } = useLanguage();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -15,11 +17,11 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
   const params = new URLSearchParams(location.search);
   const code = params.get("code");
   if (!code) {
-    return "code is necessary"
+    return <p className="p-8 text-error">{i18n.inviteCodeMissing}</p>;
   }
   const role = params.get("role");
   if (!role) {
-    return "role is necessary"
+    return <p className="p-8 text-error">{i18n.inviteRoleMissing}</p>;
   }
 
   const handleAcceptInvite = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,6 +36,7 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     try {
       const inviteRole = role === "clinic" ? "clinic" : "admin";
       await vaxApi.acceptInvite(inviteRole, code.trim());
+      setSuccess(i18n.inviteAccepted);
     } catch (err) {
       console.error("Contract failed:", err);
       if (err instanceof Error) {
@@ -46,19 +49,20 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
     }
   };
 
+  const pageTitle = role === "clinic" ? i18n.invitePageTitleClinic : i18n.invitePageTitleAdmin;
+
   return (
   <main className="pt-12 px-6 max-w-screen-md mx-auto">
     <section className="mb-7">
       <h2
         className="text-4xl font-extrabold tracking-tight text-on-surface mb-2"
-        style={{}}
       >
-        Adicionar como {role === "clinic" ? "Clínica" : "Admin"}
+        {pageTitle}
       </h2>
     </section>
     <div className="space-y-16">
       <div className="bg-surface-container-low p-8 rounded-xl shadow-sm border-none relative overflow-hidden">
-        <form 
+        <form
         onSubmit={handleAcceptInvite}
         className="space-y-8 relative z-10">
           <div className="bg-secondary-container/20 p-5 rounded-lg border-none flex items-start gap-4 mt-12"
@@ -81,8 +85,8 @@ const InvitePage: React.FC<InvitePageProps> = ({ vaxApi }) => {
                   type="submit"
                   disabled={loading}
                 >
-                  <span className="">
-                    {loading ? "Processando..." : "Salvar Registro"}
+                  <span>
+                    {loading ? i18n.loading : i18n.acceptInviteBtn}
                   </span>
                   {!loading && (
                     <span className="material-symbols-outlined">
