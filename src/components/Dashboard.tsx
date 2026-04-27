@@ -3,8 +3,6 @@ import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { useProfile, ProfileSelector } from "../Profile";
 import type { Tab } from "../Profile";
-import HomeView from "./user/HomeView";
-import WalletView from "./user/WalletView";
 import ListClinicsView from "./user/ListClinicsView";
 import UserProofRequestsView from "./user/UserProofRequestsView";
 import AddVaccineView from "./clinic/AddVaccineView";
@@ -39,10 +37,6 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   const renderView = () => {
     switch (activeTab) {
-      case "home":
-        return <HomeView walletAddress={walletAddress} />;
-      case "wallet": // USER
-        return <WalletView />;
       case "listclinics": // USER
         return <ListClinicsView vaxApi={vaxApi!} />;
       case "myproofs": // USER
@@ -66,7 +60,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           case "clinic":
             return <AddVaccineView connectedApi={connectedApi!} />;
           default:
-            return <HomeView walletAddress={walletAddress} />;
+            return <UserProofRequestsView connectedApi={connectedApi!} />;
         }
     }
   };
@@ -123,50 +117,27 @@ const Dashboard: React.FC<DashboardProps> = ({
 
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-slate-50/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:flex">
-        {profile == "user" && (
-          <button
-            onClick={() => handleTabChange("home")}
-            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "home"
-                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-                : "text-slate-400 hover:text-blue-600"
-            }`}
-          >
-            <span translate="no" 
-              className="material-symbols-outlined"
-              style={{
-                fontVariationSettings:
-                  activeTab === "home" ? "'FILL' 1" : undefined,
-              }}
-            >
-              home
-            </span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Home
-            </span>
-          </button>
-        )}
 
         {profile == "user" && (
           <button
-            onClick={() => handleTabChange("wallet")}
+            onClick={() => handleTabChange("myproofs")}
             className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "wallet"
+              activeTab === "myproofs"
                 ? "text-blue-700 bg-blue-100/50 rounded-2xl"
                 : "text-slate-400 hover:text-blue-600"
             }`}
           >
-            <span translate="no" 
+            <span translate="no"
               className="material-symbols-outlined"
               style={{
                 fontVariationSettings:
-                  activeTab === "wallet" ? "'FILL' 1" : undefined,
+                  activeTab === "myproofs" ? "'FILL' 1" : undefined,
               }}
             >
-              account_balance_wallet
+              vaccines
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Wallet
+              My Proofs
             </span>
           </button>
         )}
@@ -191,30 +162,6 @@ const Dashboard: React.FC<DashboardProps> = ({
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
               Clinics
-            </span>
-          </button>
-        )}
-
-        {profile == "user" && (
-          <button
-            onClick={() => handleTabChange("myproofs")}
-            className={`flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-150 transition-all ${
-              activeTab === "myproofs"
-                ? "text-blue-700 bg-blue-100/50 rounded-2xl"
-                : "text-slate-400 hover:text-blue-600"
-            }`}
-          >
-            <span translate="no"
-              className="material-symbols-outlined"
-              style={{
-                fontVariationSettings:
-                  activeTab === "myproofs" ? "'FILL' 1" : undefined,
-              }}
-            >
-              vaccines
-            </span>
-            <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              My Proofs
             </span>
           </button>
         )}

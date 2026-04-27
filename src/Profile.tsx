@@ -8,7 +8,7 @@ const ProfileOptions = [
 ]
 
 export type Profile = 'admin' | 'clinic' | 'user';
-export type Tab = "home" | "wallet" | "listclinics" | "myproofs" | "addvaccine" | "clinicprofile" | "metricsDerivedClinic" | "adminvaccine" | "metrics" | "access" | "adminissuers";
+export type Tab = "listclinics" | "myproofs" | "addvaccine" | "clinicprofile" | "metricsDerivedClinic" | "adminvaccine" | "metrics" | "access" | "adminissuers";
 
 interface ProfileContextValue {
   profile: Profile;
@@ -20,7 +20,7 @@ interface ProfileContextValue {
 const ProfileContext = createContext<ProfileContextValue>({
   profile: 'user',
   setProfile: () => {},
-  activeTab: 'home',
+  activeTab: 'myproofs',
   setActiveTab: () => {},
 });
 
@@ -30,7 +30,7 @@ export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
   const handleProfileChange = (newProfile: Profile) => {
     if (newProfile === profile) return;
     console.log("handleProfileChange", newProfile);
-    setActiveTab(newProfile === "user" ? "home" : newProfile === "clinic" ? "addvaccine" : "metrics");
+    setActiveTab(newProfile === "user" ? "myproofs" : newProfile === "clinic" ? "addvaccine" : "metrics");
     setProfile(newProfile);
   };
 
@@ -47,7 +47,7 @@ export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
 
 export const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = useState<Profile>('user');
-  const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [activeTab, setActiveTab] = useState<Tab>('myproofs');
 
   return (
     <ProfileContext.Provider value={{ profile, setProfile, activeTab, setActiveTab }}>
