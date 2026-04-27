@@ -7,9 +7,10 @@ import { buildProviders, VaxZkAPI } from "../contract-api/index";
 interface DeployContractProps {
   onLogout: () => void;
   walletAddress: string | null;
+  onDeployed?: (address: string) => void;
 }
 
-const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddress}) => {
+const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddress, onDeployed}) => {
   const { i18n } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployedAddress, setDeployedAddress] = useState<string | null>(
@@ -188,6 +189,14 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                     <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
                   </button>
                 </div>
+                <button
+                  type="button"
+                  className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow active:scale-95 transition-all duration-200 flex items-center justify-center gap-2"
+                  onClick={() => onDeployed?.(deployedAddress)}
+                >
+                  <span className="material-symbols-outlined text-base">arrow_forward</span>
+                  <span>{i18n.useThisContract}</span>
+                </button>
               </div>
             )}
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import { networkId, getContractId } from "./components/ConfigNetwork";
+import { networkId, getContractId, setContractId } from "./components/ConfigNetwork";
 import DeployContractView from "./components/DeployContractView";
 import { ProfileProvider } from './Profile';
 import { LanguageProvider, useLanguage } from './LanguageContext';
@@ -44,25 +44,30 @@ function AppContent() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [connectedApi, setConnectedApi] = useState<ConnectedAPI | null>(null);
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
+  const [contractId, setContractIdState] = useState<string>(() => getContractId());
 
-  const handleLoginSuccess = async (address: string, connectedApi: ConnectedAPI) => {
-    console.log('loading...');
-
-    if (getContractId()) {
-      const providers = await buildProviders(connectedApi, networkId);
-      // Using placeholder secret key as in Dashboard.tsx
+  const handleLoginSuccess = async (address: string, api: ConnectedAPI) => {
+    const id = getContractId();
+    if (id) {
+      const providers = await buildProviders(api, networkId);
       const secretKey = new Uint8Array(32);
-      const vaxApi =  await VaxZkAPI.join(
-        providers,
-        getContractId(),
-        secretKey,
-      );
-      setVaxApi(vaxApi);
+      const joined = await VaxZkAPI.join(providers, id, secretKey);
+      setVaxApi(joined);
     }
-
     setWalletAddress(address);
-    setConnectedApi(connectedApi);
+    setConnectedApi(api);
     setIsConnected(true);
+  };
+
+  const handleDeployed = async (address: string) => {
+    setContractId(address);
+    setContractIdState(address);
+    if (connectedApi) {
+      const providers = await buildProviders(connectedApi, networkId);
+      const secretKey = new Uint8Array(32);
+      const joined = await VaxZkAPI.join(providers, address, secretKey);
+      setVaxApi(joined);
+    }
   };
 
   const handleLogout = () => {
@@ -78,8 +83,8 @@ function AppContent() {
           <><LanguageSelector fixed /><Login onLoginSuccess={handleLoginSuccess} /></>
         ) : (
           <>
-            {!getContractId() ? (
-              <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} />
+            {!contractId ? (
+              <DeployContractView onLogout={handleLogout} walletAddress={walletAddress} onDeployed={handleDeployed} />
             ) : (
               <Routes>
                 <Route path="/invite" element={ <InvitePage vaxApi={vaxApi!} />} />
