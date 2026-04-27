@@ -1,3 +1,8 @@
+// VaxZK — Main Contract
+// Role model: Admin manages verifiers/issuers/vaccines; Verifier requests proofs;
+// User holds private certificates and submits ZK proofs on demand.
+// Privacy: raw certificate data never appears on the public ledger — it lives in
+// the user's local encrypted private state and is verified inside ZK circuits.
 pragma language_version >= 0.20;
 
 import CompactStandardLibrary;
@@ -13,7 +18,9 @@ export { ClinicProfile,
 
 include 'Invites';
 
-// Public ledger of shielded clinic IDs.
+// All ledger entries are public. Sensitive certificate data is never stored here.
+
+// Public ledger of shielded verifier/clinic IDs.
 export ledger clinics: Map<Bytes<32>, ClinicProfile>;
 
 // Public ledger of vaccines list.
@@ -31,13 +38,16 @@ export ledger proofReqId: Counter;
 // Map of vaccine proof requests indexed by assigned ID
 export ledger vaccineProofReqs: Map<Bytes<32>, VaccineProofRequest>;
 
-// Map of sumitted vaccine proofs indexed by request ID
+// Map of submitted vaccine proofs indexed by request ID.
+// VaxZkProof fields are disclosed here after the circuit passes — they become public.
 export ledger vaccineProofs: Map<Bytes<32>, VaxZkProof>;
 
 // Reads the caller's 32-byte secret key from local private state.
 witness localSk(): Bytes<32>;
 
-// Obtain the vaccine certificate proof signed by a registered issuer
+// Reads the VaxZkProof from the user's local encrypted private state.
+// Bridges private data into the ZK circuit without disclosing it; the circuit
+// verifies correctness before `disclose` is called on the proof fields.
 witness getAttestedCertProofWitness(): VaxZkProof;
 
 // Registers the deployer as the first admin by inserting their shielded ID.
@@ -76,11 +86,14 @@ constructor() {
   ownerClinics.insert(disclose(adminId));
 }
 
-// Derives a deterministic shielded ID using a persistent hash.
+// Derives a stable, unlinkable on-chain identifier from a raw 32-byte public key.
+// This is the canonical identity token used across `admins`, `ownerClinics`,
+// `ClinicProfile.ownerId`, and the Schnorr signature's `userShieldedPubKey`.
 export circuit getShieldedId(id: Bytes<32>): Bytes<32> {
   return persistentHash<Vector<2, Bytes<32>>>([pad(32, "registered-entity-id:"), id]);
 }
 
+// Derives and increments the next issuer ID from the `issuerId` counter.
 circuit getCertIssuerId(): Bytes<32> {
   const newIssuerId =
           persistentHash<Vector<2, Field>>([pad(32, "cert-issuer-id:") as Field, issuerId as Field]);
@@ -88,7 +101,7 @@ circuit getCertIssuerId(): Bytes<32> {
   return newIssuerId;
 }
 
-// Generate a new cert proof request ID.
+// Derives and increments the next proof request ID from the `proofReqId` counter.
 circuit getProofReqId(): Bytes<32> {
   const newProofReqId =
           persistentHash<Vector<2, Field>>([pad(32, "proof-req-id:") as Field, proofReqId as Field]);
@@ -96,7 +109,7 @@ circuit getProofReqId(): Bytes<32> {
   return newProofReqId;
 }
 
-// Registers a clinic by their shielded ID and profile info. Caller must be an admin.
+// Admin-only. Registers a verifier/clinic and grants the owner proof-request rights.
 export circuit addClinic(clinicId: Bytes<32>, clinicProfile: ClinicProfile): [] {
   isAdmin();
   assert(!clinics.member(disclose(clinicId)), "The ID is already in the clinics list");
@@ -126,20 +139,23 @@ export circuit addCertificateIssuer(issuerInfo: CertIssuerInfo): Bytes<32> {
   return newIssuerId;
 }
 
-// Vaccines
+// Admin-only. Adds a vaccine type to the approved catalog.
 export circuit addVaccine(name: Bytes<20>): [] {
   isAdmin();
   assert(!vaccines.member(disclose(name)), "Vaccine type already registered");
   vaccines.insert(disclose(name));
 }
 
+// Admin-only. Removes a vaccine type from the catalog. Does not invalidate
+// existing proof requests or submitted proofs that reference this vaccine.
 export circuit delVaccine(name: Bytes<20>): [] {
   isAdmin();
   assert(vaccines.member(disclose(name)), "Vaccine type is not registered");
   vaccines.remove(disclose(name));
 }
 
-// Registers a new vaccine proof request. Caller must be a clinic.
+// Verifier-only. Creates a proof request on the public ledger and returns its ID.
+// All request fields (`vaccine`, `personalId`, `validUntil`) are publicly visible.
 export circuit requestVaccineProof(req: VaccineProofRequest): Bytes<32> {
   isClinic();
   const newProofReqId = getProofReqId();
@@ -150,7 +166,13 @@ export circuit requestVaccineProof(req: VaccineProofRequest): Bytes<32> {
   return newProofReqId;
 }
 
-// Submits a requested vaccine proof.
+// Open to any user. Reads the private VaxZkProof from local state and verifies:
+// issuer is registered, vaccine and personalId match the request, certificate is
+// not expired, and the Schnorr signature is valid. On success, writes the proof
+// to the public ledger.
+// The Schnorr signature binds the certificate to the submitting wallet via
+// `getShieldedId(ownPublicKey())` — a cert issued for wallet A cannot be
+// submitted from wallet B.
 export circuit submitVaccineProof(proofReqId: Bytes<32>): [] {
   assert(vaccineProofReqs.member(disclose(proofReqId)),
          "The ID is not the vaccine proof requests list"
