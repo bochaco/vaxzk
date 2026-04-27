@@ -1,4 +1,4 @@
-export const networkId = "preprod";
+export const networkId = import.meta.env.VITE_NETWORK_ID ?? "preprod";
 export const urlApp = "https://preprod.vaxzk.com.br";
 
 const STORAGE_KEY = "vaxzk_contract_id";

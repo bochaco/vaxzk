@@ -10,7 +10,8 @@ interface AccessAdminProps {
 
 const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
   const { i18n } = useLanguage();
-  const [loading, setLoading] = useState(false);
+  const [loadingAdmin, setLoadingAdmin] = useState(false);
+  const [loadingClinic, setLoadingClinicState] = useState(false);
   const [loadingRemove, setLoadingRemove] = useState(false);
   const [errorAdmin, setErrorAdmin] = useState<string | null>(null);
   const [errorClinic, setErrorClinic] = useState<string | null>(null);
@@ -24,7 +25,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
 
     if (!vaxApi) return;
 
-    setLoading(true);
+    setLoadingAdmin(true);
     setErrorAdmin(null);
     setLinkAdminAddress("");
     try {
@@ -40,7 +41,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
         setErrorAdmin(i18n.errCreateInvite + String(err));
       }
     } finally {
-      setLoading(false);
+      setLoadingAdmin(false);
     }
   };
 
@@ -49,7 +50,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
 
     if (!vaxApi) return;
 
-    setLoading(true);
+    setLoadingClinicState(true);
     setErrorClinic(null);
     setLinkClinicAddress("");
     try {
@@ -65,7 +66,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
         setErrorClinic(i18n.errCreateInvite + String(err));
       }
     } finally {
-      setLoading(false);
+      setLoadingClinicState(false);
     }
   };
 
@@ -103,11 +104,11 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
         <h3 className="text-lg font-semibold text-on-surface mb-4">{i18n.accessAddAdminTitle}</h3>
         <p className="text-on-surface-variant text-sm mb-4">{i18n.accessAddAdminDesc}</p>
         <form onSubmit={handleAddInviteAdmin} className="flex flex-col gap-4">
-            <button 
+            <button
               className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
               type="submit"
-              disabled={loading}>
-                {loading ? (
+              disabled={loadingAdmin}>
+                {loadingAdmin ? (
                   <>
                     <span className="material-symbols-outlined animate-spin">
                       sync
@@ -152,11 +153,11 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
         <h3 className="text-lg font-semibold text-on-surface mb-4">{i18n.accessAddClinicTitle}</h3>
         <p className="text-on-surface-variant text-sm mb-4">{i18n.accessAddClinicDesc}</p>
         <form onSubmit={handleAddInviteClinic} className="flex flex-col gap-4">
-            <button 
+            <button
               className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
               type="submit"
-              disabled={loading}>
-                {loading ? (
+              disabled={loadingClinic}>
+                {loadingClinic ? (
                   <>
                     <span className="material-symbols-outlined animate-spin">
                       sync
@@ -174,24 +175,21 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
           {linkClinicAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
-                  <span translate="no" className="material-symbols-outlined">check_circle</span>
-                  <span>Contract deployed &amp; saved!</span>
+                  <span className="material-symbols-outlined">check_circle</span>
+                  <span>{i18n.inviteLinkCreated}</span>
                 </div>
-                <p className="text-xs text-green-800/70">
-                  This address is stored in your browser. All views will use it
-                  automatically on the next page load.
-                </p>
+                <p className="text-xs text-green-800/70">{i18n.inviteLinkStoredDesc}</p>
                 <div className="flex items-center gap-2 bg-white border border-green-100 rounded-lg px-4 py-3">
-                  <span translate="no" className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
+                  <span className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
                   <code className="text-xs font-mono text-green-900 break-all select-all flex-1">
                     {linkClinicAddress}
                   </code>
                   <button
                     type="button"
-                    title="Copy address"
+                    title={i18n.copyLink}
                     className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
                     onClick={() => navigator.clipboard.writeText(linkClinicAddress)}>
-                    <span translate="no" className="material-symbols-outlined text-green-600 text-base">content_copy</span>
+                    <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
                   </button>
                 </div>
               </div>
