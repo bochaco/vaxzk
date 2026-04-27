@@ -137,7 +137,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               vaccines
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              My Proofs
+              {i18n.navMyProofs}
             </span>
           </button>
         )}
@@ -161,7 +161,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               local_hospital
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Clinics
+              {i18n.navClinics}
             </span>
           </button>
         )}
@@ -185,7 +185,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               verified_user
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Vaccines
+              {i18n.navVaccines}
             </span>
           </button>
         )}
@@ -209,7 +209,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               local_hospital
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Profile
+              {i18n.navProfile}
             </span>
           </button>
         )}
@@ -233,7 +233,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               dashboard
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Metrics
+              {i18n.navMetrics}
             </span>
           </button>
         )}
@@ -257,7 +257,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               admin_panel_settings
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Access
+              {i18n.navAccess}
             </span>
           </button>
         )}
@@ -281,7 +281,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               vaccines
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Vaccines
+              {i18n.navVaccines}
             </span>
           </button>
         )}
@@ -305,7 +305,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               verified_user
             </span>
             <span className="text-[11px] font-medium tracking-wide uppercase mt-1">
-              Issuers
+              {i18n.navIssuers}
             </span>
           </button>
         )}

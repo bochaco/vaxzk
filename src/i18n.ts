@@ -291,6 +291,15 @@ export const translations = {
     submitProof: "Submit Proof",
     errNoIssuerFound: "No registered issuer found.",
     errSubmitProof: "Failed to submit proof: ",
+
+    // Bottom Nav
+    navMyProofs: "My Proofs",
+    navClinics: "Clinics",
+    navVaccines: "Vaccines",
+    navProfile: "Profile",
+    navMetrics: "Metrics",
+    navAccess: "Access",
+    navIssuers: "Issuers",
   },
   pt: {
     // Login
@@ -583,6 +592,15 @@ export const translations = {
     submitProof: "Enviar Prova",
     errNoIssuerFound: "Nenhum emissor registrado encontrado.",
     errSubmitProof: "Falha ao enviar prova: ",
+
+    // Bottom Nav
+    navMyProofs: "Minhas Provas",
+    navClinics: "Clínicas",
+    navVaccines: "Vacinas",
+    navProfile: "Perfil",
+    navMetrics: "Métricas",
+    navAccess: "Acesso",
+    navIssuers: "Emissores",
   },
   es: {
     // Login
@@ -874,6 +892,15 @@ export const translations = {
     submitProof: "Enviar Prueba",
     errNoIssuerFound: "No se encontró ningún emisor registrado.",
     errSubmitProof: "Error al enviar prueba: ",
+
+    // Bottom Nav
+    navMyProofs: "Mis Pruebas",
+    navClinics: "Clínicas",
+    navVaccines: "Vacunas",
+    navProfile: "Perfil",
+    navMetrics: "Métricas",
+    navAccess: "Acceso",
+    navIssuers: "Emisores",
   },
 };
 
