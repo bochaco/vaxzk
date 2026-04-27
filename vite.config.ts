@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import path from 'path'
 import react from '@vitejs/plugin-react'
 import wasm from 'vite-plugin-wasm'
 import topLevelAwait from 'vite-plugin-top-level-await'
@@ -26,6 +27,9 @@ export default defineConfig({
       // Alias 'buffer' and 'process' to their installed polyfills
       'buffer': 'buffer',
       'process': 'process/browser',
+      // isomorphic-ws browser build only has a default export; shim adds
+      // the named WebSocket export that @midnight-ntwrk packages expect.
+      'isomorphic-ws': path.resolve(__dirname, 'src/shims/isomorphic-ws.js'),
     },
   },
   build: {
