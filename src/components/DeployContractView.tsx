@@ -10,7 +10,7 @@ interface DeployContractProps {
 }
 
 const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddress}) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployedAddress, setDeployedAddress] = useState<string | null>(
     getContractId() || null,
@@ -76,7 +76,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
             <div className="flex items-center gap-3">
               <div className="flex flex-col text-left">
                 <span className="text-xs font-medium text-slate-500">
-                  {t.loggedInAs}
+                  {i18n.loggedInAs}
                 </span>
                 <span className="text-sm font-bold text-on-surface">
                   Midnight{" "}
@@ -97,7 +97,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-error hover:bg-error/10 transition-colors text-sm font-semibold"
             >
               <span className="material-symbols-outlined text-lg">logout</span>
-              <span className="hidden sm:inline">{t.logout}</span>
+              <span className="hidden sm:inline">{i18n.logout}</span>
             </button>
           </div>
         </div>
@@ -107,10 +107,10 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       {/* Page Title & Editorial Intro */}
       <section className="mb-12 text-left">
         <h2 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
-          {t.deployContract}
+          {i18n.deployContract}
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">
-          {t.deployContractSubtitle}
+          {i18n.deployContractSubtitle}
         </p>
       </section>
 
@@ -124,7 +124,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
             {/* General Settings */}
             <div className="space-y-3">
               <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-                {t.contractName}
+                {i18n.contractName}
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -134,7 +134,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                 </div>
                 <input
                   className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300 placeholder:text-outline"
-                  placeholder={t.contractNamePlaceholder}
+                  placeholder={i18n.contractNamePlaceholder}
                   type="text"
                   required
                 />
@@ -159,10 +159,10 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               </div>
               <div>
                 <h4 className="font-bold text-primary text-sm">
-                  {t.contractParamsTitle}
+                  {i18n.contractParamsTitle}
                 </h4>
                 <p className="text-xs text-blue-800/70 leading-relaxed mt-1">
-                  {t.contractDesc}
+                  {i18n.contractDesc}
                 </p>
               </div>
             </div>
@@ -171,12 +171,9 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>
-                  <span>Contract deployed &amp; saved!</span>
+                  <span>{i18n.deploySuccess}</span>
                 </div>
-                <p className="text-xs text-green-800/70">
-                  This address is stored in your browser. All views will use it
-                  automatically on the next page load.
-                </p>
+                <p className="text-xs text-green-800/70">{i18n.deploySuccessDesc}</p>
                 <div className="flex items-center gap-2 bg-white border border-green-100 rounded-lg px-4 py-3">
                   <span className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
                   <code className="text-xs font-mono text-green-900 break-all select-all flex-1">
@@ -184,7 +181,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                   </code>
                   <button
                     type="button"
-                    title="Copy address"
+                    title={i18n.copyAddress}
                     className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
                     onClick={() => navigator.clipboard.writeText(deployedAddress)}
                   >
@@ -207,11 +204,11 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
                     <span className="animate-spin material-symbols-outlined">
                       sync
                     </span>
-                    <span>{t.deploying}</span>
+                    <span>{i18n.deploying}</span>
                   </>
                 ) : (
                   <>
-                    <span>{t.deployContractButton}</span>
+                    <span>{i18n.deployContractButton}</span>
                     <span className="material-symbols-outlined">
                       cloud_upload
                     </span>

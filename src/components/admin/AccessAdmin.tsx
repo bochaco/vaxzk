@@ -9,7 +9,7 @@ interface AccessAdminProps {
 }
 
 const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [loadingRemove, setLoadingRemove] = useState(false);
   const [errorAdmin, setErrorAdmin] = useState<string | null>(null);
@@ -35,9 +35,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
-        setErrorAdmin("Erro ao criar um novo convite: " + err.message);
+        setErrorAdmin(i18n.errCreateInvite + err.message);
       } else {
-        setErrorAdmin("Erro ao criar um novo convite: " + String(err));
+        setErrorAdmin(i18n.errCreateInvite + String(err));
       }
     } finally {
       setLoading(false);
@@ -60,9 +60,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
-        setErrorClinic("Erro ao criar um novo convite: " + err.message);
+        setErrorClinic(i18n.errCreateInvite + err.message);
       } else {
-        setErrorClinic("Erro ao criar um novo convite: " + String(err));
+        setErrorClinic(i18n.errCreateInvite + String(err));
       }
     } finally {
       setLoading(false);
@@ -81,9 +81,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
     } catch (err) {
       console.error("Failed to remove admin:", err);
       if (err instanceof Error) {
-        setErrorRemove("Erro ao remover admin: " + err.message);
+        setErrorRemove(i18n.errRemoveAdmin + err.message);
       } else {
-        setErrorRemove("Erro ao remover admin: " + String(err));
+        setErrorRemove(i18n.errRemoveAdmin + String(err));
       }
     } finally {
       setLoadingRemove(false);
@@ -95,13 +95,13 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
 
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-          <span className="text-primary">{t.manage}</span> {t.accessAdminTitleEnd} </h2>
-        <p className="text-on-surface-variant text-lg leading-relaxed">{t.accessAdminSubtitle}</p>
+          <span className="text-primary">{i18n.manage}</span> {i18n.accessAdminTitleEnd} </h2>
+        <p className="text-on-surface-variant text-lg leading-relaxed">{i18n.accessAdminSubtitle}</p>
       </section>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">{t.accessAddAdminTitle}</h3>
-        <p className="text-on-surface-variant text-sm mb-4">{t.accessAddAdminDesc}</p>
+        <h3 className="text-lg font-semibold text-on-surface mb-4">{i18n.accessAddAdminTitle}</h3>
+        <p className="text-on-surface-variant text-sm mb-4">{i18n.accessAddAdminDesc}</p>
         <form onSubmit={handleAddInviteAdmin} className="flex flex-col gap-4">
             <button 
               className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
@@ -112,12 +112,12 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                     <span className="material-symbols-outlined animate-spin">
                       sync
                     </span>
-                    <span>{t.loading}</span>
+                    <span>{i18n.loading}</span>
                   </>
                 ) : (
                   <>
                     <span className="material-symbols-outlined">verified_user</span>
-                    <span>{t.accessAddAdminLink}</span>
+                    <span>{i18n.accessAddAdminLink}</span>
                   </>
                 )}
             </button>
@@ -126,12 +126,9 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>
-                  <span>Contract deployed &amp; saved!</span>
+                  <span>{i18n.inviteLinkCreated}</span>
                 </div>
-                <p className="text-xs text-green-800/70">
-                  This address is stored in your browser. All views will use it
-                  automatically on the next page load.
-                </p>
+                <p className="text-xs text-green-800/70">{i18n.inviteLinkStoredDesc}</p>
                 <div className="flex items-center gap-2 bg-white border border-green-100 rounded-lg px-4 py-3">
                   <span className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
                   <code className="text-xs font-mono text-green-900 break-all select-all flex-1">
@@ -139,7 +136,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                   </code>
                   <button
                     type="button"
-                    title="Copy address"
+                    title={i18n.copyLink}
                     className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
                     onClick={() => navigator.clipboard.writeText(linkAdminAddress)}
                   >
@@ -152,8 +149,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
       </div>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-on-surface mb-4">{t.accessAddClinicTitle}</h3>
-        <p className="text-on-surface-variant text-sm mb-4">{t.accessAddClinicDesc}</p>
+        <h3 className="text-lg font-semibold text-on-surface mb-4">{i18n.accessAddClinicTitle}</h3>
+        <p className="text-on-surface-variant text-sm mb-4">{i18n.accessAddClinicDesc}</p>
         <form onSubmit={handleAddInviteClinic} className="flex flex-col gap-4">
             <button 
               className="px-8 py-4 bg-secondary font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
@@ -164,12 +161,12 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                     <span className="material-symbols-outlined animate-spin">
                       sync
                     </span>
-                    <span>{t.loading}</span>
+                    <span>{i18n.loading}</span>
                   </>
                 ) : (
                   <>
                     <span className="material-symbols-outlined">verified_user</span>
-                    <span>{t.accessAddAClinicLink}</span>
+                    <span>{i18n.accessAddAClinicLink}</span>
                   </>
                 )}
             </button>
@@ -203,8 +200,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
       </div>
 
       <div className="bg-white p-8 rounded-xl shadow-sm border border-red-100 mb-12 text-left">
-        <h3 className="text-lg font-semibold text-red-600 mb-4">Remover meu acesso de admin</h3>
-        <p className="text-on-surface-variant text-sm mb-4">Remova suas permissoes de admin da blockchain. Esta acao nao pode ser desfeita.</p>
+        <h3 className="text-lg font-semibold text-red-600 mb-4">{i18n.removeAdminTitle}</h3>
+        <p className="text-on-surface-variant text-sm mb-4">{i18n.removeAdminDesc}</p>
         <div className="flex flex-col gap-4">
             <button 
               className="px-8 py-4 bg-red-600 text-white font-bold rounded-lg shadow-lg active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
@@ -216,12 +213,12 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                     <span translate="no" className="material-symbols-outlined animate-spin">
                       sync
                     </span>
-                    <span>{t.loading}</span>
+                    <span>{i18n.loading}</span>
                   </>
                 ) : (
                   <>
                     <span translate="no" className="material-symbols-outlined">delete_forever</span>
-                    <span>{t.removeAccess}</span>
+                    <span>{i18n.removeAccess}</span>
                   </>
                 )}
             </button>
@@ -230,7 +227,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>
-                  <span>Admin acesso removido com sucesso!</span>
+                  <span>{i18n.adminAccessRemoved}</span>
                 </div>
               </div>
             )}

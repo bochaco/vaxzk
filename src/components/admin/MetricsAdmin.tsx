@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "../../LanguageContext";
 import { VaxZkAPI } from "../../contract-api/index";
 
 interface MetricsAdminProps {
@@ -6,6 +7,7 @@ interface MetricsAdminProps {
 }
 
 const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
+    const { i18n } = useLanguage();
     const [totalAdmin, setTotalAdmin] = useState<bigint>(0n);
     const [totalInviteAdmin, setTotalAdminInvites] = useState<bigint>(0n);
     const [totalInviteClinic, setTotalClinicInvites] = useState<bigint>(0n);
@@ -50,7 +52,7 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
             </div>
           </div>
           <div className="mt-8">
-            <p className="text-on-surface-variant font-medium label-md">Total Vaccines Registered</p>
+            <p className="text-on-surface-variant font-medium label-md">{i18n.totalVaccinesRegistered}</p>
             <h2 className="text-6xl font-extrabold tracking-tighter mt-2">{totalVaccines}</h2>
           </div>
         </div>
@@ -61,7 +63,7 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
             <span translate="no" className="material-symbols-outlined">admin_panel_settings</span>
           </div>
           <div className="mt-4">
-            <p className="text-on-surface-variant font-medium text-sm">Active Admins</p>
+            <p className="text-on-surface-variant font-medium text-sm">{i18n.activeAdmins}</p>
             <h2 className="text-3xl font-bold tracking-tight">{totalAdmin}</h2>
           </div>
         </div>
@@ -70,7 +72,7 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
             <span translate="no" className="material-symbols-outlined">group</span>
           </div>
           <div className="mt-4">
-            <p className="text-on-surface-variant font-medium text-sm">Active Clinic Owners</p>
+            <p className="text-on-surface-variant font-medium text-sm">{i18n.activeVerifierOwners}</p>
             <h2 className="text-3xl font-bold tracking-tight">{totalActiveClinicOwners}</h2>
           </div>
         </div>
@@ -79,7 +81,7 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
             <span translate="no" className="material-symbols-outlined">medical_services</span>
           </div>
           <div className="mt-4">
-            <p className="text-on-surface-variant font-medium text-sm">Total Clinics</p>
+            <p className="text-on-surface-variant font-medium text-sm">{i18n.totalClinicsMetric}</p>
             <h2 className="text-3xl font-bold tracking-tight">{totalClinics}</h2>
           </div>
         </div>
@@ -87,13 +89,13 @@ const MetricsAdmin: React.FC<MetricsAdminProps> = ({ vaxApi }) => {
       <section className="grid grid-cols-2 md:grid-cols-2 gap-4 p-4">
         <div className="bg-surface-container-highest rounded-xl p-8 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <p className="text-on-surface-variant font-medium">Pending Admin Invites</p>
+            <p className="text-on-surface-variant font-medium">{i18n.pendingAdminInvites}</p>
             <h2 className="text-5xl font-extrabold tracking-tight">{totalInviteAdmin}</h2>
           </div>
         </div>
         <div className="bg-surface-container-highest rounded-xl p-8 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <p className="text-on-surface-variant font-medium">Pending Clinic Invites</p>
+            <p className="text-on-surface-variant font-medium">{i18n.pendingVerifierInvites}</p>
             <h2 className="text-5xl font-extrabold tracking-tight">{totalInviteClinic}</h2>
           </div>
         </div>

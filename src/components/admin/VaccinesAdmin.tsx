@@ -7,7 +7,7 @@ interface VaccinesAdminProps {
 }
 
 const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
-  const { t } = useLanguage();
+  const { i18n } = useLanguage();
   const [vaccines, setVaccines] = useState<string[]>([]);
   const [newVaccineName, setNewVaccineName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -90,11 +90,11 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
     <main className="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
       <section className="mb-12 text-left">
         <h2 className="text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-4 max-w-2xl">
-          <span className="text-primary">{t.manage}</span>{" "}
-          {t.vaccinesAdminTitleEnd}{" "}
+          <span className="text-primary">{i18n.manage}</span>{" "}
+          {i18n.vaccinesAdminTitleEnd}{" "}
         </h2>
         <p className="text-on-surface-variant text-lg leading-relaxed">
-          {t.vaccinesAdminSubtitle}
+          {i18n.vaccinesAdminSubtitle}
         </p>
       </section>
 
@@ -106,11 +106,11 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
         >
           <div className="flex-1 space-y-3">
             <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-              {t.vaccineName}
+              {i18n.vaccineName}
             </label>
             <input
               className="w-full px-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300"
-              placeholder={t.vaccinePlaceholder}
+              placeholder={i18n.vaccinePlaceholder}
               value={newVaccineName}
               onChange={(e) => setNewVaccineName(e.target.value)}
               disabled={loading}
@@ -128,12 +128,12 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
                   <span className="material-symbols-outlined animate-spin">
                     sync
                   </span>
-                  <span>{t.loading}</span>
+                  <span>{i18n.loading}</span>
                 </>
               ) : (
                 <>
                   <span className="material-symbols-outlined">add</span>
-                  <span>{t.add}</span>
+                  <span>{i18n.add}</span>
                 </>
               )}
             </button>
@@ -144,7 +144,7 @@ const VaccinesAdmin: React.FC<VaccinesAdminProps> = ({ vaxApi }) => {
 
       {/* Vaccines List */}
       <div className="space-y-4 text-left">
-        <h3 className="text-2xl font-bold mb-6">{t.vaccinesList}</h3>
+        <h3 className="text-2xl font-bold mb-6">{i18n.vaccinesList}</h3>
         {vaccines.length === 0 ? (
           <div className="bg-surface-container-low p-12 rounded-xl border border-dashed border-slate-200 text-center">
             <span className="material-symbols-outlined text-slate-300 text-6xl mb-4">
