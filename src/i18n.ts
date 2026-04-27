@@ -175,7 +175,7 @@ export const translations = {
     accessAddClinicTitle: "Add a new Clinic",
     accessAddAClinicLink: "Create Clinic Invitation",
     accessAddClinicDesc:
-      "Create an invitation link and send it to the user to become an clinic.",
+      "Create an invitation link and send it to the user to become a clinic.",
     removeAccess: "Remove my admin access",
 
     // List Clinics View
@@ -204,16 +204,19 @@ export const translations = {
 
     // Access Admin
     inviteLinkCreated: "Invitation link created!",
-    inviteLinkStoredDesc: "Share this link securely with the intended recipient.",
+    inviteLinkStoredDesc:
+      "Share this link securely with the intended recipient.",
     copyLink: "Copy link",
     removeAdminTitle: "Remove my admin access",
-    removeAdminDesc: "Remove your admin permissions from the blockchain. This action cannot be undone.",
+    removeAdminDesc:
+      "Remove your admin permissions from the blockchain. This action cannot be undone.",
     adminAccessRemoved: "Admin access removed successfully!",
     errCreateInvite: "Failed to create invite: ",
     errRemoveAdmin: "Failed to remove admin: ",
 
     // Deploy Contract
-    deploySuccessDesc: "This address is stored in your browser. All views will use it automatically on the next page load.",
+    deploySuccessDesc:
+      "This address is stored in your browser. All views will use it automatically on the next page load.",
     copyAddress: "Copy address",
 
     // Invite Page
@@ -234,18 +237,21 @@ export const translations = {
 
     // Issuers Admin
     issuersAdminTitleEnd: "Certificate Issuers",
-    issuersAdminSubtitle: "Register and review the organizations authorized to issue vaccine certificates.",
+    issuersAdminSubtitle:
+      "Register and review the organizations authorized to issue vaccine certificates.",
     addIssuer: "Add Issuer",
     addingIssuer: "Adding Issuer...",
     vaccinationCertIssuers: "Vaccination Certificate Issuers",
     loadingIssuers: "Loading issuers...",
     noIssuersRegistered: "No issuers registered yet.",
     addCertIssuerTitle: "Add Certificate Issuer",
-    addIssuerInfo: "To register a certificate issuer, contact the vaccine certificate provider/issuer to obtain their details (name, service URI, verification endpoint, and public key).",
+    addIssuerInfo:
+      "To register a certificate issuer, contact the vaccine certificate provider/issuer to obtain their details (name, service URI, verification endpoint, and public key).",
     issuerName: "Issuer Name",
     issuerUri: "Issuer URI",
     verificationEndpoint: "Verification Endpoint",
-    verificationEndpointDesc: "URL used by administrative agents or personnel to verify the authenticity of a vaccination certificate.",
+    verificationEndpointDesc:
+      "URL used by administrative agents or personnel to verify the authenticity of a vaccination certificate.",
     publicKey: "Public Key",
     issuerNamePlaceholder: "e.g. National Health Authority",
     issuerUriPlaceholder: "e.g. https://issuer.example.com",
@@ -258,7 +264,8 @@ export const translations = {
 
     // Clinics Admin
     clinicsTitleEnd: "Clinics",
-    manageClinicsSubtitle: "Register your clinics on-chain and view all currently registered clinics.",
+    manageClinicsSubtitle:
+      "Register your clinics on-chain and view all currently registered clinics.",
     registerNewClinic: "Register New Clinic",
     clinicName: "Clinic Name",
     clinicAddress: "Address",
@@ -519,16 +526,19 @@ export const translations = {
 
     // Access Admin
     inviteLinkCreated: "Link de convite criado!",
-    inviteLinkStoredDesc: "Compartilhe este link com segurança com o destinatário.",
+    inviteLinkStoredDesc:
+      "Compartilhe este link com segurança com o destinatário.",
     copyLink: "Copiar link",
     removeAdminTitle: "Remover meu acesso de admin",
-    removeAdminDesc: "Remova suas permissões de admin da blockchain. Esta ação não pode ser desfeita.",
+    removeAdminDesc:
+      "Remova suas permissões de admin da blockchain. Esta ação não pode ser desfeita.",
     adminAccessRemoved: "Acesso de admin removido com sucesso!",
     errCreateInvite: "Erro ao criar convite: ",
     errRemoveAdmin: "Erro ao remover admin: ",
 
     // Deploy Contract
-    deploySuccessDesc: "Este endereço está salvo no seu navegador. Todas as visualizações o usarão automaticamente no próximo carregamento.",
+    deploySuccessDesc:
+      "Este endereço está salvo no seu navegador. Todas as visualizações o usarão automaticamente no próximo carregamento.",
     copyAddress: "Copiar endereço",
 
     // Invite Page
@@ -549,18 +559,21 @@ export const translations = {
 
     // Issuers Admin
     issuersAdminTitleEnd: "Emissores de Certificado",
-    issuersAdminSubtitle: "Cadastre e revise as organizações autorizadas a emitir certificados de vacinação.",
+    issuersAdminSubtitle:
+      "Cadastre e revise as organizações autorizadas a emitir certificados de vacinação.",
     addIssuer: "Adicionar Emissor",
     addingIssuer: "Adicionando Emissor...",
     vaccinationCertIssuers: "Emissores de Certificado de Vacinação",
     loadingIssuers: "Carregando emissores...",
     noIssuersRegistered: "Nenhum emissor cadastrado ainda.",
     addCertIssuerTitle: "Adicionar Emissor de Certificado",
-    addIssuerInfo: "Para registrar um emissor de certificado, entre em contato com o provedor/emissor do certificado de vacina para obter os detalhes (nome, URI do serviço, endpoint de verificação e chave pública).",
+    addIssuerInfo:
+      "Para registrar um emissor de certificado, entre em contato com o provedor/emissor do certificado de vacina para obter os detalhes (nome, URI do serviço, endpoint de verificação e chave pública).",
     issuerName: "Nome do Emissor",
     issuerUri: "URI do Emissor",
     verificationEndpoint: "Endpoint de Verificação",
-    verificationEndpointDesc: "URL usada por agentes ou pessoal administrativo para verificar a autenticidade de um certificado de vacinação.",
+    verificationEndpointDesc:
+      "URL usada por agentes ou pessoal administrativo para verificar a autenticidade de um certificado de vacinação.",
     publicKey: "Chave Pública",
     issuerNamePlaceholder: "Ex: Autoridade Nacional de Saúde",
     issuerUriPlaceholder: "Ex: https://emissor.exemplo.com",
@@ -573,7 +586,8 @@ export const translations = {
 
     // Clinics Admin
     clinicsTitleEnd: "Clínicas",
-    manageClinicsSubtitle: "Cadastre suas clínicas na blockchain e veja todas as clínicas registradas.",
+    manageClinicsSubtitle:
+      "Cadastre suas clínicas na blockchain e veja todas as clínicas registradas.",
     registerNewClinic: "Registrar Nova Clínica",
     clinicName: "Nome da Clínica",
     clinicAddress: "Endereço",
@@ -833,16 +847,19 @@ export const translations = {
 
     // Access Admin
     inviteLinkCreated: "¡Enlace de invitación creado!",
-    inviteLinkStoredDesc: "Comparta este enlace de forma segura con el destinatario.",
+    inviteLinkStoredDesc:
+      "Comparta este enlace de forma segura con el destinatario.",
     copyLink: "Copiar enlace",
     removeAdminTitle: "Retirar mi acceso de administrador",
-    removeAdminDesc: "Elimina tus permisos de administrador de la blockchain. Esta acción no se puede deshacer.",
+    removeAdminDesc:
+      "Elimina tus permisos de administrador de la blockchain. Esta acción no se puede deshacer.",
     adminAccessRemoved: "¡Acceso de administrador eliminado con éxito!",
     errCreateInvite: "Error al crear invitación: ",
     errRemoveAdmin: "Error al eliminar administrador: ",
 
     // Deploy Contract
-    deploySuccessDesc: "Esta dirección está guardada en su navegador. Todas las vistas la usarán automáticamente en la próxima carga.",
+    deploySuccessDesc:
+      "Esta dirección está guardada en su navegador. Todas las vistas la usarán automáticamente en la próxima carga.",
     copyAddress: "Copiar dirección",
 
     // Invite Page
@@ -863,18 +880,21 @@ export const translations = {
 
     // Issuers Admin
     issuersAdminTitleEnd: "Emisores de Certificado",
-    issuersAdminSubtitle: "Registre y revise las organizaciones autorizadas para emitir certificados de vacunación.",
+    issuersAdminSubtitle:
+      "Registre y revise las organizaciones autorizadas para emitir certificados de vacunación.",
     addIssuer: "Agregar Emisor",
     addingIssuer: "Agregando Emisor...",
     vaccinationCertIssuers: "Emisores de Certificado de Vacunación",
     loadingIssuers: "Cargando emisores...",
     noIssuersRegistered: "Aún no hay emisores registrados.",
     addCertIssuerTitle: "Agregar Emisor de Certificado",
-    addIssuerInfo: "Para registrar un emisor de certificado, contacte al proveedor/emisor del certificado de vacuna para obtener sus datos (nombre, URI del servicio, endpoint de verificación y clave pública).",
+    addIssuerInfo:
+      "Para registrar un emisor de certificado, contacte al proveedor/emisor del certificado de vacuna para obtener sus datos (nombre, URI del servicio, endpoint de verificación y clave pública).",
     issuerName: "Nombre del Emisor",
     issuerUri: "URI del Emisor",
     verificationEndpoint: "Endpoint de Verificación",
-    verificationEndpointDesc: "URL utilizada por agentes o personal administrativo para verificar la autenticidad de un certificado de vacunación.",
+    verificationEndpointDesc:
+      "URL utilizada por agentes o personal administrativo para verificar la autenticidad de un certificado de vacunación.",
     publicKey: "Clave Pública",
     issuerNamePlaceholder: "Ej: Autoridad Nacional de Salud",
     issuerUriPlaceholder: "Ej: https://emisor.ejemplo.com",
@@ -887,7 +907,8 @@ export const translations = {
 
     // Clinics Admin
     clinicsTitleEnd: "Clínicas",
-    manageClinicsSubtitle: "Registre sus clínicas en la blockchain y vea todas las clínicas actualmente registradas.",
+    manageClinicsSubtitle:
+      "Registre sus clínicas en la blockchain y vea todas las clínicas actualmente registradas.",
     registerNewClinic: "Registrar Nueva Clínica",
     clinicName: "Nombre de la Clínica",
     clinicAddress: "Dirección",

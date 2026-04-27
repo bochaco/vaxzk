@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../LanguageContext';
 import { VaxZkAPI } from "../../contract-api/index";
-import { urlApp } from "../ConfigNetwork";
 import {v4 as uuidv4} from 'uuid';
 
 interface AccessAdminProps {
@@ -32,7 +31,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
       const uuid = uuidv4();
       const txData = await vaxApi.registerInvite('admin', uuid);
       console.log("txData", txData);
-      setLinkAdminAddress(urlApp + "/#/invite?role=admin&code=" + uuid);
+      const base = window.location.origin + window.location.pathname;
+      setLinkAdminAddress(base + "#/invite?role=admin&code=" + uuid);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
@@ -57,7 +57,8 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
       const uuid = uuidv4();
       const txData = await vaxApi.registerInvite('clinic', uuid);
       console.log("txData", txData);
-      setLinkClinicAddress(urlApp + "/#/invite?role=clinic&code=" + uuid);
+      const base = window.location.origin + window.location.pathname;
+      setLinkClinicAddress(base + "#/invite?role=clinic&code=" + uuid);
     } catch (err) {
       console.error("Failed to add vaccine:", err);
       if (err instanceof Error) {
