@@ -2,5 +2,5 @@ export const networkId = "preprod";
 export const urlApp = "https://preprod.vaxzk.com.br";
 
 export function getContractId(): string {
-  return "51a783f1146d9757150e7812b8a2be15593d7337d89559f35bbefb5d7b95b713";
+  return "228c6562bc105f8554275e7f72fbb9d61de2fe5a93c85e9c8dfbd2d2b7d6103f";
 }
