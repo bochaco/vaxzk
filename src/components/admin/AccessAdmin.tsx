@@ -177,7 +177,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
           {linkClinicAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
-                  <span className="material-symbols-outlined">check_circle</span>
+                  <span translate="no" className="material-symbols-outlined">check_circle</span>
                   <span>Contract deployed &amp; saved!</span>
                 </div>
                 <p className="text-xs text-green-800/70">
@@ -185,7 +185,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                   automatically on the next page load.
                 </p>
                 <div className="flex items-center gap-2 bg-white border border-green-100 rounded-lg px-4 py-3">
-                  <span className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
+                  <span translate="no" className="material-symbols-outlined text-green-600 text-base shrink-0">link</span>
                   <code className="text-xs font-mono text-green-900 break-all select-all flex-1">
                     {linkClinicAddress}
                   </code>
@@ -194,7 +194,7 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
                     title="Copy address"
                     className="shrink-0 p-1 rounded hover:bg-green-100 transition-colors"
                     onClick={() => navigator.clipboard.writeText(linkClinicAddress)}>
-                    <span className="material-symbols-outlined text-green-600 text-base">content_copy</span>
+                    <span translate="no" className="material-symbols-outlined text-green-600 text-base">content_copy</span>
                   </button>
                 </div>
               </div>
@@ -213,15 +213,15 @@ const AccessAdmin: React.FC<AccessAdminProps> = ({ vaxApi }) => {
               disabled={loadingRemove}>
                 {loadingRemove ? (
                   <>
-                    <span className="material-symbols-outlined animate-spin">
+                    <span translate="no" className="material-symbols-outlined animate-spin">
                       sync
                     </span>
                     <span>{t.loading}</span>
                   </>
                 ) : (
                   <>
-                    <span className="material-symbols-outlined">delete_forever</span>
-                    <span>Remover meu acesso de admin</span>
+                    <span translate="no" className="material-symbols-outlined">delete_forever</span>
+                    <span>{t.removeAccess}</span>
                   </>
                 )}
             </button>

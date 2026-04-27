@@ -78,6 +78,7 @@ export const translations = {
     familyGroupDesc:
       "Your dependents (2) are up to date on their schedule. Great job!",
     manageFamily: "Manage family",
+
     // Wallet view
     vaccinationWallet: "Vaccination Wallet",
     walletSubtitle:
@@ -161,6 +162,7 @@ export const translations = {
     add: "Add",
     loading: "Processing...",
 
+    // Manage Access
     accessAdminTitleEnd: "Access",
     accessAdminSubtitle: "Manage user permissions",
     accessAddAdminTitle: "Add a new Admin",
@@ -168,9 +170,10 @@ export const translations = {
     accessAddAdminDesc:
       "Create an invitation link and send it to the user to become an admin.",
     accessAddClinicTitle: "Add a new Clinic",
-    accessAddClinicDesc: "Create invitation link",
-    accessAddAClinicLink:
+    accessAddAClinicLink: "Create invitation link",
+    accessAddClinicDesc:
       "Create an invitation link and send it to the user to become an clinic.",
+    removeAccess: "Remove my admin access",
 
     // List Clinics View
     listClinicsTitle: "List of Clinics",
@@ -291,6 +294,7 @@ export const translations = {
       infant: "Categoria Infantil",
       booster: "Reforço 10 anos",
     },
+
     // Add Vaccine View
     registerVaccine: "Registrar Vacina",
     addVaccineSubtitle:
@@ -346,6 +350,7 @@ export const translations = {
     add: "Adicionar",
     loading: "Processando...",
 
+    // Manage Access
     accessAdminTitleEnd: "Acessos",
     accessAdminSubtitle: "Gerencie as permissoes dos usuarios",
     accessAddAdminTitle: "Adicionar um novo Admin",
@@ -353,9 +358,10 @@ export const translations = {
     accessAddAdminDesc:
       "Crie um link de convite e envie para o usuario se tornar admin.",
     accessAddClinicTitle: "Add a new Clinic",
-    accessAddClinicDesc: "Create invitation link",
-    accessAddAClinicLink:
+    accessAddAClinicLink: "Create invitation link",
+    accessAddClinicDesc:
       "Create an invitation link and send it to the user to become an clinic.",
+    removeAccess: "Remover meu acesso de admin",
 
     // List Clinics View
     listClinicsTitle: "Lista de Clínicas",
@@ -532,6 +538,7 @@ export const translations = {
     add: "Agregar",
     loading: "Procesando...",
 
+    // Manage Access
     accessAdminTitleEnd: "Acessos",
     accessAdminSubtitle: "Gerencie as permissoes dos usuarios",
     accessAddAdminTitle: "Adicionar um novo Admin",
@@ -539,9 +546,10 @@ export const translations = {
     accessAddAdminDesc:
       "Crea un enlace de invitación y envíalo al usuario para que se convierta en administrador.",
     accessAddClinicTitle: "Add a new Clinic",
-    accessAddClinicDesc: "Create invitation link",
-    accessAddAClinicLink:
+    accessAddAClinicLink: "Create invitation link",
+    accessAddClinicDesc:
       "Create an invitation link and send it to the user to become an clinic.",
+    removeAccess: "Retira mi acceso de administrador",
 
     // List Clinics View
     listClinicsTitle: "Lista de Clínicas",
