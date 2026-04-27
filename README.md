@@ -45,8 +45,6 @@ All vaccine records remain in the user's local encrypted private state. The publ
 - Register certificate issuers (e.g. WHO, national health authorities) with their cryptographic public key.
 - View platform metrics: total admins, registered clinics, and pending invites.
 
-![Admin dashboard](public/images/02-admin-dashboard.png)
-
 ### Clinic / Authorized Verifier
 
 The "Clinic" role is not limited to traditional health facilities. Any organization with a legitimate need to issue or verify vaccination records can hold this role, including:
@@ -64,8 +62,6 @@ Capabilities:
 - Create vaccine proof requests on-chain — specifying the required vaccine type, the user's personal/passport ID, and a minimum certificate validity date.
 - View proofs that users have submitted in response to requests.
 
-![Clinic certificate issuance](public/images/03-clinic-certificate.png)
-
 ### User
 
 - Connect via the [Lace](https://www.lace.io/) or [1AM](https://1am.xyz/) browser wallet.
@@ -73,10 +69,6 @@ Capabilities:
 - View private vaccine certificates stored in local encrypted state.
 - Submit zero-knowledge vaccine proofs in response to clinic or agency proof requests.
 - Multi-language interface: English, Portuguese, and Spanish.
-
-![User proofs view](public/images/04-user-proofs.png)
-
-![Clinic map](public/images/05-clinic-map.png)
 
 ---
 
@@ -95,6 +87,10 @@ Capabilities:
 ---
 
 ## Deployment & Running the Application
+
+You can either:
+- Use the published application at https://preprod.vaxzk.com.br, or
+- Clone this repository and run it locally — follow the steps in the next section to build and start the app.
 
 ### Prerequisites
 
@@ -171,8 +167,6 @@ Tests live in `contract/src/test/`. They use [Vitest](https://vitest.dev/) with 
 - User flows (submit ZK proof, Schnorr signature verification)
 
 Each test has a 15-second timeout because ZK proof generation is compute-intensive even in the simulator.
-
-![Test run output](public/images/06-test-run.png)
 
 ---
 
