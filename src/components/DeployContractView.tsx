@@ -17,6 +17,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
     getContractId() || null,
   );
   const [error, setError] = useState<string | null>(null);
+  const [joinAddress, setJoinAddress] = useState("");
 
   const handleDeploy = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +43,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
       // Fresh 32-byte secret key for this admin identity. Its derived public
       // key becomes the first admin on the ledger via the localSk() witness.
       const secretKey = crypto.getRandomValues(new Uint8Array(32));
-      
+
       const api = await VaxZkAPI.deploy(providers, secretKey);
       const address = api.deployedContractAddress as unknown as string;
       console.log(api);
@@ -104,8 +105,8 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         </div>
       </header>
 
-    <main className="pt-24 px-6 max-w-screen-md mx-auto">
-      {/* Page Title & Editorial Intro */}
+    <main className="pt-24 px-6 max-w-screen-md mx-auto pb-16">
+      {/* Page Title */}
       <section className="mb-12 text-left">
         <h2 className="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
           {i18n.deployContract}
@@ -115,48 +116,60 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
         </p>
       </section>
 
-      {/* Form Container with Tonal Depth */}
-      <div className="space-y-16 text-left">
+      <div className="space-y-8 text-left">
+        {/* Join Existing Contract */}
+        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+          <h3 className="text-lg font-semibold text-on-surface mb-4">
+            {i18n.joinExistingContract}
+          </h3>
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                <span className="material-symbols-outlined text-outline text-base">link</span>
+              </div>
+              <input
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all placeholder:text-outline font-mono"
+                placeholder={i18n.contractAddressPlaceholder}
+                type="text"
+                value={joinAddress}
+                onChange={(e) => setJoinAddress(e.target.value)}
+              />
+            </div>
+            <button
+              type="button"
+              className="px-6 py-3 bg-primary text-black font-bold rounded-lg shadow active:scale-95 transition-all duration-200 disabled:opacity-50 flex items-center gap-2 text-sm whitespace-nowrap"
+              disabled={!joinAddress.trim()}
+              onClick={() => onDeployed?.(joinAddress.trim())}
+            >
+              <span className="material-symbols-outlined text-base">arrow_forward</span>
+              <span>{i18n.joinContract}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1 h-px bg-slate-200" />
+          <span className="text-sm text-on-surface-variant font-medium">{i18n.orDeployNew}</span>
+          <div className="flex-1 h-px bg-slate-200" />
+        </div>
+
+        {/* Deploy New Contract */}
         <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-          {/* Decorative Subtle Background Gradient */}
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
 
           <form className="space-y-8 relative z-10" onSubmit={handleDeploy}>
-            {/* General Settings */}
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold tracking-wide text-primary uppercase ml-1">
-                {i18n.contractName}
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <span className="material-symbols-outlined text-outline">
-                    description
-                  </span>
-                </div>
-                <input
-                  className="w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-300 placeholder:text-outline"
-                  placeholder={i18n.contractNamePlaceholder}
-                  type="text"
-                  required
-                />
-              </div>
-            </div>
-
             {error && (
-              <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200 text-sm flex items-start gap-3 mt-6">
-                <span className="material-symbols-outlined text-red-500">
-                  error
-                </span>
+              <div className="bg-red-50 text-red-700 p-4 rounded-lg border border-red-200 text-sm flex items-start gap-3">
+                <span className="material-symbols-outlined text-red-500">error</span>
                 <span>{error}</span>
               </div>
             )}
 
             {/* Visual Aid Card */}
-            <div className="bg-blue-50 p-5 rounded-lg border-none flex items-start gap-4 mt-6">
+            <div className="bg-blue-50 p-5 rounded-lg flex items-start gap-4">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-primary">
-                  gavel
-                </span>
+                <span className="material-symbols-outlined text-primary">gavel</span>
               </div>
               <div>
                 <h4 className="font-bold text-primary text-sm">
@@ -168,7 +181,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               </div>
             </div>
 
-             {deployedAddress && (
+            {deployedAddress && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-green-700 font-bold">
                   <span className="material-symbols-outlined">check_circle</span>
@@ -200,9 +213,7 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               </div>
             )}
 
-            {/* Primary Action */}
             {!deployedAddress && (
-            <div className="pt-6 relative pb-20">
               <button
                 className={`w-full py-4 bg-gradient-to-r from-primary to-blue-600 font-bold text-lg rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 ${isDeploying ? "opacity-80 cursor-wait" : ""}`}
                 type="submit"
@@ -210,27 +221,22 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
               >
                 {isDeploying ? (
                   <>
-                    <span className="animate-spin material-symbols-outlined">
-                      sync
-                    </span>
+                    <span className="animate-spin material-symbols-outlined">sync</span>
                     <span>{i18n.deploying}</span>
                   </>
                 ) : (
                   <>
                     <span>{i18n.deployContractButton}</span>
-                    <span className="material-symbols-outlined">
-                      cloud_upload
-                    </span>
+                    <span className="material-symbols-outlined">cloud_upload</span>
                   </>
                 )}
               </button>
-            </div>
             )}
           </form>
         </div>
       </div>
     </main>
-    </div>        
+    </div>
   );
 };
 
