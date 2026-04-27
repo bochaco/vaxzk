@@ -292,6 +292,9 @@ export const translations = {
     errNoIssuerFound: "No registered issuer found.",
     errSubmitProof: "Failed to submit proof: ",
 
+    // Deploy Contract
+    useThisContract: "Use This Contract & Continue",
+
     // Bottom Nav
     navMyProofs: "My Proofs",
     navClinics: "Clinics",
@@ -593,6 +596,9 @@ export const translations = {
     errNoIssuerFound: "Nenhum emissor registrado encontrado.",
     errSubmitProof: "Falha ao enviar prova: ",
 
+    // Deploy Contract
+    useThisContract: "Usar Este Contrato & Continuar",
+
     // Bottom Nav
     navMyProofs: "Minhas Provas",
     navClinics: "Clínicas",
@@ -892,6 +898,9 @@ export const translations = {
     submitProof: "Enviar Prueba",
     errNoIssuerFound: "No se encontró ningún emisor registrado.",
     errSubmitProof: "Error al enviar prueba: ",
+
+    // Deploy Contract
+    useThisContract: "Usar Este Contrato & Continuar",
 
     // Bottom Nav
     navMyProofs: "Mis Pruebas",
