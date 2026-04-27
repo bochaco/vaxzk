@@ -4,9 +4,15 @@ import {
   type NetworkId,
 } from "@midnight-ntwrk/midnight-js-network-id";
 import { fromHex } from "@midnight-ntwrk/midnight-js-utils";
-import { CompactTypeJubjubPoint, type JubjubPoint } from "@midnight-ntwrk/compact-runtime";
+import {
+  CompactTypeJubjubPoint,
+  type JubjubPoint,
+} from "@midnight-ntwrk/compact-runtime";
 import { pureCircuits, Role } from "../../managed/contract/index.js";
-import { generateKeyPair, signVaxZkCertificate } from "../../../src/contract-api/signing.js";
+import {
+  generateKeyPair,
+  signVaxZkCertificate,
+} from "../../../src/contract-api/signing.js";
 import { VaxZkSimulator, type TestUser } from "./vaxzk-simulator.js";
 import {
   randomBytes,
@@ -24,9 +30,13 @@ setNetworkId("undeployed" as NetworkId);
 // patch CompactTypeJubjubPoint.fromValue to intern points by (x, y) so that
 // identical coordinates always map to the same object reference.
 const _jubjubCache = new Map<string, JubjubPoint>();
-const _origFromValue = CompactTypeJubjubPoint.fromValue.bind(CompactTypeJubjubPoint);
+const _origFromValue = CompactTypeJubjubPoint.fromValue.bind(
+  CompactTypeJubjubPoint,
+);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CompactTypeJubjubPoint as any).fromValue = function (value: any[]): JubjubPoint {
+(CompactTypeJubjubPoint as any).fromValue = function (
+  value: any[],
+): JubjubPoint {
   const pt = _origFromValue(value);
   const key = `${pt.x},${pt.y}`;
   if (!_jubjubCache.has(key)) _jubjubCache.set(key, pt);
@@ -71,22 +81,11 @@ describe("VaxZk contract", () => {
   // ── Initial state ──────────────────────────────────────────────────────────
 
   describe("initial state", () => {
-    it("starts with the three built-in vaccines (HepB, PCV, Tdap)", () => {
+    it("starts with empty vaccines, clinics, issuers, proof request, and proof maps", () => {
       const l = simulator.getLedger();
-      expect(l.vaccines.member(encodeBytes20("HepB"))).toBe(true);
-      expect(l.vaccines.member(encodeBytes20("PCV"))).toBe(true);
-      expect(l.vaccines.member(encodeBytes20("Tdap"))).toBe(true);
-      expect(l.vaccines.size()).toBe(3n);
-    });
-
-    it("starts with initial clinics and empty issuers map", () => {
-      const l = simulator.getLedger();
-      expect(l.clinics.size()).toBe(2n);
+      expect(l.vaccines.isEmpty()).toBe(true);
+      expect(l.clinics.isEmpty()).toBe(true);
       expect(l.issuers.isEmpty()).toBe(true);
-    });
-
-    it("starts with empty proof request and proof maps", () => {
-      const l = simulator.getLedger();
       expect(l.vaccineProofReqs.isEmpty()).toBe(true);
       expect(l.vaccineProofs.isEmpty()).toBe(true);
     });
@@ -103,7 +102,9 @@ describe("VaxZk contract", () => {
 
     it("is deterministic for the same input", () => {
       const input = randomBytes(32);
-      expect(pureCircuits.getShieldedId(input)).toEqual(pureCircuits.getShieldedId(input));
+      expect(pureCircuits.getShieldedId(input)).toEqual(
+        pureCircuits.getShieldedId(input),
+      );
     });
 
     it("produces distinct outputs for distinct inputs", () => {
@@ -125,13 +126,17 @@ describe("VaxZk contract", () => {
     it("rejects a duplicate clinic ID", () => {
       const clinic = randomUser();
       simulator.addClinic(clinicId(clinic), mockProfile(clinic));
-      expect(() => simulator.addClinic(clinicId(clinic), mockProfile(clinic))).toThrow();
+      expect(() =>
+        simulator.addClinic(clinicId(clinic), mockProfile(clinic)),
+      ).toThrow();
     });
 
     it("non-admin cannot register a clinic", () => {
       const stranger = randomUser();
       simulator.switchUser(stranger);
-      expect(() => simulator.addClinic(clinicId(randomUser()), mockProfile())).toThrow("You are not an admin");
+      expect(() =>
+        simulator.addClinic(clinicId(randomUser()), mockProfile()),
+      ).toThrow("You are not an admin");
     });
   });
 
@@ -145,10 +150,12 @@ describe("VaxZk contract", () => {
     });
 
     it("rejects adding a duplicate vaccine", () => {
+      simulator.addVaccine(encodeBytes20("HepB"));
       expect(() => simulator.addVaccine(encodeBytes20("HepB"))).toThrow();
     });
 
     it("admin can remove a registered vaccine", () => {
+      simulator.addVaccine(encodeBytes20("HepB"));
       const name = encodeBytes20("HepB");
       simulator.delVaccine(name);
       expect(simulator.getLedger().vaccines.member(name)).toBe(false);
@@ -161,7 +168,9 @@ describe("VaxZk contract", () => {
     it("non-admin cannot add a vaccine", () => {
       const stranger = randomUser();
       simulator.switchUser(stranger);
-      expect(() => simulator.addVaccine(encodeBytes20("MMR"))).toThrow("You are not an admin");
+      expect(() => simulator.addVaccine(encodeBytes20("MMR"))).toThrow(
+        "You are not an admin",
+      );
     });
   });
 
@@ -227,7 +236,9 @@ describe("VaxZk contract", () => {
 
       expect(proofReqId).toBeInstanceOf(Uint8Array);
       expect(proofReqId.length).toBe(32);
-      expect(simulator.getLedger().vaccineProofReqs.member(proofReqId)).toBe(true);
+      expect(simulator.getLedger().vaccineProofReqs.member(proofReqId)).toBe(
+        true,
+      );
     });
 
     it("non-clinic cannot request a vaccine proof", () => {
@@ -337,13 +348,24 @@ describe("VaxZk contract", () => {
       const vaccine = encodeBytes20("PCV");
       const personalId = encodeBytes20("ID-DUPE");
       const validUntil = randomTimestamp();
-      const proofReqId = simulator.requestVaccineProof({ vaccine, personalId, validUntil });
+      const proofReqId = simulator.requestVaccineProof({
+        vaccine,
+        personalId,
+        validUntil,
+      });
 
       const patient = randomUser();
       simulator.switchUser(patient);
       const expirationDate = validUntil + 500n;
       simulator.setVaxZkProof(
-        signVaxZkCertificate(issuerSk, issuerId, vaccine, personalId, expirationDate, fromHex(patient.pk)),
+        signVaxZkCertificate(
+          issuerSk,
+          issuerId,
+          vaccine,
+          personalId,
+          expirationDate,
+          fromHex(patient.pk),
+        ),
       );
 
       // First submission succeeds.
@@ -449,7 +471,11 @@ describe("VaxZk contract", () => {
       const vaccine = encodeBytes20("Tdap");
       const personalId = encodeBytes20("PASS-EXP");
       const validUntil = randomTimestamp();
-      const proofReqId = simulator.requestVaccineProof({ vaccine, personalId, validUntil });
+      const proofReqId = simulator.requestVaccineProof({
+        vaccine,
+        personalId,
+        validUntil,
+      });
 
       const patient = randomUser();
       simulator.switchUser(patient);
@@ -485,7 +511,11 @@ describe("VaxZk contract", () => {
       const vaccine = encodeBytes20("HepB");
       const personalId = encodeBytes20("PASS-TAMPER");
       const validUntil = randomTimestamp();
-      const proofReqId = simulator.requestVaccineProof({ vaccine, personalId, validUntil });
+      const proofReqId = simulator.requestVaccineProof({
+        vaccine,
+        personalId,
+        validUntil,
+      });
 
       const patient = randomUser();
       simulator.switchUser(patient);
@@ -506,7 +536,9 @@ describe("VaxZk contract", () => {
         },
       });
 
-      expect(() => simulator.submitVaccineProof(proofReqId)).toThrow("Invalid attestation signature");
+      expect(() => simulator.submitVaccineProof(proofReqId)).toThrow(
+        "Invalid attestation signature",
+      );
     });
 
     it("rejects a proof signed for a different patient's public key", () => {
@@ -525,7 +557,11 @@ describe("VaxZk contract", () => {
       const vaccine = encodeBytes20("HepB");
       const personalId = encodeBytes20("PASS-WRONGPK");
       const validUntil = randomTimestamp();
-      const proofReqId = simulator.requestVaccineProof({ vaccine, personalId, validUntil });
+      const proofReqId = simulator.requestVaccineProof({
+        vaccine,
+        personalId,
+        validUntil,
+      });
 
       const patient = randomUser();
       const wrongPatient = randomUser();
@@ -542,7 +578,9 @@ describe("VaxZk contract", () => {
         ),
       );
 
-      expect(() => simulator.submitVaccineProof(proofReqId)).toThrow("Invalid attestation signature");
+      expect(() => simulator.submitVaccineProof(proofReqId)).toThrow(
+        "Invalid attestation signature",
+      );
     });
 
     it("rejects a proof signed by an unregistered issuer", () => {
@@ -557,7 +595,11 @@ describe("VaxZk contract", () => {
       const vaccine = encodeBytes20("Tdap");
       const personalId = encodeBytes20("ID-UNKNOWN");
       const validUntil = randomTimestamp();
-      const proofReqId = simulator.requestVaccineProof({ vaccine, personalId, validUntil });
+      const proofReqId = simulator.requestVaccineProof({
+        vaccine,
+        personalId,
+        validUntil,
+      });
 
       const patient = randomUser();
       simulator.switchUser(patient);
@@ -585,18 +627,24 @@ describe("VaxZk contract", () => {
       const clinic = randomUser();
       simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.revokeClinic(clinicId(clinic));
-      expect(simulator.getLedger().clinics.member(clinicId(clinic))).toBe(false);
+      expect(simulator.getLedger().clinics.member(clinicId(clinic))).toBe(
+        false,
+      );
     });
 
     it("rejects revoking a clinic that is not registered", () => {
-      expect(() => simulator.revokeClinic(randomBytes(32))).toThrow("Clinic ID is not in the clinics list");
+      expect(() => simulator.revokeClinic(randomBytes(32))).toThrow(
+        "Clinic ID is not in the clinics list",
+      );
     });
 
     it("non-admin cannot revoke a clinic", () => {
       const clinic = randomUser();
       simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.switchUser(randomUser());
-      expect(() => simulator.revokeClinic(clinicId(clinic))).toThrow("You are not an admin");
+      expect(() => simulator.revokeClinic(clinicId(clinic))).toThrow(
+        "You are not an admin",
+      );
     });
   });
 
@@ -607,8 +655,12 @@ describe("VaxZk contract", () => {
       const clinic = randomUser();
       simulator.addClinic(clinicId(clinic), mockProfile(clinic));
       simulator.revokeClinic(clinicId(clinic));
-      expect(simulator.getLedger().clinics.member(clinicId(clinic))).toBe(false);
-      expect(simulator.getLedger().ownerClinics.member(clinicId(clinic))).toBe(false);
+      expect(simulator.getLedger().clinics.member(clinicId(clinic))).toBe(
+        false,
+      );
+      expect(simulator.getLedger().ownerClinics.member(clinicId(clinic))).toBe(
+        false,
+      );
 
       simulator.switchUser(clinic);
       expect(() =>
@@ -616,7 +668,7 @@ describe("VaxZk contract", () => {
           vaccine: encodeBytes20("HepB"),
           personalId: encodeBytes20("PASS-REVOKED"),
           validUntil: randomTimestamp(),
-        })
+        }),
       ).toThrow("You are not a registered clinic");
     });
   });
@@ -632,7 +684,9 @@ describe("VaxZk contract", () => {
 
     it("non-admin cannot register an invite", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.registerInvite(Role.admin, randomBytes(32))).toThrow("You are not an admin");
+      expect(() =>
+        simulator.registerInvite(Role.admin, randomBytes(32)),
+      ).toThrow("You are not an admin");
     });
 
     it("registering the same invite code twice does not increase the invite count", () => {
@@ -640,7 +694,9 @@ describe("VaxZk contract", () => {
       simulator.registerInvite(Role.admin, inviteCode);
       const countAfterFirst = simulator.getLedger().inviteAdminHash.size();
       simulator.registerInvite(Role.admin, inviteCode);
-      expect(simulator.getLedger().inviteAdminHash.size()).toBe(countAfterFirst);
+      expect(simulator.getLedger().inviteAdminHash.size()).toBe(
+        countAfterFirst,
+      );
     });
   });
 
@@ -656,18 +712,24 @@ describe("VaxZk contract", () => {
       simulator.acceptInvite(Role.admin, inviteCode);
 
       expect(simulator.getLedger().admins.size()).toBe(adminsBefore + 1n);
-      expect(simulator.getLedger().inviteAdminHash.size()).toBe(invitesBefore - 1n);
+      expect(simulator.getLedger().inviteAdminHash.size()).toBe(
+        invitesBefore - 1n,
+      );
     });
 
     it("rejects an invalid invite code", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.acceptInvite(Role.admin, randomBytes(32))).toThrow("Invalid admin invite code");
+      expect(() => simulator.acceptInvite(Role.admin, randomBytes(32))).toThrow(
+        "Invalid admin invite code",
+      );
     });
 
     it("rejects if the user is already an admin", () => {
       const inviteCode = randomBytes(32);
       simulator.registerInvite(Role.admin, inviteCode);
-      expect(() => simulator.acceptInvite(Role.admin, inviteCode)).toThrow("user is already an admin");
+      expect(() => simulator.acceptInvite(Role.admin, inviteCode)).toThrow(
+        "user is already an admin",
+      );
     });
   });
 
@@ -682,29 +744,37 @@ describe("VaxZk contract", () => {
       simulator.switchUser(newClinicOwner);
       simulator.acceptInvite(Role.clinic, inviteCode);
 
-      expect(simulator.getLedger().ownerClinics.size()).toBe(clinicsBefore + 1n);
-      expect(simulator.getLedger().inviteClinicHash.size()).toBe(invitesBefore - 1n);
+      expect(simulator.getLedger().ownerClinics.size()).toBe(
+        clinicsBefore + 1n,
+      );
+      expect(simulator.getLedger().inviteClinicHash.size()).toBe(
+        invitesBefore - 1n,
+      );
     });
 
     it("rejects an invalid clinic invite code", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.acceptInvite(Role.clinic, randomBytes(32))).toThrow("Invalid clinic invite code");
+      expect(() =>
+        simulator.acceptInvite(Role.clinic, randomBytes(32)),
+      ).toThrow("Invalid clinic invite code");
     });
 
     it("rejects if the user is already a clinic owner", () => {
       const inviteCode = randomBytes(32);
       simulator.registerInvite(Role.clinic, inviteCode);
-      
+
       const user = randomUser();
       simulator.switchUser(user);
       simulator.acceptInvite(Role.clinic, inviteCode); // success
-      
+
       const anotherInvite = randomBytes(32);
       simulator.switchUser(admin);
       simulator.registerInvite(Role.clinic, anotherInvite);
-      
+
       simulator.switchUser(user);
-      expect(() => simulator.acceptInvite(Role.clinic, anotherInvite)).toThrow("user is already a clinic");
+      expect(() => simulator.acceptInvite(Role.clinic, anotherInvite)).toThrow(
+        "user is already a clinic",
+      );
     });
   });
 
@@ -747,7 +817,9 @@ describe("VaxZk contract", () => {
 
       simulator.revokeAdmin();
 
-      expect(() => simulator.addVaccine(encodeBytes20("MMR"))).toThrow("You are not an admin");
+      expect(() => simulator.addVaccine(encodeBytes20("MMR"))).toThrow(
+        "You are not an admin",
+      );
     });
   });
 
@@ -762,7 +834,9 @@ describe("VaxZk contract", () => {
 
     it("non-clinic cannot register a clinic invite", () => {
       simulator.switchUser(randomUser());
-      expect(() => simulator.registerInvite(Role.clinic, randomBytes(32))).toThrow("You are not an admin");
+      expect(() =>
+        simulator.registerInvite(Role.clinic, randomBytes(32)),
+      ).toThrow("You are not an admin");
     });
   });
 });

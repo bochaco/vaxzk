@@ -58,32 +58,6 @@ constructor() {
 
   issuerId.increment(1);
   proofReqId.increment(1);
-
-  // Init some Vaccines
-  vaccines.insert(disclose(pad(20, "HepB")));
-  vaccines.insert(disclose(pad(20, "PCV")));
-  vaccines.insert(disclose(pad(20, "Tdap")));
-
-  // Init clinics
-  clinics.insert(
-    disclose(pad(32, "clinic1")),
-    disclose(ClinicProfile { name: pad(32, "Clinic 1"),
-                             address: pad(64, "123 Main St"),
-                             ownerId: disclose(adminId),
-                             latitud: disclose(pad(20, "-23.5990263")),
-                             longitud: disclose(pad(20, "-46.6419712")),
-                             isOnline: disclose(true) })
-    );
-  clinics.insert(
-    disclose(pad(32, "clinic22")),
-    disclose(ClinicProfile { name: pad(32, "Clinic Local 22"),
-                             address: pad(64, "123 Main St"),
-                             ownerId: disclose(adminId),
-                             latitud: disclose(pad(20, "-23.5990263")),
-                             longitud: disclose(pad(20, "-46.6419712")),
-                             isOnline: disclose(true) })
-    );
-  ownerClinics.insert(disclose(adminId));
 }
 
 // Derives a stable, unlinkable on-chain identifier from a raw 32-byte public key.
