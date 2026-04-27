@@ -4,7 +4,8 @@ module Types {
   import "./Schnorr";
   export { SchnorrSignature, schnorrVerifyVaxZk, schnorrChallengeVaxZk };
 
-  // Vaccine certificate issuer metadata
+  // Vaccine certificate issuer. `key` is the JubJub public key for Schnorr
+  // verification; the corresponding secret key stays off-chain with the issuer.
   export struct CertIssuerInfo {
     // issuer DID or URL (e.g., "did:example:who" or "https://who.int")
     uri: Opaque<'string'>,
@@ -16,7 +17,8 @@ module Types {
     verificationEndpoint: Opaque<'string'>,
   }
 
-  // Vaccine proof request
+  // Proof request created by a verifier. All fields are public on the ledger
+  // once inserted — `personalId` is visible to any ledger reader.
   export struct VaccineProofRequest {
     // Vaccine product/type
     vaccine: Bytes<20>,
@@ -26,7 +28,8 @@ module Types {
     validUntil: Uint<128>,
   }
 
-  // Vaccine proof
+  // Full vaccine certificate stored in the user's local encrypted private state.
+  // Fields are only disclosed on-chain after all circuit assertions pass in `submitVaccineProof`.
   export struct VaxZkProof {
     // Vaccine certificate issuer assinged ID
     issuerId: Bytes<32>,
@@ -40,7 +43,8 @@ module Types {
     issuerSignature: SchnorrSignature
   }
 
-  // Clinig Profile
+  // Verifier/clinic profile. `ownerId` is a shielded wallet ID (not a raw key).
+  // Location fields are intentionally public for map-based discovery.
   export struct ClinicProfile {
     ownerId: Bytes<32>,
     name: Bytes<32>,

@@ -6,6 +6,8 @@
 module Schnorr {
   import CompactStandardLibrary;
 
+  // Schnorr signature on the JubJub curve: R = k·G, s = k + c·sk.
+  // Verification checks G·s == R + c·PK.
   export struct SchnorrSignature {
     announcement: JubjubPoint;
     response: Field;
@@ -55,6 +57,9 @@ module Schnorr {
     assert(lhs == rhs, "Invalid attestation signature");
   }
 
+  // Pure circuit (no ZK proof required). Computes the full challenge hash used by
+  // both `schnorrVerifyVaxZk` and the off-chain signing code (`signing.ts`).
+  // Callers must truncate the result to 248 bits before using as a JubJub scalar.
   export pure circuit schnorrChallengeVaxZk(
                         ann: JubjubPoint,
                         pk: JubjubPoint,

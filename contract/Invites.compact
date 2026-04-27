@@ -1,3 +1,6 @@
+// Invite-based access control. Codes are stored verbatim on the public ledger
+// and consumed (one-time use) when accepted. Use a large random nonce so codes
+// cannot be brute-forced before the recipient accepts.
 import CompactStandardLibrary;
 
 export ledger admins: Set<Bytes<32>>;
@@ -10,7 +13,11 @@ export ledger inviteClinicHash: Set<Bytes<32>>;
 
 witness inviteNonce(): Bytes<32>;
 
-export enum Role { admin, clinic }
+// Routes invite codes into `inviteAdminHash` or `inviteClinicHash` sets.
+export enum Role {
+  admin,
+  clinic
+}
 
 // Guards: aborts the calling circuit if the caller is not a registered admin.
 circuit isAdmin(): [] {
@@ -26,6 +33,7 @@ circuit isClinic(): [] {
   assert(ownerClinics.member(disclose(ownerId)), "You are not a registered clinic");
 }
 
+// Admin-only. Registers a one-time invite code for the given role.
 export circuit registerInvite(role: Role, inviteCode: Bytes<32>): [] {
   isAdmin();
 
@@ -37,6 +45,9 @@ export circuit registerInvite(role: Role, inviteCode: Bytes<32>): [] {
   }
 }
 
+// Open to any caller. Redeems an invite code (one-time use) and promotes the
+// caller to the specified role. Reverts if the code is invalid or the caller
+// already holds that role.
 export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
   const d_role = disclose(role);
   const d_inviteCode = disclose(inviteCode);
@@ -61,6 +72,7 @@ export circuit acceptInvite(role: Role, inviteCode: Bytes<32>): [] {
   }
 }
 
+// Admin-only self-revocation. No guard against removing the last admin.
 export circuit revokeAdmin(): [] {
   isAdmin();
 
