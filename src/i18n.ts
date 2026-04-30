@@ -4,9 +4,6 @@ export const translations = {
   en: {
     // Login
     tagline: "Your immunization passport, always with you.",
-    privacyNote:
-      "Your clinical data is encrypted and stored on the blockchain using",
-    privacyNote2: "to ensure absolute privacy.",
     connecting: "Connecting...",
     connected: "Connected",
     connectButton: "Connect with Midnight",
@@ -328,9 +325,6 @@ export const translations = {
   pt: {
     // Login
     tagline: "Seu passaporte de imunização, sempre com você.",
-    privacyNote:
-      "Seus dados clínicos são criptografados e armazenados na blockchain usando",
-    privacyNote2: "para garantir privacidade absoluta.",
     connecting: "Iniciando...",
     connected: "Conectado",
     connectButton: "Entrar com Midnight",
@@ -653,9 +647,6 @@ export const translations = {
   es: {
     // Login
     tagline: "Tu pasaporte de inmunización, siempre contigo.",
-    privacyNote:
-      "Tus datos clínicos están cifrados y almacenados en la blockchain usando",
-    privacyNote2: "para garantizar total privacidad.",
     connecting: "Conectando...",
     connected: "Conectado",
     connectButton: "Entrar con Midnight",

@@ -94,19 +94,11 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           <p className="text-on-surface-variant text-lg leading-relaxed font-medium px-4">
             {i18n.tagline}
           </p>
-          <div className="bg-surface-container-low p-5 rounded-xl text-sm border-none shadow-sm text-left">
-            <div className="flex items-start gap-3">
-              <span translate="no" className="material-symbols-outlined text-primary mt-0.5">verified_user</span>
-              <p className="text-on-surface-variant leading-snug">
-                {i18n.privacyNote} <span className="font-bold text-primary">Midnight</span> {i18n.privacyNote2}
-              </p>
+          {status === 'error' && error && (
+            <div className="p-2 bg-error-container text-on-error-container rounded text-[10px]">
+              {error}
             </div>
-            {status === 'error' && error && (
-              <div className="mt-4 p-2 bg-error-container text-on-error-container rounded text-[10px]">
-                {error}
-              </div>
-            )}
-          </div>
+          )}
         </section>
 
         {/* Primary Action */}
