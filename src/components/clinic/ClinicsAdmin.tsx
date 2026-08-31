@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../../LanguageContext";
 import {
   buildProviders,
@@ -35,6 +35,11 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
   const [longitud, setLongitud] = useState("");
   const [isOnline, setIsOnline] = useState(false);
 
+  // Kept in a ref so the effect below can read the latest translation without
+  // re-running (and re-subscribing to the contract) when the language changes.
+  const i18nRef = useRef(i18n);
+  i18nRef.current = i18n;
+
   useEffect(() => {
     let subscription: { unsubscribe: () => void } | undefined;
 
@@ -57,7 +62,7 @@ const ClinicsAdmin: React.FC<ClinicsAdminProps> = ({ connectedApi }) => {
         });
       } catch (err) {
         console.error("Failed to join contract:", err);
-        setError(i18n.errConnectContract);
+        setError(i18nRef.current.errConnectContract);
         setClinicsLoading(false);
       }
     }

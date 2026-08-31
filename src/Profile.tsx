@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
+import { ProfileContext, useProfile, type Profile, type Tab } from './ProfileContext';
 // import { buildProviders, VaxZkAPI } from "./contract-api/index";
 
 const ProfileOptions = [
@@ -6,23 +7,6 @@ const ProfileOptions = [
   { code: 'clinic', label: 'Clinic' },
   { code: 'user', label: 'User' },
 ]
-
-export type Profile = 'admin' | 'clinic' | 'user';
-export type Tab = "listclinics" | "myproofs" | "addvaccine" | "clinicprofile" | "metricsDerivedClinic" | "adminvaccine" | "metrics" | "access" | "adminissuers";
-
-interface ProfileContextValue {
-  profile: Profile;
-  setProfile: (profile: Profile) => void;
-  activeTab: Tab;
-  setActiveTab: (tab: Tab) => void;
-}
-
-const ProfileContext = createContext<ProfileContextValue>({
-  profile: 'user',
-  setProfile: () => {},
-  activeTab: 'myproofs',
-  setActiveTab: () => {},
-});
 
 export function ProfileSelector({ fixed = false }: { fixed?: boolean }) {
   const {profile, setProfile, setActiveTab} = useProfile();
@@ -55,5 +39,3 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     </ProfileContext.Provider>
   );
 };
-
-export const useProfile = () => useContext(ProfileContext);

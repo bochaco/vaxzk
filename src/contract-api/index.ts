@@ -121,6 +121,7 @@ export class VaxZkAPI implements DeployedVaxZkAPI {
           ) as Promise<VaxZkPrivateState>,
         ),
       ],
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- combineLatest's overload resolution needs the 2-arg arity
       (ledgerState, _) => {
         const dec = new TextDecoder();
         const decodeBytes = (b: Uint8Array) =>
@@ -538,6 +539,7 @@ export async function buildProviders(
       },
       async balanceTx(
         tx: UnboundTransaction,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars -- required by the WalletProvider interface
         _ttl?: Date,
       ): Promise<FinalizedTransaction> {
         const serialized = toHex(tx.serialize());

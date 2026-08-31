@@ -16,6 +16,7 @@ export const createInMemoryPrivateStateProvider = <
   const noop = () => Promise.resolve();
 
   return {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- required by the PrivateStateProvider interface
     setContractAddress(_address: string): void {
       // no-op: in-memory provider doesn't scope by contract address
     },

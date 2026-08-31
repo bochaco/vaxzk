@@ -7,6 +7,7 @@ import { fromHex } from "@midnight-ntwrk/midnight-js-utils";
 import {
   CompactTypeJubjubPoint,
   type JubjubPoint,
+  type Value,
 } from "@midnight-ntwrk/compact-runtime";
 import { pureCircuits, Role } from "../../managed/contract/index.js";
 import {
@@ -33,9 +34,8 @@ const _jubjubCache = new Map<string, JubjubPoint>();
 const _origFromValue = CompactTypeJubjubPoint.fromValue.bind(
   CompactTypeJubjubPoint,
 );
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CompactTypeJubjubPoint as any).fromValue = function (
-  value: any[],
+CompactTypeJubjubPoint.fromValue = function (
+  value: Value,
 ): JubjubPoint {
   const pt = _origFromValue(value);
   const key = `${pt.x},${pt.y}`;

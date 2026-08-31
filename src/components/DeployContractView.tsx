@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { InitialAPI } from "@midnight-ntwrk/dapp-connector-api";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
 import { networkId, getContractId } from "./ConfigNetwork";
@@ -30,8 +31,8 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
 
       const wallets = Object.values(window.midnight);
       const wallet = wallets.find(
-        (w) => !!w && typeof w === "object" && "apiVersion" in w,
-      ) as any;
+        (w): w is InitialAPI => !!w && typeof w === "object" && "apiVersion" in w,
+      );
 
       if (!wallet) {
         throw new Error("Compatible Midnight wallet not found");
@@ -54,7 +55,9 @@ const DeployContractView: React.FC<DeployContractProps> = ({onLogout, walletAddr
     } catch (err) {
       console.error("Deployment failed:", err);
       if (err && typeof err === 'object' && 'cause' in err) {
-        const cause = (err as any).cause;
+        const cause = err.cause as {
+          failure?: { message?: unknown; cause?: { txData?: Record<string, number> } };
+        } | undefined;
         let errorMessage = cause?.failure?.message ? String(cause?.failure?.message) : String("");
         const txData = cause?.failure?.cause?.txData;
         if (txData) {

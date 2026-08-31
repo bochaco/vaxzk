@@ -1,8 +1,8 @@
 import React from "react";
 import { useLanguage } from "../LanguageContext";
 import { LanguageSelector } from "../App";
-import { useProfile, ProfileSelector } from "../Profile";
-import type { Tab } from "../Profile";
+import { ProfileSelector } from "../Profile";
+import { useProfile, type Tab } from "../ProfileContext";
 import ListClinicsView from "./user/ListClinicsView";
 import UserProofRequestsView from "./user/UserProofRequestsView";
 import AddVaccineView from "./clinic/AddVaccineView";

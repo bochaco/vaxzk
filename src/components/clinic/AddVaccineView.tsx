@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { useLanguage } from "../../LanguageContext";
 import {
@@ -65,11 +65,18 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
   const [vaxApi, setVaxApi] = useState<VaxZkAPI | null>(null);
   const [showProofReqModal, setShowProofReqModal] = useState(false);
 
+  // Kept in refs so the effects below can read the latest callback/translation
+  // without re-running whenever the parent re-renders or the language changes.
+  const onModalTriggeredRef = useRef(onModalTriggered);
+  onModalTriggeredRef.current = onModalTriggered;
+  const i18nRef = useRef(i18n);
+  i18nRef.current = i18n;
+
   useEffect(() => {
     if (triggerModal === "proofReq") {
       setProofReqError(null);
       setShowProofReqModal(true);
-      onModalTriggered?.();
+      onModalTriggeredRef.current?.();
     }
   }, [triggerModal]);
 
@@ -97,7 +104,7 @@ const AddVaccineView: React.FC<AddVaccineViewProps> = ({
         });
       } catch (err) {
         console.error("Failed to join contract:", err);
-        setProofReqError(i18n.errConnectContract);
+        setProofReqError(i18nRef.current.errConnectContract);
       }
     }
 
