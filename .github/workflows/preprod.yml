@@ -30,7 +30,7 @@ jobs:
       - name: COMPACT
         run: |
            curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
-           compact update
+           compact update 0.31.1
            compact compile contract/vaxzk.compact contract/managed
            mkdir -p public/keys public/zkir
            cp -r contract/managed/keys/* public/keys/
